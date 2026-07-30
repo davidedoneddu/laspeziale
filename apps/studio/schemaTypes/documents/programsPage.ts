@@ -1,0 +1,72 @@
+import {defineField, defineType} from 'sanity'
+
+export const programsPage = defineType({
+  name: 'programsPage',
+  title: 'Pagina Programmi',
+  type: 'document',
+  initialValue: {
+    heroEyebrow: 'Aree di intervento',
+    heroTitle: 'Percorsi clinici costruiti intorno alla persona',
+    heroText:
+      'Le aree di lavoro principali dello studio: peso e ricomposizione corporea, gonfiore e disturbi intestinali, salute femminile, anti-age e nutrizione sportiva.',
+    listTitle: 'Le aree che trattiamo',
+    listText: "Scegli l'esigenza piu vicina al tuo momento e scopri come viene costruito il percorso.",
+    cardButtonLabel: 'Scopri di piu',
+    methodEyebrow: 'Come scegliere',
+    methodTitle: "Il percorso completo parte dalla nutrizione, ma ogni bisogno ha la sua porta d'ingresso.",
+    methodText:
+      'La Speziale distingue tra percorsi nutrizionali personalizzati e consulenze stand-alone: cosi ogni persona puo orientarsi verso la soluzione piu adatta al proprio momento.',
+    methodCoreEyebrow: 'Il core del metodo',
+    methodCoreText:
+      'Il percorso completo unisce dieta personalizzata, consulenza, follow-up, eventuale fitoterapia e prodotti consigliati quando sono utili al risultato.',
+    methodCoreLinkLabel: 'Approfondisci il metodo',
+    methodDietLabel: 'Con dieta',
+    methodDietTitle: 'Percorsi nutrizionali',
+    methodDietText:
+      'Per chi desidera un piano alimentare strutturato, controlli periodici e un accompagnamento completo.',
+    methodPhytoLabel: 'Senza dieta',
+    methodPhytoTitle: 'Consulenze indipendenti',
+    methodPhytoText:
+      'Per chi cerca fitoterapia, prodotti selezionati o consapevolezza alimentare senza avviare un percorso con dieta.',
+    methodPhytoLinkLabel: 'Scopri le altre consulenze',
+  },
+  groups: [
+    {name: 'hero', title: 'Apertura pagina', default: true},
+    {name: 'method', title: 'Metodo e differenze'},
+    {name: 'content', title: 'Elenco programmi'},
+    {name: 'cta', title: 'CTA finale'},
+    {name: 'seo', title: 'SEO Google'},
+  ],
+  fields: [
+    defineField({name: 'heroEyebrow', title: 'Etichetta', type: 'string', group: 'hero'}),
+    defineField({name: 'heroTitle', title: 'Titolo', type: 'string', group: 'hero', validation: (rule) => rule.required()}),
+    defineField({name: 'heroText', title: 'Testo introduttivo', type: 'text', rows: 3, group: 'hero'}),
+    defineField({
+      name: 'heroImage',
+      title: 'Immagine hero',
+      type: 'image',
+      group: 'hero',
+      options: {hotspot: true},
+      fields: [defineField({name: 'alt', title: 'Testo alternativo', type: 'string'})],
+    }),
+    defineField({name: 'methodEyebrow', title: 'Etichetta sezione', type: 'string', group: 'method'}),
+    defineField({name: 'methodTitle', title: 'Titolo sezione', type: 'string', group: 'method'}),
+    defineField({name: 'methodText', title: 'Testo introduttivo', type: 'text', rows: 4, group: 'method'}),
+    defineField({name: 'methodCoreEyebrow', title: 'Etichetta riquadro principale', type: 'string', group: 'method'}),
+    defineField({name: 'methodCoreText', title: 'Testo riquadro metodo principale', type: 'text', rows: 4, group: 'method'}),
+    defineField({name: 'methodCoreLinkLabel', title: 'Testo link riquadro principale', type: 'string', group: 'method'}),
+    defineField({name: 'methodDietLabel', title: 'Etichetta percorso con dieta', type: 'string', group: 'method'}),
+    defineField({name: 'methodDietTitle', title: 'Titolo percorso con dieta', type: 'string', group: 'method'}),
+    defineField({name: 'methodDietText', title: 'Testo percorso con dieta', type: 'text', rows: 3, group: 'method'}),
+    defineField({name: 'methodPhytoLabel', title: 'Etichetta percorso senza dieta', type: 'string', group: 'method'}),
+    defineField({name: 'methodPhytoTitle', title: 'Titolo percorso senza dieta', type: 'string', group: 'method'}),
+    defineField({name: 'methodPhytoText', title: 'Testo percorso senza dieta', type: 'text', rows: 3, group: 'method'}),
+    defineField({name: 'methodPhytoLinkLabel', title: 'Testo link fitoterapia', type: 'string', group: 'method'}),
+    defineField({name: 'listTitle', title: 'Titolo sopra le card', description: 'La griglia sottostante viene composta automaticamente con tutti i programmi pubblicati.', type: 'string', group: 'content'}),
+    defineField({name: 'listText', title: 'Testo sopra le card', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'cardButtonLabel', title: 'Testo bottone card', type: 'string', group: 'content'}),
+    defineField({name: 'cta', title: 'Contenuto CTA', type: 'pageCta', group: 'cta'}),
+    defineField({name: 'seo', title: 'Titolo e descrizione Google', type: 'seo', group: 'seo'}),
+  ],
+  preview: {prepare: () => ({title: 'Pagina Programmi', subtitle: 'Archivio dei percorsi'})},
+})

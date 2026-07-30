@@ -1,0 +1,41 @@
+import {defineField, defineType} from 'sanity'
+
+export const siteSettings = defineType({
+  name: 'siteSettings',
+  title: 'Impostazioni sito',
+  type: 'document',
+  groups: [
+    {name: 'content', title: 'Identita sito', default: true},
+    {name: 'contacts', title: 'Contatti'},
+    {name: 'seo', title: 'SEO Google'},
+    {name: 'legal', title: 'Legale'},
+  ],
+  fields: [
+    defineField({name: 'siteTitle', title: 'Nome sito', description: 'Nome mostrato nei meta e nello Studio.', type: 'string', group: 'content', validation: (rule) => rule.required()}),
+    defineField({name: 'logo', title: 'Logo', description: 'Logo usato in testata e footer.', type: 'image', group: 'content', options: {hotspot: true}, fields: [defineField({name: 'alt', title: 'Testo alternativo', type: 'string'})]}),
+    defineField({name: 'favicon', title: 'Favicon', description: 'Piccola icona del browser. Consigliato formato quadrato.', type: 'image', group: 'content'}),
+    defineField({name: 'email', title: 'Email principale', type: 'string', group: 'contacts', validation: (rule) => rule.email()}),
+    defineField({name: 'phone', title: 'Telefono', type: 'string', group: 'contacts'}),
+    defineField({name: 'address', title: 'Indirizzo studio', type: 'string', group: 'contacts'}),
+    defineField({name: 'locationText', title: 'Testo Dove siamo', description: 'Breve descrizione della posizione da mostrare nella pagina contatti.', type: 'text', rows: 3, group: 'contacts'}),
+    defineField({name: 'openingHours', title: 'Orari di apertura', description: 'Una riga per ogni fascia oraria.', type: 'text', rows: 4, group: 'contacts'}),
+    defineField({name: 'contactText', title: 'Testo Contattaci', description: 'Messaggio introduttivo prima di email, telefono e form.', type: 'text', rows: 3, group: 'contacts'}),
+    defineField({name: 'instagram', title: 'Link Instagram', type: 'url', group: 'contacts', validation: (rule) => rule.uri({scheme: ['http', 'https']})}),
+    defineField({name: 'facebook', title: 'Link Facebook', type: 'url', group: 'contacts', validation: (rule) => rule.uri({scheme: ['http', 'https']})}),
+    defineField({name: 'whatsapp', title: 'Link WhatsApp', type: 'url', group: 'contacts', validation: (rule) => rule.uri({scheme: ['http', 'https']})}),
+    defineField({name: 'globalCtaLabel', title: 'Bottone globale - testo', description: 'Bottone in alto a destra, per esempio Richiedi una consulenza.', type: 'string', group: 'content'}),
+    defineField({name: 'globalCtaLink', title: 'Bottone globale - link', description: 'Esempio: /contatti', type: 'string', group: 'content'}),
+    defineField({name: 'seo', title: 'Titolo e descrizione Google', type: 'seo', group: 'seo'}),
+    defineField({name: 'footerText', title: 'Testo footer', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'privacyPolicyLink', title: 'Privacy policy link', type: 'string', group: 'legal'}),
+    defineField({name: 'cookiePolicyLink', title: 'Cookie policy link', type: 'string', group: 'legal'}),
+    defineField({name: 'legalName', title: 'Nome del titolare del trattamento', description: 'Nome e cognome o ragione sociale da mostrare nelle informative.', type: 'string', group: 'legal'}),
+    defineField({name: 'vatNumber', title: 'Partita IVA o codice fiscale', type: 'string', group: 'legal'}),
+    defineField({name: 'privacyEmail', title: 'Email per richieste privacy', description: "Se vuota viene usata l'email principale del sito.", type: 'string', group: 'legal', validation: (rule) => rule.email()}),
+    defineField({name: 'privacyUpdatedAt', title: 'Data aggiornamento informative', type: 'date', group: 'legal'}),
+  ],
+  preview: {
+    select: {title: 'siteTitle', media: 'logo'},
+    prepare: ({title, media}) => ({title: title || 'Impostazioni sito', subtitle: 'Configurazione globale', media}),
+  },
+})

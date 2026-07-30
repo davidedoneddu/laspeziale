@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  text: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<article class="service-card surface">
+  <span class="service-icon" aria-hidden="true"></span>
+  <h3>{title}</h3>
+  <p>{text}</p>
+</article>
+
+<style>
+  .service-card {
+    min-height: 236px;
+    padding: 26px;
+  }
+
+  .service-icon {
+    display: block;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    margin-bottom: 28px;
+    background:
+      linear-gradient(135deg, rgba(255, 253, 248, 0.85), transparent),
+      var(--color-sage);
+  }
+
+  h3 {
+    margin-bottom: 12px;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+</style>

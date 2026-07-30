@@ -1,0 +1,48 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { getSiteSettings } from "../lib/sanity";
+
+const settings = await getSiteSettings();
+const updatedAt = settings.privacyUpdatedAt
+  ? new Intl.DateTimeFormat("it-IT", { dateStyle: "long" }).format(new Date(`${settings.privacyUpdatedAt}T12:00:00`))
+  : "22 giugno 2026";
+---
+
+<MainLayout title="Cookie policy" description="Informazioni su cookie, preferenze locali e contenuti esterni utilizzati dal sito La Speziale.">
+  <LegalPage eyebrow="Preferenze e tecnologie" title="Cookie policy" intro="Quali strumenti usa il sito e come puoi modificare le tue scelte in ogni momento." updatedAt={updatedAt}>
+    <section>
+      <h2>Cosa usa questo sito</h2>
+      <p>Il sito non utilizza cookie pubblicitari o di profilazione propri. Memorizza nel browser una preferenza tecnica necessaria a ricordare la scelta sui contenuti esterni. Google Maps viene caricato soltanto dopo il consenso.</p>
+    </section>
+
+    <section>
+      <h2>Dettaglio degli strumenti</h2>
+      <div class="legal-table">
+        <table>
+          <thead><tr><th>Strumento</th><th>Finalità</th><th>Durata</th><th>Categoria</th></tr></thead>
+          <tbody>
+            <tr><td><code>laspeziale-consent-v1</code></td><td>Ricorda la scelta espressa nel banner.</td><td>Fino a 180 giorni</td><td>Necessario</td></tr>
+            <tr><td>Google Maps</td><td>Mostra la posizione dello studio con una mappa interattiva.</td><td>Secondo le condizioni di Google</td><td>Contenuto esterno facoltativo</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Google Maps</h2>
+      <p>Prima del consenso la mappa non viene collegata ai server di Google. Dopo l'attivazione, Google può ricevere informazioni tecniche come indirizzo IP, browser e interazioni con la mappa, e può utilizzare cookie o tecnologie analoghe secondo la propria <a href="https://policies.google.com/privacy?hl=it" target="_blank" rel="noopener noreferrer">informativa privacy</a>.</p>
+    </section>
+
+    <section>
+      <h2>Come modificare o revocare la scelta</h2>
+      <p>Puoi rifiutare i contenuti esterni senza perdere le funzioni principali del sito. Usa il pulsante seguente oppure il collegamento “Preferenze cookie” nel footer.</p>
+      <button class="button button-secondary" type="button" data-open-cookie-settings>Gestisci le preferenze</button>
+    </section>
+
+    <section>
+      <h2>Impostazioni del browser</h2>
+      <p>Puoi anche eliminare dati locali e cookie dalle impostazioni del browser. La cancellazione della preferenza farà comparire nuovamente il banner alla visita successiva.</p>
+    </section>
+  </LegalPage>
+</MainLayout>

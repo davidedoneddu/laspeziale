@@ -1,0 +1,681 @@
+---
+import { getPrograms, getSiteSettings } from "../lib/sanity";
+
+const [settings, programs] = await Promise.all([getSiteSettings(), getPrograms()]);
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const findProgram = (slug: string) => programs.find((program) => program.slug === slug);
+const clinicalItems = [
+  { label: "Gestione del peso, cellulite e ricomposizione corporea", slug: "gestione-peso-ricomposizione-corporea" },
+  { label: "Gonfiore e disturbi intestinali", slug: "gonfiore-disturbi-intestinali" },
+  { label: "Salute femminile e cambiamenti ormonali", slug: "menopausa-premenopausa" },
+  { label: "Longevita e Anti-Age", slug: "programma-anti-age" },
+  { label: "Nutrizione Sportiva", slug: "nutrizione-sportiva" },
+].map((item) => ({ ...item, href: `/programmi/${findProgram(item.slug)?.slug || item.slug}` }));
+const consultationItems = [
+  { label: "Farmacista Fitoterapeuta", href: "/fitoterapia" },
+  { label: "Tutor del Benessere", href: "/consapevolezza" },
+];
+const headerCtaLabel = "Richiedi una consulenza";
+const headerCtaLink = settings.globalCtaLink || "/contatti";
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="La Speziale home">
+      <img class="brand-logo" src={settings.logoUrl || "/assets/old-site/logo.png"} alt="Studio nutrizionista La Speziale Milano" />
+    </a>
+
+    <nav class="desktop-nav" aria-label="Navigazione principale">
+      <a class:list={["nav-link", { active: pathname.startsWith("/il-metodo") }]} href="/il-metodo">
+        Il Metodo
+      </a>
+      <div class:list={["nav-item", "programs-item", { active: pathname.startsWith("/programmi") }]}>
+        <a href="/programmi" aria-haspopup="true">Aree di intervento</a>
+        <div class="programs-menu" aria-label="Aree di intervento">
+          {clinicalItems.map((item) => <a href={item.href}>{item.label}</a>)}
+        </div>
+      </div>
+      <div class:list={["nav-item", "programs-item", { active: pathname.startsWith("/altre-consulenze") || pathname.startsWith("/fitoterapia") || pathname.startsWith("/consapevolezza") }]}>
+        <a href="/altre-consulenze" aria-haspopup="true">Consulenze</a>
+        <div class="programs-menu" aria-label="Consulenze">
+          {consultationItems.map((item) => <a href={item.href}>{item.label}</a>)}
+        </div>
+      </div>
+      <a class:list={["nav-link", { active: pathname.startsWith("/dicono-di-noi") }]} href="/dicono-di-noi">
+        Dicono di noi
+      </a>
+      <a class:list={["nav-link", { active: pathname.startsWith("/contatti") }]} href="/contatti">
+        Contatti
+      </a>
+    </nav>
+
+    <a class="header-cta" href={headerCtaLink}>
+      {headerCtaLabel}
+    </a>
+
+    <details class="mobile-menu">
+      <summary aria-label="Apri menu" title="Apri menu">
+        <span class="burger" aria-hidden="true"></span>
+      </summary>
+      <div class="mobile-panel">
+        <div class="mobile-panel-inner">
+          <nav class="mobile-primary" aria-label="Navigazione mobile principale">
+            <a href="/il-metodo">
+              <span>Il Metodo</span>
+            </a>
+            <a href="/altre-consulenze">
+              <span>Consulenze</span>
+            </a>
+            <a href="/dicono-di-noi">
+              <span>Dicono di noi</span>
+            </a>
+            <a href="/contatti">
+              <span>Contatti</span>
+            </a>
+          </nav>
+
+          <div class="mobile-sections-grid">
+            <section class="mobile-section" aria-labelledby="mobile-programs-title">
+              <div class="mobile-section-head">
+                <div>
+                  <p>{clinicalItems.length} bisogni principali</p>
+                  <h2 id="mobile-programs-title">Aree di intervento</h2>
+                </div>
+                <a href="/programmi">Vedi tutti</a>
+              </div>
+              <div class="mobile-link-list">
+                {clinicalItems.map((item) => <a href={item.href}>{item.label}</a>)}
+              </div>
+            </section>
+
+            <section class="mobile-section" aria-labelledby="mobile-consultations-title">
+              <div class="mobile-section-head">
+                <div>
+                  <p>{consultationItems.length} competenze dedicate</p>
+                  <h2 id="mobile-consultations-title">Consulenze</h2>
+                </div>
+                <a href="/altre-consulenze">Vedi tutte</a>
+              </div>
+              <div class="mobile-link-list">
+                {consultationItems.map((item) => <a href={item.href}>{item.label}</a>)}
+              </div>
+            </section>
+          </div>
+
+          <a class="mobile-consultation" href={settings.globalCtaLink || "/contatti"}>
+            {headerCtaLabel}
+          </a>
+        </div>
+      </div>
+    </details>
+  </div>
+</header>
+
+<script>
+  const menus = Array.from(document.querySelectorAll<HTMLDetailsElement>(".mobile-menu"));
+  let lockedScrollY = 0;
+
+  const lockPageScroll = () => {
+    if (document.body.classList.contains("mobile-nav-open")) return;
+    lockedScrollY = window.scrollY;
+    document.documentElement.classList.add("mobile-nav-open");
+    document.body.classList.add("mobile-nav-open");
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${lockedScrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+  };
+
+  const unlockPageScroll = () => {
+    if (!document.body.classList.contains("mobile-nav-open")) return;
+    const previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = "auto";
+    document.documentElement.classList.remove("mobile-nav-open");
+    document.body.classList.remove("mobile-nav-open");
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.left = "";
+    document.body.style.right = "";
+    document.body.style.width = "";
+    window.scrollTo(0, lockedScrollY);
+    requestAnimationFrame(() => {
+      document.documentElement.style.scrollBehavior = previousScrollBehavior;
+    });
+  };
+
+  menus.forEach((menu) => {
+    const panel = menu.querySelector<HTMLElement>(".mobile-panel");
+    const originalParent = panel?.parentElement;
+
+    if (!panel || !originalParent) return;
+
+    menu.addEventListener("toggle", () => {
+      if (menu.open) {
+        document.body.appendChild(panel);
+        panel.dataset.portal = "true";
+        lockPageScroll();
+      } else {
+        originalParent.appendChild(panel);
+        delete panel.dataset.portal;
+        unlockPageScroll();
+      }
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    menus.forEach((menu) => {
+      menu.open = false;
+    });
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    z-index: 1000;
+    top: 0;
+    border-bottom: 1px solid var(--color-border);
+    background: rgba(252, 251, 247, 0.96);
+    backdrop-filter: blur(18px);
+  }
+
+  .header-inner {
+    position: relative;
+    display: grid;
+    min-height: 76px;
+    grid-template-columns: minmax(210px, 1fr) auto auto;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .brand {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-logo {
+    display: block;
+    width: 180px;
+    max-height: 52px;
+    object-fit: contain;
+  }
+
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    color: var(--color-muted);
+    font-size: 0.88rem;
+    font-weight: 800;
+  }
+
+  .nav-item {
+    position: relative;
+  }
+
+  .programs-item::after {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 14px;
+    content: "";
+  }
+
+  .nav-item > a,
+  .nav-link {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    border-radius: 999px;
+    padding: 9px 11px;
+    white-space: nowrap;
+  }
+
+  .nav-item:hover > a,
+  .nav-item:focus-within > a,
+  .nav-item.active > a,
+  .nav-link:hover,
+  .nav-link.active {
+    background: rgba(197, 155, 39, 0.12);
+    color: var(--color-primary);
+  }
+
+  .programs-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 30;
+    display: grid;
+    min-width: 300px;
+    max-width: 360px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--color-white);
+    box-shadow: var(--shadow-soft);
+    opacity: 0;
+    padding: 8px;
+    pointer-events: none;
+    transform: translateY(6px);
+    transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
+    visibility: hidden;
+  }
+
+  .programs-menu a {
+    border-radius: 10px;
+    color: var(--color-primary);
+    line-height: 1.25;
+    padding: 12px 14px;
+  }
+
+  .programs-menu a:hover,
+  .programs-menu a:focus {
+    background: rgba(197, 155, 39, 0.1);
+  }
+
+  .programs-item:hover .programs-menu,
+  .programs-item:focus-within .programs-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .header-cta {
+    display: inline-flex;
+    min-height: 46px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: white;
+    font-weight: 850;
+    line-height: 1.15;
+    padding: 10px 18px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .header-cta:hover,
+  .header-cta:focus {
+    background: var(--color-primary-hover);
+    color: white;
+    transform: translateY(-1px);
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
+  :global(html:has(.mobile-menu[open])),
+  :global(body:has(.mobile-menu[open])),
+  :global(html.mobile-nav-open),
+  :global(body.mobile-nav-open) {
+    overflow: hidden;
+  }
+
+  :global(body.mobile-nav-open) .site-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1004;
+    background: rgba(252, 251, 247, 0.98);
+  }
+
+  @media (max-width: 1120px) {
+    .header-inner {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      min-height: 68px;
+      gap: 14px;
+      position: static;
+      padding: 10px 0;
+    }
+
+    .desktop-nav {
+      display: none;
+    }
+
+    .header-cta {
+      min-height: 40px;
+      padding: 9px 14px;
+      font-size: 0.86rem;
+    }
+
+    .mobile-menu {
+      display: block;
+      order: 3;
+      justify-self: end;
+    }
+
+    .mobile-menu > summary {
+      position: relative;
+      z-index: 1003;
+      display: inline-flex;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      color: var(--color-ink);
+      cursor: pointer;
+      font-size: 0;
+      font-weight: 850;
+      list-style: none;
+      padding: 0;
+      user-select: none;
+    }
+
+    .burger {
+      display: block;
+      position: relative;
+      width: 18px;
+      height: 14px;
+    }
+
+    .burger,
+    .burger::before,
+    .burger::after {
+      flex: 0 0 auto;
+    }
+
+    .burger::before,
+    .burger::after,
+    .burger {
+      color: var(--color-ink);
+    }
+
+    .burger::before,
+    .burger::after {
+      position: absolute;
+      left: 50%;
+      display: block;
+      width: 18px;
+      height: 2.25px;
+      border-radius: 999px;
+      background: currentColor;
+      content: "";
+      transform: translateX(-50%);
+      transform-origin: center;
+      transition: top 160ms ease, transform 160ms ease, opacity 160ms ease;
+    }
+
+    .burger {
+      background:
+        linear-gradient(currentColor, currentColor) center / 18px 2.25px no-repeat;
+      transition: background-size 120ms ease, transform 160ms ease;
+    }
+
+    .burger::before {
+      top: 0;
+    }
+
+    .burger::after {
+      top: 11.75px;
+    }
+
+    .mobile-menu[open] .burger {
+      background-size: 0 2.25px;
+      transform: none;
+    }
+
+    .mobile-menu[open] .burger::before {
+      top: 6px;
+      transform: translateX(-50%) rotate(45deg);
+      opacity: 1;
+    }
+
+    .mobile-menu[open] .burger::after {
+      top: 6px;
+      transform: translateX(-50%) rotate(-45deg);
+    }
+
+    .mobile-menu > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mobile-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 1001;
+      width: 100%;
+      height: 100dvh;
+      background:
+        linear-gradient(180deg, rgba(251, 247, 238, 0.84), rgba(251, 247, 238, 0.74)),
+        rgba(251, 247, 238, 0.7);
+      backdrop-filter: blur(72px) saturate(80%) brightness(1.08);
+      -webkit-backdrop-filter: blur(72px) saturate(80%) brightness(1.08);
+      box-shadow: 0 28px 80px rgba(38, 51, 44, 0.16);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding-top: 68px;
+      scrollbar-color: rgba(65, 107, 73, 0.62) rgba(19, 56, 43, 0.08);
+      scrollbar-width: thin;
+      touch-action: pan-y;
+    }
+
+    .mobile-panel::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .mobile-panel::-webkit-scrollbar-track {
+      background: rgba(19, 56, 43, 0.06);
+    }
+
+    .mobile-panel::-webkit-scrollbar-thumb {
+      border: 2px solid rgba(251, 247, 238, 0.86);
+      border-radius: 999px;
+      background: rgba(65, 107, 73, 0.7);
+    }
+
+    .mobile-panel::-webkit-scrollbar-thumb:hover {
+      background: rgba(19, 56, 43, 0.8);
+    }
+
+    .mobile-panel-inner {
+      display: grid;
+      width: min(920px, 100%);
+      min-height: 100%;
+      align-content: start;
+      gap: clamp(16px, 2.5vw, 24px);
+      margin: 0 auto;
+      padding: clamp(18px, 3vw, 28px) clamp(18px, 4vw, 40px) 30px;
+    }
+
+    .mobile-primary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .mobile-primary a {
+      display: flex;
+      min-height: 58px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--color-border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.64);
+      color: var(--color-ink);
+      padding: 12px 14px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(19, 56, 43, 0.06);
+    }
+
+    .mobile-primary span {
+      font-size: 1rem;
+      font-weight: 900;
+      line-height: 1.15;
+    }
+
+    .mobile-panel a:hover,
+    .mobile-panel a:focus {
+      background: rgba(197, 155, 39, 0.1);
+    }
+
+    .mobile-sections-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items: start;
+      justify-content: center;
+    }
+
+    .mobile-section {
+      display: grid;
+      gap: 14px;
+    }
+
+    .mobile-section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .mobile-section-head p {
+      margin: 0 0 6px;
+      color: var(--color-gold-dark);
+      font-size: 0.74rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .mobile-section h2 {
+      margin: 0;
+      color: var(--color-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.32rem, 3.2vw, 1.55rem);
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .mobile-section-head a {
+      border-radius: 999px;
+      background: var(--color-white);
+      color: var(--color-gold-dark);
+      font-size: 0.8rem;
+      font-weight: 850;
+      padding: 8px 12px;
+    }
+
+    .mobile-link-list {
+      display: grid;
+      overflow: hidden;
+      border: 1px solid rgba(38, 51, 44, 0.09);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.56);
+    }
+
+    .mobile-link-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 42px;
+      border-bottom: 1px solid rgba(38, 51, 44, 0.08);
+      color: #4e5d53;
+      font-size: clamp(0.82rem, 1.55vw, 0.94rem);
+      font-weight: 820;
+      line-height: 1.25;
+      padding: 10px 13px;
+    }
+
+    .mobile-link-list a:last-child {
+      border-bottom: 0;
+    }
+
+    .mobile-link-list a::after {
+      color: var(--color-gold-dark);
+      content: "->";
+      flex: 0 0 auto;
+      font-size: 0.94rem;
+    }
+
+    .mobile-consultation {
+      display: inline-flex;
+      min-height: 50px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: var(--color-primary);
+      color: white;
+      font-weight: 900;
+      padding: 12px 18px;
+      text-align: center;
+    }
+
+    .mobile-panel .mobile-consultation:hover,
+    .mobile-panel .mobile-consultation:focus {
+      background: var(--color-primary-hover);
+      color: white;
+      transform: translateY(-1px);
+    }
+  }
+
+  @media (min-width: 700px) and (max-width: 1120px) {
+    .mobile-consultation {
+      justify-self: center;
+      min-width: min(420px, 70vw);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 0;
+    }
+
+    .brand {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .brand-logo {
+      width: 138px;
+      max-height: 40px;
+    }
+
+    .header-cta {
+      display: none;
+    }
+
+    .mobile-menu {
+      order: 2;
+      flex: 0 0 auto;
+      margin-left: 8px;
+    }
+
+    .mobile-panel {
+      height: 100dvh;
+      padding-top: 62px;
+    }
+
+    .mobile-panel-inner {
+      padding: 16px 16px 26px;
+    }
+
+    .mobile-primary {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .mobile-sections-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .mobile-section h2 {
+      font-size: 1.55rem;
+    }
+  }
+</style>

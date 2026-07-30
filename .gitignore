@@ -1,0 +1,28 @@
+# Dipendenze
+node_modules/
+
+# Build Astro
+dist/
+.astro/
+
+# Netlify
+.netlify/
+
+# Variabili e segreti
+.env
+.env.*
+!.env.example
+
+# Log
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Sistema ed editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Output di analisi generati
+graphify-out/

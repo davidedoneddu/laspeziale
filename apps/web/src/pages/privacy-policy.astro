@@ -1,0 +1,66 @@
+---
+import LegalPage from "../components/LegalPage.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { getSiteSettings } from "../lib/sanity";
+
+const settings = await getSiteSettings();
+const controller = settings.legalName || settings.siteTitle || "La Speziale";
+const privacyEmail = settings.privacyEmail || settings.email;
+const updatedAt = settings.privacyUpdatedAt
+  ? new Intl.DateTimeFormat("it-IT", { dateStyle: "long" }).format(new Date(`${settings.privacyUpdatedAt}T12:00:00`))
+  : "22 giugno 2026";
+---
+
+<MainLayout title="Privacy policy" description="Informativa sul trattamento dei dati personali del sito La Speziale.">
+  <LegalPage eyebrow="Informativa privacy" title="Privacy policy" intro="Come vengono trattati i dati personali quando visiti il sito o contatti La Speziale." updatedAt={updatedAt}>
+    <section>
+      <h2>Titolare del trattamento</h2>
+      <p><strong>{controller}</strong><br />{settings.address}<br />Email: <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>{settings.vatNumber && <><br />Partita IVA o codice fiscale: {settings.vatNumber}</>}</p>
+    </section>
+
+    <section>
+      <h2>Dati trattati</h2>
+      <ul>
+        <li>Dati di contatto e contenuto dei messaggi inviati volontariamente tramite email, telefono o WhatsApp.</li>
+        <li>Dati tecnici necessari alla sicurezza e al funzionamento del sito, come indirizzo IP, data della richiesta e informazioni sul browser, eventualmente registrati dai fornitori tecnici.</li>
+        <li>Preferenze relative al consenso per i contenuti esterni, conservate localmente nel browser.</li>
+      </ul>
+      <p class="legal-note"><strong>Dati relativi alla salute:</strong> non inserire informazioni sanitarie nei normali messaggi di contatto. Gli eventuali dati sanitari necessari al percorso professionale vengono trattati separatamente, dopo una specifica informativa.</p>
+    </section>
+
+    <section>
+      <h2>Finalità e basi giuridiche</h2>
+      <ul>
+        <li>Rispondere alle richieste e organizzare una consulenza: esecuzione di misure precontrattuali richieste dall'interessato.</li>
+        <li>Garantire sicurezza, prevenire abusi e mantenere il sito funzionante: legittimo interesse del titolare.</li>
+        <li>Caricare Google Maps: consenso, revocabile in qualsiasi momento.</li>
+        <li>Adempiere a obblighi di legge, amministrativi o fiscali quando applicabili: obbligo legale.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Destinatari e fornitori</h2>
+      <p>I dati possono essere trattati da fornitori tecnici incaricati di hosting, gestione dei contenuti, posta elettronica e sicurezza. Google Maps riceve dati dal browser soltanto dopo il consenso ai contenuti esterni. I fornitori operano secondo i rispettivi ruoli e condizioni privacy.</p>
+    </section>
+
+    <section>
+      <h2>Trasferimenti fuori dallo Spazio Economico Europeo</h2>
+      <p>Alcuni fornitori possono trattare dati anche fuori dallo Spazio Economico Europeo. In tali casi il trasferimento deve avvenire sulla base di una decisione di adeguatezza o di altre garanzie previste dal GDPR.</p>
+    </section>
+
+    <section>
+      <h2>Conservazione</h2>
+      <p>I dati vengono conservati per il tempo necessario a rispondere alla richiesta, gestire il rapporto professionale e rispettare gli obblighi di legge. I log tecnici seguono i tempi stabiliti dai fornitori e dalle esigenze di sicurezza. La scelta relativa ai contenuti esterni viene richiesta nuovamente dopo 180 giorni.</p>
+    </section>
+
+    <section>
+      <h2>Diritti dell'interessato</h2>
+      <p>Puoi chiedere accesso, rettifica, cancellazione, limitazione, portabilità e opposizione nei casi previsti, oltre a revocare il consenso senza pregiudicare i trattamenti precedenti. Scrivi a <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. Puoi inoltre proporre reclamo al <a href="https://www.garanteprivacy.it/" target="_blank" rel="noopener noreferrer">Garante per la protezione dei dati personali</a>.</p>
+    </section>
+
+    <section>
+      <h2>Natura del conferimento</h2>
+      <p>I dati necessari a rispondere a una richiesta devono essere forniti per poter ricevere riscontro. Il consenso a Google Maps è facoltativo: rifiutandolo puoi comunque usare il sito e aprire direttamente il link esterno alla posizione.</p>
+    </section>
+  </LegalPage>
+</MainLayout>

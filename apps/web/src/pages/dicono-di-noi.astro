@@ -1,0 +1,142 @@
+---
+import { ExternalLink, Star } from "@lucide/astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import CTASection from "../components/CTASection.astro";
+import { getTestimonials, getTestimonialsPage } from "../lib/sanity";
+
+const [testimonials, page] = await Promise.all([getTestimonials(), getTestimonialsPage()]);
+const googleReviews = page.googleReviews || [];
+const googleRating = Math.min(5, Math.max(0, page.googleRating || 0));
+const googleReviewsUrl = page.googleReviewsUrl || "https://www.google.com/maps/search/?api=1&query=La+Speziale+Milano";
+const formatReviewDate = (value?: string) => {
+  if (!value) return undefined;
+  return new Intl.DateTimeFormat("it-IT", { month: "long", year: "numeric" }).format(new Date(`${value}T12:00:00`));
+};
+---
+
+<MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
+  <section class:list={["page-hero", { "testimonials-hero": page.heroImageUrl }]} style={page.heroImageUrl ? `--testimonials-hero: url('${page.heroImageUrl}')` : undefined}>
+    <div class="container">
+      <p class="eyebrow">{page.heroEyebrow || "Dicono di noi"}</p>
+      <h1>{page.heroTitle}</h1>
+      {page.heroText && <p class="lead">{page.heroText}</p>}
+    </div>
+  </section>
+  <section class="section section-soft">
+    <div class="container">
+      <SectionTitle title={page.sectionTitle || "Storie e risultati"} />
+      {page.sectionText && <p class="testimonial-manifesto">{page.sectionText}</p>}
+      <div class="grid grid-3">
+        {testimonials.map((item) => (
+          <article class="surface testimonial">
+            {item.imageUrl && <img src={item.imageUrl} alt={`Ritratto di ${item.name}`} loading="lazy" />}
+            <p>“{item.text}”</p><h2>{item.name}</h2>{item.role && <span>{item.role}</span>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {page.showGoogleReviews && (
+    <section class="google-reviews-section" aria-labelledby="google-reviews-title">
+      <div class="container google-reviews-layout">
+        <div class="google-summary">
+          <span class="google-mark" aria-hidden="true">G</span>
+          <p class="eyebrow">{page.googleEyebrow || "Recensioni Google"}</p>
+          <h2 id="google-reviews-title">{page.googleTitle || "La voce di chi ci ha scelto"}</h2>
+          {page.googleText && <p class="google-intro">{page.googleText}</p>}
+          {(googleRating > 0 || page.googleReviewCount) && (
+            <div class="rating-summary">
+              {googleRating > 0 && <strong>{googleRating.toLocaleString("it-IT", { maximumFractionDigits: 1 })}</strong>}
+              {googleRating > 0 && (
+                <span class="stars" aria-label={`Valutazione media ${googleRating} su 5`}>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <Star size={18} stroke-width={1.8} class:list={{ filled: index < Math.round(googleRating) }} aria-hidden="true" />
+                  ))}
+                </span>
+              )}
+              {page.googleReviewCount && <span>{page.googleReviewCount} recensioni</span>}
+            </div>
+          )}
+          {page.googleBusinessName && <p class="business-name">{page.googleBusinessName}</p>}
+          <a class="button google-link" href={googleReviewsUrl} target="_blank" rel="noopener noreferrer nofollow">
+            {page.googleButtonLabel || "Vedi tutte le recensioni su Google"}
+            <ExternalLink size={17} stroke-width={1.8} aria-hidden="true" />
+          </a>
+        </div>
+
+        {googleReviews.length > 0 && (
+          <div class="google-review-grid">
+            {googleReviews.map((review) => {
+              const rating = Math.min(5, Math.max(1, review.rating || 5));
+              const reviewDate = formatReviewDate(review.reviewDate);
+              return (
+                <article class="google-review-card">
+                  <div class="review-stars stars" aria-label={`${rating} stelle su 5`}>
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <Star size={16} stroke-width={1.8} class:list={{ filled: index < rating }} aria-hidden="true" />
+                    ))}
+                  </div>
+                  <blockquote>{review.text}</blockquote>
+                  <footer class="review-author">
+                    {review.avatarUrl ? (
+                      <img src={review.avatarUrl} alt={review.avatarAlt || `Foto di ${review.author}`} loading="lazy" />
+                    ) : (
+                      <span class="author-initial" aria-hidden="true">{review.author.charAt(0)}</span>
+                    )}
+                    <div>
+                      <strong>{review.author}</strong>
+                      {reviewDate && <span>{reviewDate}</span>}
+                    </div>
+                    {review.sourceUrl && (
+                      <a href={review.sourceUrl} target="_blank" rel="noopener noreferrer nofollow" aria-label={`Apri la recensione Google di ${review.author}`}>
+                        <ExternalLink size={16} aria-hidden="true" />
+                      </a>
+                    )}
+                  </footer>
+                </article>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  <CTASection {...page.cta} />
+</MainLayout>
+
+<style>
+  .testimonials-hero { min-height:480px; display:grid; align-items:end; background-image:linear-gradient(90deg,rgba(16,24,20,.68),rgba(16,24,20,.18)),var(--testimonials-hero); background-position:center; background-size:cover; padding-bottom:60px; }
+  .testimonials-hero h1, .testimonials-hero .eyebrow, .testimonials-hero .lead { color:white; }
+  .testimonial { padding:28px; }
+  .testimonial-manifesto { max-width:760px; margin:-18px auto 34px; color:var(--color-muted); font-family:Georgia,"Times New Roman",serif; font-size:1.02rem; font-style:italic; line-height:1.7; text-align:center; }
+  .testimonial img { width:72px; height:72px; border-radius:50%; object-fit:cover; margin-bottom:20px; }
+  .testimonial h2 { margin-bottom:6px; font-family:inherit; font-size:1rem; font-weight:850; }
+  .testimonial span { color:var(--color-sage-dark); font-weight:800; }
+  .google-reviews-section { border-top:1px solid rgba(38,51,44,.08); border-bottom:1px solid rgba(38,51,44,.08); background:#edf2ec; padding:76px 0; }
+  .google-reviews-layout { display:grid; grid-template-columns:minmax(250px,.72fr) minmax(0,1.55fr); gap:56px; align-items:start; }
+  .google-summary { position:sticky; top:112px; }
+  .google-mark { display:grid; width:42px; height:42px; place-items:center; border:1px solid rgba(38,51,44,.12); border-radius:50%; margin-bottom:22px; background:white; color:#4285f4; font-size:1.25rem; font-weight:900; box-shadow:0 8px 20px rgba(38,51,44,.08); }
+  .google-summary h2 { max-width:480px; margin-bottom:16px; font-size:clamp(2.1rem,4vw,3.7rem); }
+  .google-intro { max-width:520px; }
+  .rating-summary { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin:24px 0 6px; color:var(--color-muted); }
+  .rating-summary > strong { color:var(--color-ink); font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; line-height:1; }
+  .stars { display:inline-flex; gap:3px; color:#c6a056; }
+  .stars :global(svg.filled) { fill:currentColor; }
+  .business-name { margin:8px 0 24px; color:var(--color-ink); font-weight:800; }
+  .google-link { display:inline-flex; gap:9px; align-items:center; border:1px solid rgba(38,51,44,.14); background:white; color:var(--color-ink); }
+  .google-review-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+  .google-review-card { display:flex; min-height:245px; flex-direction:column; border:1px solid rgba(38,51,44,.1); border-radius:8px; background:#fffefa; padding:26px; box-shadow:0 14px 30px rgba(38,51,44,.07); }
+  .review-stars { margin-bottom:20px; }
+  .google-review-card blockquote { flex:1; margin:0 0 26px; color:var(--color-ink); font-family:Georgia,"Times New Roman",serif; font-size:1.12rem; line-height:1.65; }
+  .review-author { display:grid; grid-template-columns:42px minmax(0,1fr) auto; gap:12px; align-items:center; }
+  .review-author img, .author-initial { display:grid; width:42px; height:42px; place-items:center; border-radius:50%; object-fit:cover; }
+  .author-initial { background:#dce6db; color:var(--color-sage-dark); font-weight:900; }
+  .review-author strong, .review-author span { display:block; }
+  .review-author span { margin-top:2px; color:var(--color-muted); font-size:.82rem; }
+  .review-author > a { color:var(--color-sage-dark); padding:8px; }
+  @media (max-width:900px) { .google-reviews-layout { grid-template-columns:1fr; gap:34px; } .google-summary { position:static; } }
+  @media (max-width:650px) { .google-reviews-section { padding:56px 0; } .google-review-grid { grid-template-columns:1fr; } .google-review-card { min-height:0; padding:22px; } }
+</style>

@@ -1,0 +1,55 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import SectionTitle from "../../components/SectionTitle.astro";
+import CTASection from "../../components/CTASection.astro";
+import { getPrograms, getProgramsPage } from "../../lib/sanity";
+
+const [programs, page] = await Promise.all([getPrograms(), getProgramsPage()]);
+const hiddenProgramSlugs = new Set(["nutrizione-integrata", "fitoterapia-erbe-officinali-nutraceutici", "consapevolezza-motivazione"]);
+const visiblePrograms = programs.filter((program) => !hiddenProgramSlugs.has(program.slug) && !program.slug.includes("fitoterapia"));
+---
+
+<MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
+  <section class="programs-hero" style={`--programs-hero: url('${page.heroImageUrl || "/assets/old-site/hero-header.jpg"}')`}>
+    <div class="container programs-hero-copy">
+      <p class="eyebrow">{page.heroEyebrow || "Programmi"}</p>
+      <h1>{page.heroTitle}</h1>
+      {page.heroText && <p class="lead">{page.heroText}</p>}
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <SectionTitle title={page.listTitle || "I nostri percorsi"} text={page.listText} />
+      <div class="program-grid">
+        {visiblePrograms.map((program) => (
+          <article class="program-card surface">
+            <div class="program-thumb" style={`--program-image: url('${program.imageUrl || "/assets/old-site/hero-bright-wellbeing.png"}')`} role="img" aria-label={program.title}></div>
+            <div class="program-body">
+              <p class="eyebrow">{program.category || "Percorso"}</p>
+              <h2>{program.title}</h2>
+              <p>{program.excerpt}</p>
+              <a class="button button-secondary" href={`/programmi/${program.slug}`}>{page.cardButtonLabel || "Scopri di piu"}</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CTASection {...page.cta} />
+</MainLayout>
+
+<style>
+  .programs-hero { display: grid; min-height: 72vh; align-items: end; background-image: linear-gradient(180deg, rgba(16,24,20,.36), rgba(16,24,20,.76)), var(--programs-hero); background-position: center; background-size: cover; padding: 90px 0 76px; }
+  .programs-hero-copy, .programs-hero h1 { color: white; }
+  .programs-hero .eyebrow, .programs-hero .lead { color: rgba(255,255,255,.88); }
+  .program-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 24px; }
+  .program-card { overflow: hidden; }
+  .program-thumb { min-height: 230px; background-image: linear-gradient(rgba(16,24,20,.04), rgba(16,24,20,.04)), var(--program-image); background-position: center; background-size: cover; }
+  .program-body { padding: 26px; }
+  .program-body h2 { margin-bottom: 14px; font-size: clamp(1.65rem,4vw,2.35rem); }
+  @media (max-width: 780px) {
+    .program-grid { grid-template-columns: 1fr; }
+  }
+</style>

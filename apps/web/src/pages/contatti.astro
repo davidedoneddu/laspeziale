@@ -1,0 +1,137 @@
+---
+import { MapPin } from "@lucide/astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import CTASection from "../components/CTASection.astro";
+import { getContactPage, getSiteSettings } from "../lib/sanity";
+
+const [settings, page] = await Promise.all([getSiteSettings(), getContactPage()]);
+const mapQuery = page.mapQuery || settings.address || "Milano";
+const encodedMapQuery = encodeURIComponent(mapQuery);
+const mapEmbedUrl = `https://www.google.com/maps?q=${encodedMapQuery}&output=embed`;
+const mapExternalUrl = page.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodedMapQuery}`;
+---
+
+<MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
+  <section class:list={["page-hero", { "contact-hero-image": page.heroImageUrl }]} style={page.heroImageUrl ? `--contact-hero: url('${page.heroImageUrl}')` : undefined}>
+    <div class="container">
+      <p class="eyebrow">{page.heroEyebrow || "Contatti"}</p>
+      <h1>{page.heroTitle}</h1>
+      {page.heroText && <p class="lead">{page.heroText}</p>}
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container contact-intro">
+      <div>
+        <h2>{page.locationTitle || "Dove siamo"}</h2>
+        <p>{settings.locationText}</p>
+        <h2>{page.hoursTitle || "Orari di apertura"}</h2>
+        <p>{page.hoursIntro}<br />{settings.openingHours?.split("\n").map((line) => <>{line}<br /></>)}</p>
+        <h2>{page.contactTitle || "Contattaci"}</h2>
+        <p>{settings.contactText}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div>
+        <SectionTitle title={page.formTitle || "Scrivici"} text={page.formText} />
+        <form class="surface form-grid">
+          <label>{page.nameLabel || "Nome e cognome"}<input type="text" name="name" placeholder={page.namePlaceholder} /></label>
+          <label>{page.emailLabel || "Email"}<input type="email" name="email" placeholder={page.emailPlaceholder} /></label>
+          <label>{page.messageLabel || "Messaggio"}<textarea name="message" placeholder={page.messagePlaceholder}></textarea></label>
+          <button class="button button-primary" type="button">{page.submitLabel || "Invia richiesta"}</button>
+        </form>
+      </div>
+      <aside class="contact-side">
+        <div class="surface contact-box"><h2>{page.addressTitle || "Indirizzo"}</h2><p>{settings.address}</p></div>
+        <div class="surface contact-box">
+          <h2>{page.contactsTitle || "Contatti"}</h2>
+          <p>Tel: <a href={`tel:${settings.phone.replaceAll(" ", "")}`}>{settings.phone}</a><br />Email: <a href={`mailto:${settings.email}`}>{settings.email}</a></p>
+        </div>
+        <div class="map-panel surface">
+          <div class="map-frame" data-consent-map>
+            <iframe
+              data-map-frame
+              data-src={mapEmbedUrl}
+              title={page.mapLabel || "Mappa della sede La Speziale"}
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              allowfullscreen
+              hidden
+            ></iframe>
+            <div class="map-consent" data-map-placeholder>
+              <span class="map-icon"><MapPin size={30} stroke-width={1.8} aria-hidden="true" /></span>
+              <div>
+                <h3>Mappa interattiva</h3>
+                <p>Per mostrare Google Maps serve il consenso ai contenuti esterni.</p>
+              </div>
+              <button class="button button-secondary" type="button" data-enable-map>Mostra la mappa</button>
+            </div>
+          </div>
+          <div class="map-toolbar">
+            <span>{mapQuery}</span>
+            <a href={mapExternalUrl} target="_blank" rel="noopener noreferrer">Apri in Google Maps</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  {page.cta?.title && <CTASection {...page.cta} />}
+</MainLayout>
+
+<style>
+  .contact-hero-image { min-height: 480px; display: grid; align-items: end; background-image: linear-gradient(90deg,rgba(16,24,20,.68),rgba(16,24,20,.18)),var(--contact-hero); background-position:center; background-size:cover; padding-bottom:60px; }
+  .contact-hero-image h1, .contact-hero-image .eyebrow, .contact-hero-image .lead { color:white; }
+  .contact-intro { max-width:980px; }
+  .contact-intro h2 { margin:28px 0 8px; font-family:inherit; font-size:1.2rem; }
+  .contact-grid { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(300px,.95fr); gap:28px; }
+  form { padding:24px; }
+  button { border:0; cursor:pointer; }
+  .contact-side { display:grid; gap:22px; }
+  .contact-box { padding:28px; }
+  .contact-box h2 { font-family:Georgia,"Times New Roman",serif; font-size:2rem; }
+  .map-panel { display:block; overflow:hidden; }
+  .map-frame { position:relative; min-height:360px; background:#e7ebe2; }
+  .map-panel iframe { display:block; width:100%; height:360px; border:0; background:#e7ebe2; }
+  .map-consent { position:absolute; inset:0; display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:18px; align-items:center; padding:32px; background:linear-gradient(135deg,#e7ebe2,#f5f0e6); }
+  .map-consent[hidden], .map-panel iframe[hidden] { display:none; }
+  .map-icon { display:grid; width:58px; height:58px; place-items:center; border-radius:50%; background:var(--color-white); color:var(--color-sage-dark); box-shadow:0 12px 30px rgba(38,51,44,.12); }
+  .map-consent h3 { margin:0 0 6px; font-size:1.2rem; }
+  .map-consent p { max-width:390px; margin:0; }
+  .map-consent .button { width:auto; white-space:nowrap; }
+  .map-toolbar { display:flex; align-items:center; justify-content:space-between; gap:20px; border-top:1px solid rgba(38,51,44,.1); padding:16px 20px; background:var(--color-white); }
+  .map-toolbar span { color:var(--color-muted); font-size:.9rem; }
+  .map-toolbar a { flex:none; color:var(--color-sage-dark); font-weight:800; }
+  .map-toolbar a:hover { text-decoration:underline; text-underline-offset:3px; }
+  @media (max-width:560px) { .map-consent { grid-template-columns:1fr; align-content:center; justify-items:start; padding:24px; } .map-consent .button { width:100%; } .map-toolbar { align-items:flex-start; flex-direction:column; gap:8px; } }
+  @media (max-width:820px) { .contact-grid { grid-template-columns:1fr; } }
+</style>
+
+<script>
+  type ConsentState = { externalMedia?: boolean };
+  type ConsentManager = { get: () => ConsentState | null; setExternalMedia: (allowed: boolean) => void };
+  const manager = () => (window as typeof window & { LaSpezialeConsent?: ConsentManager }).LaSpezialeConsent;
+  const mapRoot = document.querySelector<HTMLElement>("[data-consent-map]");
+  const frame = mapRoot?.querySelector<HTMLIFrameElement>("[data-map-frame]");
+  const placeholder = mapRoot?.querySelector<HTMLElement>("[data-map-placeholder]");
+  const enableButton = mapRoot?.querySelector<HTMLButtonElement>("[data-enable-map]");
+
+  const syncMap = (consent?: ConsentState | null) => {
+    if (!frame || !placeholder) return;
+    const allowed = consent?.externalMedia === true;
+    if (allowed && !frame.hasAttribute("src")) frame.src = frame.dataset.src || "";
+    if (!allowed) frame.removeAttribute("src");
+    frame.hidden = !allowed;
+    placeholder.hidden = allowed;
+  };
+
+  document.addEventListener("laspeziale:consent", (event) => {
+    syncMap((event as CustomEvent<ConsentState>).detail);
+  });
+  window.addEventListener("load", () => syncMap(manager()?.get()));
+  enableButton?.addEventListener("click", () => manager()?.setExternalMedia(true));
+</script>

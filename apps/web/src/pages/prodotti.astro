@@ -1,0 +1,382 @@
+---
+import { ExternalLink, Search } from "@lucide/astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { getProducts, getProductsPage } from "../lib/sanity";
+
+const [page, products] = await Promise.all([getProductsPage(), getProducts()]);
+const quickCategories = [
+  "Drenaggio e Liquidi",
+  "Gambe e Microcircolo",
+  "Stress e Sonno",
+  "Digestione e Pancia",
+  "Benessere Ormonale",
+  "Energia e Vitalita",
+  "Difese Immunitarie",
+  "Anti-Age e Cellule",
+  "Capelli e Unghie",
+];
+
+const normalize = (value: string) =>
+  value
+    .toLocaleLowerCase("it")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+
+const productsHeroDisclaimer =
+  "I prodotti presenti in questa pagina sono solo consigliati da La Speziale e non sono venduti direttamente dallo studio: il sito non e un ecommerce, non gestisce carrelli, pagamenti, spedizioni o assistenza sugli ordini. Le informazioni non sostituiscono una consulenza medica, nutrizionale o sanitaria personalizzata; prima di assumere integratori o rimedi naturali, soprattutto in caso di patologie, terapie farmacologiche, gravidanza o allattamento, confrontati con un professionista.";
+---
+
+<MainLayout title={page.seo?.title} description={page.seo?.description || productsHeroDisclaimer} image={page.seo?.imageUrl || page.heroImageUrl}>
+  <section class="shop-hero">
+    <div class="container shop-hero-inner">
+      <div class="shop-hero-copy">
+        <p class="eyebrow">{page.heroEyebrow || "Prodotti consigliati"}</p>
+        <h1>{page.heroTitle || "La tua lista della spesa naturale"}</h1>
+        <p class="lead">
+          {productsHeroDisclaimer}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section products-list-section">
+    <div class="container products-shell">
+      <div class="products-tools">
+        <label class="product-search">
+          <span>{page.searchLabel || "Cerca un prodotto"}</span>
+          <span class="search-control">
+            <Search size={19} stroke-width={1.9} aria-hidden="true" />
+            <input
+              type="search"
+              data-product-search
+              placeholder={page.searchPlaceholder || "Digita il nome del prodotto consigliato sul foglio..."}
+              autocomplete="off"
+              disabled={products.length === 0}
+            />
+          </span>
+        </label>
+
+        <div class="category-chips" aria-label="Filtri prodotto">
+          <button type="button" class="chip active" data-category-button value="">Tutti i prodotti</button>
+          {quickCategories.map((category) => <button type="button" class="chip" data-category-button value={normalize(category)}>{category}</button>)}
+        </div>
+      </div>
+
+      <div class="product-table" data-products-list>
+        <div class="product-table-head" aria-hidden="true">
+          <span>Nome prodotto consigliato</span>
+          <span>Collegamento partner</span>
+        </div>
+
+        {products.map((product) => {
+          const categoryText = product.category || "Prodotto consigliato";
+          const searchableText = [
+            product.title,
+            product.category,
+            product.excerpt,
+            product.price,
+            product.purchaseLabel,
+            ...(product.tags || []),
+            ...(product.relatedTherapies || []).map((therapy) => therapy.title),
+          ]
+            .filter(Boolean)
+            .join(" ");
+          const categorySearch = normalize(`${categoryText} ${(product.tags || []).join(" ")}`);
+          return (
+            <article class="product-row" data-product-row data-search={searchableText} data-category={categorySearch}>
+              <div class="product-main">
+                <span>{categoryText}</span>
+                <h2><a href={`/prodotti/${product.slug}/`}>{product.title}</a></h2>
+                {product.excerpt && <p>{product.excerpt}</p>}
+              </div>
+              <div class="product-side">
+                <a class="details-link" href={`/prodotti/${product.slug}/`}>Dettaglio</a>
+                {product.purchaseUrl ? (
+                  <a class="buy-link" href={product.purchaseUrl} target="_blank" rel="noopener noreferrer">
+                    {product.purchaseLabel || "Acquista"} <ExternalLink size={14} stroke-width={2.2} aria-hidden="true" />
+                  </a>
+                ) : (
+                  <a class="buy-link" href="/contatti">Richiedi info</a>
+                )}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <p class="products-empty" data-products-empty hidden={products.length > 0} aria-live="polite">
+        {products.length === 0 ? "I prodotti saranno disponibili presto." : page.emptyText || "Nessun prodotto corrisponde alla ricerca."}
+      </p>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  const normalizeProductValue = (value: string) =>
+    value
+      .toLocaleLowerCase("it")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+
+  const search = document.querySelector<HTMLInputElement>("[data-product-search]");
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-category-button]"));
+  const rows = Array.from(document.querySelectorAll<HTMLElement>("[data-product-row]"));
+  const empty = document.querySelector<HTMLElement>("[data-products-empty]");
+  let activeCategory = "";
+
+  const applyFilters = () => {
+    const query = normalizeProductValue(search?.value || "");
+    let visibleCount = 0;
+
+    rows.forEach((row) => {
+      const matchesSearch = normalizeProductValue(row.dataset.search || "").includes(query);
+      const matchesCategory = !activeCategory || normalizeProductValue(row.dataset.category || "").includes(activeCategory);
+      const matches = matchesSearch && matchesCategory;
+      row.hidden = !matches;
+      if (matches) visibleCount += 1;
+    });
+
+    if (empty) empty.hidden = visibleCount > 0;
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeCategory = button.value;
+      buttons.forEach((item) => item.classList.toggle("active", item === button));
+      applyFilters();
+    });
+  });
+
+  search?.addEventListener("input", applyFilters);
+</script>
+
+<style>
+  .shop-hero {
+    background:
+      radial-gradient(circle at 18% 8%, rgba(197, 155, 39, 0.14), transparent 30%),
+      linear-gradient(135deg, #fffdf8 0%, #fcfbf7 55%, #eef2ec 100%);
+    padding: clamp(68px, 10vw, 118px) 0 56px;
+  }
+
+  .shop-hero-inner {
+    max-width: 980px;
+  }
+
+  .shop-hero h1 {
+    color: #13382b;
+    font-size: clamp(2.15rem, 4.6vw, 3.8rem);
+  }
+
+  .products-list-section {
+    background: #fcfbf7;
+  }
+
+  .products-shell {
+    max-width: 980px;
+  }
+
+  .products-tools {
+    display: grid;
+    gap: 18px;
+    border: 1px solid rgba(46, 58, 54, 0.08);
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 16px 46px rgba(46, 58, 54, 0.06);
+    padding: clamp(18px, 3vw, 26px);
+  }
+
+  .product-search {
+    display: grid;
+    gap: 8px;
+    color: #13382b;
+    font-size: 0.88rem;
+    font-weight: 850;
+  }
+
+  .search-control {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid rgba(46, 58, 54, 0.12);
+    border-radius: 16px;
+    background: #fcfbf7;
+    padding: 0 16px;
+  }
+
+  .search-control :global(svg) {
+    color: #9aa29b;
+  }
+
+  .search-control input {
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    padding: 15px 0;
+  }
+
+  .category-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip {
+    border: 1px solid rgba(46, 58, 54, 0.13);
+    border-radius: 999px;
+    background: #fcfbf7;
+    color: #647066;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 850;
+    padding: 8px 12px;
+    transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+
+  .chip:hover,
+  .chip.active {
+    border-color: #13382b;
+    background: #13382b;
+    color: white;
+  }
+
+  .product-table {
+    overflow: hidden;
+    border: 1px solid rgba(46, 58, 54, 0.08);
+    border-radius: 24px;
+    background: white;
+    box-shadow: 0 16px 46px rgba(46, 58, 54, 0.06);
+    margin-top: 22px;
+  }
+
+  .product-table-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: 20px;
+    border-bottom: 1px solid rgba(46, 58, 54, 0.08);
+    background: rgba(252, 251, 247, 0.82);
+    color: #89928b;
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 14px 24px;
+    text-transform: uppercase;
+  }
+
+  .product-table-head span:last-child {
+    text-align: right;
+  }
+
+  .product-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: 20px;
+    align-items: center;
+    border-bottom: 1px solid rgba(46, 58, 54, 0.08);
+    padding: 18px 24px;
+    transition: background 160ms ease;
+  }
+
+  .product-row:last-child {
+    border-bottom: 0;
+  }
+
+  .product-row:hover {
+    background: rgba(252, 251, 247, 0.72);
+  }
+
+  .product-row[hidden] {
+    display: none;
+  }
+
+  .product-main span {
+    display: block;
+    color: #c59b27;
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .product-main h2 {
+    margin: 4px 0 5px;
+    color: #13382b;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 850;
+    line-height: 1.32;
+  }
+
+  .product-main p {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.45;
+  }
+
+  .product-side {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .details-link,
+  .buy-link {
+    display: inline-flex;
+    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 0.76rem;
+    font-weight: 900;
+    padding: 9px 12px;
+    white-space: nowrap;
+  }
+
+  .details-link {
+    border: 1px solid rgba(19, 56, 43, 0.12);
+    color: #13382b;
+  }
+
+  .buy-link {
+    gap: 6px;
+    background: #13382b;
+    color: white;
+  }
+
+  .buy-link:hover {
+    background: #c59b27;
+  }
+
+  .products-empty {
+    border: 1px dashed rgba(38, 51, 44, 0.2);
+    border-radius: 16px;
+    background: #f7f5ef;
+    margin-top: 20px;
+    padding: 30px;
+    text-align: center;
+  }
+
+  @media (max-width: 760px) {
+    .product-table-head,
+    .product-row {
+      grid-template-columns: 1fr;
+    }
+
+    .product-table-head {
+      display: none;
+    }
+
+    .product-side {
+      justify-content: stretch;
+    }
+
+    .details-link,
+    .buy-link {
+      flex: 1;
+    }
+
+  }
+</style>

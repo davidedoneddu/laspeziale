@@ -1,0 +1,150 @@
+---
+import { getSiteSettings } from "../lib/sanity";
+
+const settings = await getSiteSettings();
+const clinicalLinks = [
+  { href: "/programmi/gestione-peso-ricomposizione-corporea", label: "Gestione del peso, cellulite e ricomposizione corporea" },
+  { href: "/programmi/gonfiore-disturbi-intestinali", label: "Gonfiore e disturbi intestinali" },
+  { href: "/programmi/menopausa-premenopausa", label: "Salute femminile e cambiamenti ormonali" },
+  { href: "/programmi/programma-anti-age", label: "Longevita e Anti-Age" },
+  { href: "/programmi/nutrizione-sportiva", label: "Nutrizione Sportiva" },
+];
+const consultationLinks = [
+  { href: "/fitoterapia", label: "Farmacista Fitoterapeuta" },
+  { href: "/consapevolezza", label: "Tutor del Benessere" },
+];
+---
+
+<footer class="footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="footer-brand" href="/">
+        <img src={settings.logoUrl || "/assets/old-site/logo.png"} alt="La Speziale" />
+      </a>
+      <p>{settings.footerText || "Nutrizione integrata e percorsi personalizzati a Milano."}</p>
+    </div>
+    <div>
+      <h2>Link rapidi</h2>
+      <nav>
+        <a href="/il-metodo">Il Metodo</a>
+        <a href="/altre-consulenze">Consulenze</a>
+        <a href="/dicono-di-noi">Dicono di noi</a>
+        <a href="/contatti">Contatti</a>
+      </nav>
+    </div>
+    <div>
+      <h2>Aree di intervento</h2>
+      <nav>
+        {clinicalLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+    <div>
+      <h2>Consulenze</h2>
+      <nav>
+        <a href="/altre-consulenze">Panoramica consulenze</a>
+        {consultationLinks.map((link) => <a href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+    <div>
+      <h2>Contatti</h2>
+      <p>
+        <a href={`tel:${settings.phone.replaceAll(" ", "")}`}>{settings.phone}</a><br />
+        <a href={`mailto:${settings.email}`}>{settings.email}</a><br />
+        {settings.address}
+      </p>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>&copy; {new Date().getFullYear()} {settings.siteTitle || "La Speziale"}</span>
+    <span class="legal-links">
+      <a href={settings.privacyPolicyLink || "/privacy-policy"}>Privacy</a>
+      <a href={settings.cookiePolicyLink || "/cookie-policy"}>Cookie</a>
+      <button type="button" data-open-cookie-settings>Preferenze cookie</button>
+    </span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid rgba(19, 56, 43, 0.08);
+    background:
+      radial-gradient(circle at 12% 0%, rgba(197, 155, 39, 0.1), transparent 28%),
+      #e8eadf;
+    padding: 54px 0 28px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 0.75fr 1fr 0.9fr 0.9fr;
+    gap: 36px;
+  }
+
+  .footer-brand {
+    display: inline-block;
+    margin-bottom: 14px;
+  }
+
+  .footer-brand img {
+    width: 170px;
+    max-height: 60px;
+    object-fit: contain;
+  }
+
+  h2 {
+    margin-bottom: 12px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 850;
+    text-transform: uppercase;
+  }
+
+  nav {
+    display: grid;
+    gap: 8px;
+    color: var(--color-muted);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    border-top: 1px solid rgba(19, 56, 43, 0.08);
+    margin-top: 38px;
+    padding-top: 22px;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .legal-links button {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (max-width: 1100px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 760px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+    }
+  }
+</style>

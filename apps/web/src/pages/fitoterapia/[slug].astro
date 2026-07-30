@@ -1,0 +1,191 @@
+---
+import { BadgeCheck, Leaf, Mail, MessageCircle, ShoppingBag } from "@lucide/astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { blocksToText, getSiteSettings, getTherapies, getTherapy } from "../../lib/sanity";
+
+export async function getStaticPaths() {
+  const therapies = await getTherapies();
+  return therapies.map((therapy) => ({params: {slug: therapy.slug}}));
+}
+
+const [settings, therapy] = await Promise.all([
+  getSiteSettings(),
+  Astro.params.slug ? getTherapy(Astro.params.slug) : Promise.resolve(undefined),
+]);
+
+if (!therapy) return Astro.rewrite("/404?kind=therapy");
+
+const isVisible = (value: boolean | undefined) => value !== false;
+const paragraphs = blocksToText(therapy.description || []);
+const benefits = therapy.benefitCards || [];
+const products = therapy.recommendedProducts || [];
+const faqs = therapy.faqs || [];
+const heroImage = therapy.imageUrl || "/assets/old-site/fitoterapia.jpg";
+const finalCtaImage = therapy.finalCtaImageUrl || heroImage;
+const showOverview = isVisible(therapy.showOverview);
+const showBenefits = isVisible(therapy.showBenefits) && benefits.length > 0;
+const showProducts = isVisible(therapy.showRecommendedProducts) && products.length > 0;
+const showFaqs = isVisible(therapy.showFaqs) && faqs.length > 0;
+const showFinalCta = isVisible(therapy.showFinalCta);
+const anchors = [
+  showOverview && { href: "#panoramica", label: "Panoramica" },
+  showBenefits && { href: "#benefici", label: "Benefici" },
+  showProducts && { href: "#prodotti", label: "Prodotti" },
+  showFaqs && { href: "#faq", label: "FAQ" },
+  showFinalCta && { href: "#contatti", label: "Contatti" },
+].filter(Boolean) as { href: string; label: string }[];
+---
+
+<MainLayout title={therapy.seo?.title || `${therapy.title} | Fitoterapia La Speziale Milano`} description={therapy.seo?.description || therapy.excerpt} image={therapy.seo?.imageUrl || heroImage}>
+  <article class="therapy-page">
+    <header class="therapy-detail-hero" style={`--therapy-detail-hero: url('${heroImage}')`}>
+      <div class="container therapy-copy">
+        <p class="eyebrow">{therapy.category || "Consiglio fitoterapico"}</p>
+        <h1>{therapy.title}</h1>
+        {therapy.excerpt && <p class="lead">{therapy.excerpt}</p>}
+        <div class="hero-actions">
+          {showOverview && <a class="button hero-primary" href="#panoramica">{therapy.heroPrimaryLabel || "Scopri i consigli"}</a>}
+          <a class="button hero-secondary" href={therapy.ctaLink || "/contatti"}>{therapy.ctaLabel || "Prenota una consulenza"}</a>
+        </div>
+      </div>
+    </header>
+
+    {isVisible(therapy.showAnchorNav) && anchors.length > 1 && (
+      <nav class="anchor-nav" aria-label="Sezioni fitoterapia">
+        <div class="container anchor-list">
+          {anchors.map((anchor) => <a href={anchor.href}>{anchor.label}</a>)}
+        </div>
+      </nav>
+    )}
+
+    {showOverview && (
+      <section class="section" id="panoramica">
+        <div class="container overview-grid">
+          <div>
+            <h2>{therapy.overviewTitle || "Quando puo essere utile"}</h2>
+            {(paragraphs.length ? paragraphs : [therapy.excerpt || ""]).filter(Boolean).map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+          {therapy.notes?.length && (
+            <aside class="therapy-notes">
+              <h3>{therapy.notesTitle || "Indicazioni importanti"}</h3>
+              <ul class="check-list">
+                {therapy.notes.map((note) => <li><BadgeCheck size={18} aria-hidden="true" /> {note}</li>)}
+              </ul>
+            </aside>
+          )}
+        </div>
+      </section>
+    )}
+
+    {showBenefits && (
+      <section class="section section-soft" id="benefici">
+        <div class="container">
+          <h2>{therapy.benefitsTitle || "I benefici del supporto"}</h2>
+          <div class="benefit-grid">
+            {benefits.map((benefit) => (
+              <article class="benefit-card">
+                <Leaf size={34} stroke-width={1.4} aria-hidden="true" />
+                <h3>{benefit.title}</h3>
+                {benefit.description && <p>{benefit.description}</p>}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showProducts && (
+      <section class="section products-related" id="prodotti">
+        <div class="container">
+          <h2>{therapy.recommendedProductsTitle || "Prodotti consigliati"}</h2>
+          <div class="related-grid">
+            {products.map((product) => (
+              <article class="related-card">
+                <a href={`/prodotti/${product.slug}/`} class="related-image" aria-label={`Apri ${product.title}`}>
+                  {product.imageUrl ? <img src={product.imageUrl} alt={product.imageAlt || product.title} loading="lazy" /> : <span></span>}
+                </a>
+                <div>
+                  {product.category && <p class="eyebrow">{product.category}</p>}
+                  <h3><a href={`/prodotti/${product.slug}/`}>{product.title}</a></h3>
+                  {product.excerpt && <p>{product.excerpt}</p>}
+                  <div class="related-actions">
+                    <a class="button button-secondary" href={`/prodotti/${product.slug}/`}>Dettaglio</a>
+                    {product.purchaseUrl && <a class="button button-primary" href={product.purchaseUrl} target="_blank" rel="noopener noreferrer">{product.purchaseLabel || "Acquista"}</a>}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showFaqs && (
+      <section class="section section-soft" id="faq">
+        <div class="container narrow">
+          <h2>{therapy.faqsTitle || "Domande frequenti"}</h2>
+          <div class="faq-list">
+            {faqs.map((faq) => (
+              <details>
+                <summary>{faq.question}</summary>
+                <p>{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showFinalCta && (
+      <section class="section final-therapy" id="contatti">
+        <div class="container">
+          <div class="final-card" style={`--final-image: url('${finalCtaImage}')`}>
+            <div>
+              <h2>{therapy.finalCtaTitle || `Vuoi approfondire ${therapy.title}?`}</h2>
+              <p>{therapy.finalCtaText || "Scrivici per ricevere indicazioni personalizzate e capire quali prodotti o percorsi possono essere adatti."}</p>
+              <div class="final-actions">
+                <a class="button button-primary" href={settings.whatsapp || "/contatti"}><MessageCircle size={18} aria-hidden="true" /> Scrivi su WhatsApp</a>
+                <a class="button button-secondary" href={`mailto:${settings.email}`}><Mail size={18} aria-hidden="true" /> Invia una email</a>
+              </div>
+            </div>
+            <ShoppingBag size={64} stroke-width={1.2} aria-hidden="true" />
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</MainLayout>
+
+<style>
+  .therapy-page { background:#fffefa; }
+  .therapy-detail-hero { display:grid; min-height:72vh; align-items:end; background-image:linear-gradient(90deg,rgba(16,24,20,.76),rgba(16,24,20,.18)),var(--therapy-detail-hero); background-position:center; background-size:cover; padding:96px 0 80px; }
+  .therapy-copy, .therapy-copy h1, .therapy-copy .eyebrow, .therapy-copy .lead { color:white; }
+  .therapy-copy { max-width:760px; }
+  .hero-actions, .final-actions, .related-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+  .hero-secondary { border:1px solid rgba(255,255,255,.7); color:white; background:rgba(255,255,255,.08); }
+  .hero-primary { background:var(--color-sage); color:white; }
+  .anchor-nav { position:sticky; top:76px; z-index:12; border-bottom:1px solid rgba(38,51,44,.1); background:rgba(255,254,250,.94); backdrop-filter:blur(12px); }
+  .anchor-list { display:flex; justify-content:center; gap:28px; overflow:auto; }
+  .anchor-list a { padding:16px 4px; color:var(--color-ink); font-weight:800; white-space:nowrap; }
+  .overview-grid { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr); gap:56px; }
+  .therapy-notes { align-self:start; border-radius:16px; background:#f5f0e6; padding:28px; box-shadow:var(--shadow-soft); }
+  .check-list { display:grid; gap:14px; padding:0; margin:16px 0 0; list-style:none; }
+  .check-list li { display:flex; gap:10px; align-items:flex-start; }
+  .check-list svg { flex:0 0 auto; color:var(--color-sage); margin-top:3px; }
+  .benefit-grid, .related-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; margin-top:28px; }
+  .benefit-card, .related-card { border:1px solid rgba(38,51,44,.1); border-radius:12px; background:white; box-shadow:0 16px 38px rgba(38,51,44,.08); }
+  .benefit-card { padding:28px; }
+  .benefit-card svg { color:var(--color-sage); }
+  .related-card { overflow:hidden; display:grid; grid-template-rows:auto 1fr; }
+  .related-card > div { padding:22px; }
+  .related-image { display:block; aspect-ratio:4/3; background:linear-gradient(135deg,#d8e0d1,#f1e5d3); overflow:hidden; }
+  .related-image img { width:100%; height:100%; object-fit:cover; }
+  .related-actions .button { flex:1 1 120px; min-height:44px; padding:10px 14px; text-align:center; }
+  .faq-list { display:grid; border:1px solid rgba(38,51,44,.12); border-radius:12px; background:white; overflow:hidden; }
+  .faq-list details + details { border-top:1px solid rgba(38,51,44,.1); }
+  .faq-list summary { cursor:pointer; font-weight:850; padding:18px 20px; }
+  .faq-list p { padding:0 20px 20px; }
+  .final-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:28px; align-items:center; border-radius:16px; background-image:linear-gradient(90deg,rgba(239,235,224,.96),rgba(239,235,224,.74)),var(--final-image); background-position:center; background-size:cover; padding:42px; box-shadow:var(--shadow-soft); }
+  .final-card svg { color:var(--color-sage); }
+  @media (max-width:880px) { .overview-grid, .benefit-grid, .related-grid, .final-card { grid-template-columns:1fr; } .anchor-nav { top:68px; } }
+</style>

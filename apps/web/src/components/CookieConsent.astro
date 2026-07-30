@@ -1,0 +1,158 @@
+---
+import { Settings2, ShieldCheck, X } from "@lucide/astro";
+---
+
+<section class="consent-banner" data-consent-banner role="dialog" aria-labelledby="consent-title" aria-modal="false" hidden>
+  <div class="consent-heading">
+    <span class="consent-icon"><ShieldCheck size={24} stroke-width={1.8} aria-hidden="true" /></span>
+    <div>
+      <h2 id="consent-title" tabindex="-1">La tua privacy, con scelte chiare</h2>
+      <p>Usiamo solo strumenti tecnici necessari. Google Maps viene caricato esclusivamente con il tuo consenso.</p>
+    </div>
+    <button class="consent-close" type="button" data-consent-close aria-label="Chiudi il banner">
+      <X size={20} stroke-width={2} aria-hidden="true" />
+    </button>
+  </div>
+
+  <div class="consent-preferences" data-consent-preferences hidden>
+    <div class="consent-option">
+      <div>
+        <strong>Funzionalità necessarie</strong>
+        <span>Memorizzano la scelta espressa e garantiscono il funzionamento del sito.</span>
+      </div>
+      <input type="checkbox" checked disabled aria-label="Funzionalità necessarie sempre attive" />
+    </div>
+    <label class="consent-option">
+      <div>
+        <strong>Contenuti esterni</strong>
+        <span>Consente di visualizzare la mappa interattiva fornita da Google Maps.</span>
+      </div>
+      <input type="checkbox" data-external-media-toggle />
+    </label>
+  </div>
+
+  <div class="consent-footer">
+    <div class="consent-links">
+      <a href="/privacy-policy">Privacy policy</a>
+      <a href="/cookie-policy">Cookie policy</a>
+    </div>
+    <div class="consent-actions">
+      <button class="consent-button consent-manage" type="button" data-consent-manage>
+        <Settings2 size={17} stroke-width={1.8} aria-hidden="true" />
+        Personalizza
+      </button>
+      <button class="consent-button consent-reject" type="button" data-consent-reject>Rifiuta</button>
+      <button class="consent-button consent-save" type="button" data-consent-save hidden>Salva scelte</button>
+      <button class="consent-button consent-accept" type="button" data-consent-accept>Accetta</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  .consent-banner { position:fixed; right:20px; bottom:20px; left:20px; z-index:100; width:min(940px,calc(100% - 40px)); margin:0 auto; border:1px solid rgba(38,51,44,.14); border-radius:18px; background:rgba(255,253,248,.98); box-shadow:0 24px 70px rgba(25,38,31,.24); padding:22px; }
+  .consent-banner[hidden], .consent-preferences[hidden], .consent-button[hidden] { display:none; }
+  .consent-heading { display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:14px; align-items:start; }
+  .consent-icon { display:grid; width:42px; height:42px; place-items:center; border-radius:50%; background:#e7ebe2; color:var(--color-sage-dark); }
+  .consent-heading h2 { margin:1px 0 5px; font-family:inherit; font-size:1.08rem; font-weight:850; }
+  .consent-heading p { max-width:680px; margin:0; font-size:.93rem; line-height:1.5; }
+  .consent-close { display:grid; width:36px; height:36px; place-items:center; border:1px solid rgba(38,51,44,.12); border-radius:50%; background:transparent; color:var(--color-ink); cursor:pointer; }
+  .consent-preferences { display:grid; gap:1px; overflow:hidden; border:1px solid rgba(38,51,44,.1); border-radius:12px; background:rgba(38,51,44,.1); margin-top:18px; }
+  .consent-option { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:18px; align-items:center; background:var(--color-white); padding:14px 16px; cursor:pointer; }
+  .consent-option div { display:grid; gap:2px; }
+  .consent-option strong { font-size:.92rem; }
+  .consent-option span { color:var(--color-muted); font-size:.82rem; font-weight:500; }
+  .consent-option input { width:22px; height:22px; margin:0; accent-color:var(--color-sage-dark); }
+  .consent-footer { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:18px; }
+  .consent-links { display:flex; flex-wrap:wrap; gap:14px; font-size:.85rem; font-weight:750; }
+  .consent-links a { text-decoration:underline; text-underline-offset:3px; }
+  .consent-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:9px; }
+  .consent-button { display:inline-flex; min-height:42px; align-items:center; justify-content:center; gap:7px; border:1px solid rgba(38,51,44,.18); border-radius:999px; background:var(--color-white); color:var(--color-ink); cursor:pointer; font:inherit; font-size:.86rem; font-weight:800; padding:9px 16px; white-space:nowrap; }
+  .consent-accept, .consent-save { border-color:var(--color-ink); background:var(--color-ink); color:var(--color-white); }
+  .consent-button:hover { transform:translateY(-1px); }
+  .consent-button:focus-visible, .consent-close:focus-visible { outline:3px solid rgba(93,120,95,.35); outline-offset:2px; }
+  @media (max-width:720px) { .consent-banner { right:10px; bottom:10px; left:10px; width:calc(100% - 20px); max-height:calc(100dvh - 20px); overflow:auto; padding:18px; } .consent-icon { display:none; } .consent-heading { grid-template-columns:minmax(0,1fr) auto; } .consent-footer { align-items:stretch; flex-direction:column; } .consent-actions { display:grid; grid-template-columns:1fr 1fr; } .consent-button { width:100%; } .consent-manage { grid-column:1 / -1; } }
+</style>
+
+<script>
+  type ConsentState = {
+    version: 1;
+    necessary: true;
+    externalMedia: boolean;
+    updatedAt: string;
+  };
+
+  const STORAGE_KEY = "laspeziale-consent-v1";
+  const MAX_AGE = 180 * 24 * 60 * 60 * 1000;
+  const banner = document.querySelector<HTMLElement>("[data-consent-banner]");
+  const preferences = banner?.querySelector<HTMLElement>("[data-consent-preferences]");
+  const title = banner?.querySelector<HTMLElement>("#consent-title");
+  const toggle = banner?.querySelector<HTMLInputElement>("[data-external-media-toggle]");
+  const manageButton = banner?.querySelector<HTMLButtonElement>("[data-consent-manage]");
+  const saveButton = banner?.querySelector<HTMLButtonElement>("[data-consent-save]");
+  let current: ConsentState | null = null;
+
+  const readConsent = (): ConsentState | null => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) return null;
+      const value = JSON.parse(stored) as ConsentState;
+      if (value.version !== 1 || Date.now() - new Date(value.updatedAt).getTime() > MAX_AGE) {
+        localStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+      return value;
+    } catch {
+      return null;
+    }
+  };
+
+  const notify = (consent: ConsentState) => {
+    document.dispatchEvent(new CustomEvent("laspeziale:consent", { detail: consent }));
+  };
+
+  const persist = (externalMedia: boolean) => {
+    current = { version: 1, necessary: true, externalMedia, updatedAt: new Date().toISOString() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    if (toggle) toggle.checked = externalMedia;
+    if (banner) banner.hidden = true;
+    notify(current);
+  };
+
+  const openBanner = (showPreferences = false) => {
+    if (!banner || !preferences || !manageButton || !saveButton) return;
+    banner.hidden = false;
+    preferences.hidden = !showPreferences;
+    manageButton.hidden = showPreferences;
+    saveButton.hidden = !showPreferences;
+    if (toggle) toggle.checked = current?.externalMedia === true;
+    requestAnimationFrame(() => title?.focus());
+  };
+
+  current = readConsent();
+  if (current) notify(current);
+  else openBanner(false);
+
+  banner?.querySelector("[data-consent-accept]")?.addEventListener("click", () => persist(true));
+  banner?.querySelector("[data-consent-reject]")?.addEventListener("click", () => persist(false));
+  banner?.querySelector("[data-consent-save]")?.addEventListener("click", () => persist(toggle?.checked === true));
+  banner?.querySelector("[data-consent-manage]")?.addEventListener("click", () => openBanner(true));
+  banner?.querySelector("[data-consent-close]")?.addEventListener("click", () => {
+    if (current) banner.hidden = true;
+    else persist(false);
+  });
+  document.querySelectorAll<HTMLElement>("[data-open-cookie-settings]").forEach((button) => {
+    button.addEventListener("click", () => openBanner(true));
+  });
+
+  (window as typeof window & {
+    LaSpezialeConsent?: {
+      get: () => ConsentState | null;
+      setExternalMedia: (allowed: boolean) => void;
+      open: () => void;
+    };
+  }).LaSpezialeConsent = {
+    get: () => current,
+    setExternalMedia: (allowed) => persist(allowed),
+    open: () => openBanner(true),
+  };
+</script>

@@ -1,0 +1,152 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+
+Astro.response.status = 404;
+
+const requestedPath = Astro.url.pathname.toLowerCase();
+const requestedKind = Astro.url.searchParams.get("kind");
+const initialKind = requestedKind === "program" || requestedPath.startsWith("/programmi/")
+  ? "program"
+  : requestedKind === "product" || requestedPath.startsWith("/prodotti/")
+    ? "product"
+    : requestedKind === "therapy" || requestedPath.startsWith("/fitoterapia/")
+      ? "therapy"
+      : "page";
+
+const messages = {
+  program: {
+    eyebrow: "Programma non disponibile",
+    title: "Questo programma non è più disponibile",
+    text: "Potrebbe essere stato rimosso, aggiornato o sostituito da un nuovo percorso.",
+    label: "Scopri i programmi",
+    href: "/programmi",
+  },
+  product: {
+    eyebrow: "Prodotto non disponibile",
+    title: "Questo prodotto non è più disponibile",
+    text: "Consulta la selezione aggiornata dei prodotti disponibili attraverso La Speziale.",
+    label: "Vedi i prodotti",
+    href: "/prodotti",
+  },
+  therapy: {
+    eyebrow: "Fitoterapia non disponibile",
+    title: "Questa terapia non e piu disponibile",
+    text: "Consulta la selezione aggiornata dei consigli di fitoterapia disponibili attraverso La Speziale.",
+    label: "Vedi le fitoterapie",
+    href: "/fitoterapia",
+  },
+  page: {
+    eyebrow: "Pagina non trovata",
+    title: "Qui non c'è più nulla",
+    text: "La pagina potrebbe essere stata spostata oppure l'indirizzo non è corretto.",
+    label: "Torna alla homepage",
+    href: "/",
+  },
+} as const;
+
+const initialMessage = messages[initialKind];
+---
+
+<MainLayout
+  title="Pagina non trovata"
+  description="La pagina richiesta non è disponibile."
+  image="/assets/old-site/hero-header.jpg"
+  noindex
+>
+  <section class="not-found" data-not-found data-kind={initialKind}>
+    <div class="container not-found-copy">
+      <p class="eyebrow" data-not-found-eyebrow>{initialMessage.eyebrow}</p>
+      <h1 data-not-found-title>{initialMessage.title}</h1>
+      <p class="lead" data-not-found-text>{initialMessage.text}</p>
+      <div class="not-found-actions">
+        <a class="button button-primary" href={initialMessage.href} data-not-found-link>{initialMessage.label}</a>
+        <a class="button not-found-secondary" href="/contatti">Contattaci</a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script define:vars={{ messages }}>
+  const path = window.location.pathname.toLowerCase();
+  const kind = path.startsWith("/programmi/")
+    ? "program"
+    : path.startsWith("/prodotti/")
+      ? "product"
+      : path.startsWith("/fitoterapia/")
+        ? "therapy"
+        : "page";
+  const message = messages[kind];
+  const section = document.querySelector("[data-not-found]");
+  const eyebrow = document.querySelector("[data-not-found-eyebrow]");
+  const title = document.querySelector("[data-not-found-title]");
+  const text = document.querySelector("[data-not-found-text]");
+  const link = document.querySelector("[data-not-found-link]");
+
+  if (section) section.dataset.kind = kind;
+  if (eyebrow) eyebrow.textContent = message.eyebrow;
+  if (title) title.textContent = message.title;
+  if (text) text.textContent = message.text;
+  if (link) {
+    link.textContent = message.label;
+    link.setAttribute("href", message.href);
+  }
+</script>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: calc(100dvh - 76px);
+    align-items: center;
+    background-image:
+      linear-gradient(90deg, rgba(20, 29, 25, 0.8), rgba(20, 29, 25, 0.28)),
+      url("/assets/old-site/hero-header.jpg");
+    background-position: center;
+    background-size: cover;
+    padding: 72px 0;
+  }
+
+  .not-found-copy {
+    color: white;
+  }
+
+  .not-found h1 {
+    max-width: 760px;
+    color: white;
+  }
+
+  .not-found .eyebrow,
+  .not-found .lead {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .not-found .lead {
+    max-width: 600px;
+  }
+
+  .not-found-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  .not-found-secondary {
+    border-color: rgba(255, 255, 255, 0.58);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    backdrop-filter: blur(8px);
+  }
+
+  @media (max-width: 620px) {
+    .not-found {
+      min-height: calc(100dvh - 68px);
+      align-items: end;
+      background-position: 60% center;
+      padding: 58px 0;
+    }
+
+    .not-found-actions {
+      display: grid;
+    }
+  }
+</style>

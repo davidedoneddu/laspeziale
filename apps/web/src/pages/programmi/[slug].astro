@@ -1,0 +1,872 @@
+---
+import {
+  Activity,
+  ArrowRight,
+  BadgeCheck,
+  CalendarDays,
+  Check,
+  ClipboardList,
+  Dumbbell,
+  Heart,
+  Leaf,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Scale,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  UserRound,
+} from "@lucide/astro";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { blocksToText, getProgram, getPrograms, getSiteSettings } from "../../lib/sanity";
+
+const retiredProgramSlugs = new Set(["nutrizione-integrata", "fitoterapia-erbe-officinali-nutraceutici"]);
+const isRetiredProgramSlug = (slug: string) => retiredProgramSlugs.has(slug) || slug.includes("fitoterapia") || slug === "consapevolezza-motivazione";
+
+export async function getStaticPaths() {
+  const programs = await getPrograms();
+  const retiredSlugs = new Set(["nutrizione-integrata", "fitoterapia-erbe-officinali-nutraceutici", "consapevolezza-motivazione"]);
+  const isRetiredSlug = (slug: string) => retiredSlugs.has(slug) || slug.includes("fitoterapia");
+  return programs
+    .filter((program) => !isRetiredSlug(program.slug))
+    .map((program) => ({
+      params: { slug: program.slug },
+    }));
+}
+
+const program = Astro.params.slug ? await getProgram(Astro.params.slug) : undefined;
+if (!program || isRetiredProgramSlug(program.slug)) return Astro.rewrite("/404?kind=program");
+
+const settings = await getSiteSettings();
+const isVisible = (value?: boolean) => value !== false;
+
+const showAudience = isVisible(program.showAudience);
+const showDescription = isVisible(program.showDescription);
+const showBenefits = isVisible(program.showBenefits);
+const showProcess = isVisible(program.showProcess);
+const showFaqs = isVisible(program.showFaqs);
+const showExtraContent = isVisible(program.showExtraContent);
+const showFinalCta = isVisible(program.showFinalCta);
+
+const descriptionParagraphs = blocksToText(program.description || []);
+const introParagraphs = descriptionParagraphs.length ? descriptionParagraphs : [program.excerpt];
+const audience = program.audience?.length
+  ? program.audience
+  : [
+      "Cerchi un percorso costruito sulla tua situazione reale.",
+      "Hai gia provato soluzioni generiche senza continuita nei risultati.",
+      "Vuoi capire meglio il tuo corpo e costruire abitudini sostenibili.",
+    ];
+
+const benefits = (program.benefitCards?.length
+  ? program.benefitCards
+  : program.benefits?.length
+    ? program.benefits
+    : []
+).map((benefit) =>
+  typeof benefit === "string"
+    ? { icon: "leaf", title: benefit, description: "Un risultato costruito sulle tue esigenze e monitorato nel tempo." }
+    : benefit,
+);
+
+const processSteps = program.processSteps?.length
+  ? program.processSteps
+  : [
+      { title: "Ascoltiamo la persona", description: "Raccogliamo storia, abitudini, obiettivi e contesto quotidiano." },
+      { title: "Valutiamo il corpo", description: "Osserviamo dati, composizione corporea e segnali utili al percorso." },
+      { title: "Costruiamo il programma", description: "Definiamo una strategia personalizzata, concreta e sostenibile." },
+      { title: "Ti accompagniamo nel tempo", description: "Aggiorniamo il piano in base ai progressi e alle esigenze." },
+    ];
+
+const richTextBlocks = (program.blocks || []).filter((block) => {
+  return typeof block === "object" && block !== null && "_type" in block && block._type === "richTextBlock";
+}) as { title?: string; content?: { children?: { text?: string }[] }[] }[];
+
+const faqs = program.faqs || [];
+const heroImage = program.heroImageUrl || program.imageUrl || "/assets/old-site/hero-header.jpg";
+
+const benefitIcons = {
+  leaf: Leaf,
+  heart: Heart,
+  scale: Scale,
+  activity: Activity,
+  target: Target,
+  shield: ShieldCheck,
+  dumbbell: Dumbbell,
+  sparkles: Sparkles,
+};
+
+const audienceIcons = [Scale, ClipboardList, Activity, Heart, Sparkles, Target];
+const stepIcons = [UserRound, Activity, Leaf, Target, BadgeCheck, Heart];
+
+const overviewItems = [
+  {
+    icon: UserRound,
+    title: "Prima visita",
+    items: [
+      "Colloquio approfondito",
+      "Analisi dello stile di vita",
+      "Valutazione degli obiettivi",
+      program.personalizedNote || "Piano personalizzato",
+    ],
+  },
+  {
+    icon: CalendarDays,
+    title: "Controlli periodici",
+    items: [
+      "Monitoraggio dei progressi",
+      "Verifica dei risultati",
+      "Aggiornamento del programma",
+      program.deliveryMode || "Supporto nel tempo",
+    ],
+  },
+];
+
+const compactFacts = [
+  { icon: ClipboardList, label: "Percorso", value: program.programType || program.price || "Su consulenza" },
+  { icon: MapPin, label: "Modalita", value: program.deliveryMode || "Online o in studio" },
+  { icon: BadgeCheck, label: "Durata", value: program.duration || "Personalizzata" },
+];
+---
+
+<MainLayout
+  title={program.seo?.title || `${program.title} | Studio nutrizionista La Speziale Milano`}
+  description={program.seo?.description || program.excerpt}
+  image={program.seo?.imageUrl || heroImage}
+>
+  <article class="program-page">
+    <header class="program-hero" style={`--program-hero: url('${heroImage}')`}>
+      <div class="program-hero-shade">
+        <div class="container program-hero-copy">
+          <p class="eyebrow">{program.category || "Programma personalizzato"}</p>
+          <h1>{program.title}</h1>
+          <p class="hero-kicker">{program.excerpt}</p>
+          <a class="button hero-button" href={program.ctaLink || "/contatti"}>{program.ctaLabel || "Richiedi una consulenza"}</a>
+        </div>
+      </div>
+    </header>
+
+    {showDescription && (
+      <section class="program-intro">
+        <div class="container intro-grid">
+          <div class="intro-heading">
+            <span aria-hidden="true">⌁</span>
+            <h2>{program.descriptionTitle || "Capire il punto di partenza e il primo passo."}</h2>
+          </div>
+          <div class="intro-copy">
+            {introParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="program-facts" aria-label="Informazioni sul percorso">
+      <div class="container facts-row">
+        {compactFacts.map((fact) => {
+          const FactIcon = fact.icon;
+          return (
+            <div>
+              <FactIcon size={21} stroke-width={1.7} aria-hidden="true" />
+              <span>{fact.label}</span>
+              <strong>{fact.value}</strong>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+
+    {showAudience && audience.length > 0 && (
+      <section class="program-section recognition-section">
+        <div class="container narrow">
+          <h2>{program.audienceTitle || "Ti riconosci in una di queste situazioni?"}</h2>
+          <div class="recognition-list">
+            {audience.map((item, index) => {
+              const AudienceIcon = audienceIcons[index % audienceIcons.length];
+              return (
+                <div class="recognition-item">
+                  <span><AudienceIcon size={22} stroke-width={1.55} aria-hidden="true" /></span>
+                  <p>{item}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showProcess && processSteps.length > 0 && (
+      <section class="program-section process-section" id="come-funziona">
+        <div class="container">
+          <h2>{program.processTitle || "Come costruiamo il tuo percorso"}</h2>
+          <div class="process-line" style={`--steps: ${processSteps.length}`}>
+            {processSteps.map((step, index) => {
+              const StepIcon = stepIcons[index % stepIcons.length];
+              return (
+                <article class="process-step">
+                  <span class="process-number">{String(index + 1).padStart(2, "0")}</span>
+                  <StepIcon size={38} stroke-width={1.35} aria-hidden="true" />
+                  <h3>{step.title}</h3>
+                  {step.description && <p>{step.description}</p>}
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showBenefits && benefits.length > 0 && (
+      <section class="program-section benefits-section" id="benefici">
+        <div class="container">
+          <h2>{program.benefitsTitle || "Cosa puoi ottenere"}</h2>
+          <div class="benefits-grid">
+            {benefits.map((benefit) => {
+              const BenefitIcon = benefitIcons[benefit.icon as keyof typeof benefitIcons] || Leaf;
+              return (
+                <article class="benefit-card">
+                  <BenefitIcon size={42} stroke-width={1.45} aria-hidden="true" />
+                  <h3>{benefit.title || "Risultato personalizzato"}</h3>
+                  {benefit.description && <p>{benefit.description}</p>}
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <section class="program-section visits-section">
+      <div class="container visits-grid">
+        {overviewItems.map((item) => {
+          const VisitIcon = item.icon;
+          return (
+            <article class="visit-card">
+              <span><VisitIcon size={35} stroke-width={1.45} aria-hidden="true" /></span>
+              <div>
+                <h2>{item.title}</h2>
+                <ul>
+                  {item.items.map((detail) => <li><Check size={14} stroke-width={2.6} aria-hidden="true" />{detail}</li>)}
+                </ul>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    {showExtraContent && richTextBlocks.length > 0 && (
+      <section class="program-section editorial-section">
+        <div class="container editorial-content">
+          {richTextBlocks.map((block) => (
+            <section>
+              {block.title && <h2>{block.title}</h2>}
+              {(block.content || []).map((contentBlock) => (
+                <p>{contentBlock.children?.map((child) => child.text || "").join("")}</p>
+              ))}
+            </section>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {showFaqs && faqs.length > 0 && (
+      <section class="program-section faq-section" id="faq">
+        <div class="container faq-wrap">
+          <h2>{program.faqsTitle || "Domande frequenti"}</h2>
+          <div class="faq-list">
+            {faqs.map((faq) => (
+              <details>
+                <summary>{faq.question}<span aria-hidden="true">+</span></summary>
+                <p>{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showFinalCta && (
+      <section class="final-section" id="contatti">
+        <div class="container final-copy">
+          <span aria-hidden="true">⌁</span>
+          <h2>{program.finalCtaTitle || "Il primo passo e comprendere il tuo corpo."}</h2>
+          <p>{program.finalCtaText || "Ogni persona ha esigenze diverse. Prenota una consulenza: analizzeremo la tua situazione e costruiremo un percorso personalizzato."}</p>
+          <div class="final-actions">
+            <a class="button final-primary" href={program.ctaLink || "/contatti"}>
+              {program.ctaLabel || "Richiedi una consulenza"} <ArrowRight size={16} aria-hidden="true" />
+            </a>
+            <a class="button final-secondary" href={settings.whatsapp || "/contatti"}>
+              <MessageCircle size={17} aria-hidden="true" /> WhatsApp
+            </a>
+            <a class="button final-secondary" href={`mailto:${settings.email}`}>
+              <Mail size={17} aria-hidden="true" /> Email
+            </a>
+          </div>
+        </div>
+      </section>
+    )}
+  </article>
+</MainLayout>
+
+<style>
+  .program-page {
+    background: #fffefa;
+  }
+
+  .program-hero {
+    min-height: clamp(460px, 66vh, 680px);
+    background-image:
+      linear-gradient(180deg, rgba(16, 24, 20, 0.24), rgba(16, 24, 20, 0.62)),
+      var(--program-hero);
+    background-position: center;
+    background-size: cover;
+  }
+
+  .program-hero-shade {
+    display: grid;
+    min-height: clamp(460px, 66vh, 680px);
+    align-items: center;
+    padding: 76px 0 64px;
+  }
+
+  .program-hero-copy {
+    max-width: 820px;
+    color: white;
+    text-align: center;
+  }
+
+  .program-hero h1 {
+    max-width: 820px;
+    margin: 0 auto 16px;
+    color: white;
+    font-size: clamp(2.4rem, 6vw, 4.8rem);
+    line-height: 0.98;
+  }
+
+  .program-hero .eyebrow,
+  .hero-kicker {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .hero-kicker {
+    max-width: 680px;
+    margin: 0 auto;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+    line-height: 1.45;
+  }
+
+  .hero-button {
+    margin-top: 28px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #13382b;
+  }
+
+  .program-intro {
+    padding: clamp(62px, 8vw, 104px) 0;
+    background: #fffefa;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    gap: clamp(38px, 7vw, 92px);
+    align-items: start;
+  }
+
+  .intro-heading span,
+  .final-copy > span {
+    display: block;
+    color: var(--color-sage-dark);
+    font-size: 1.6rem;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .intro-heading h2 {
+    max-width: 12ch;
+    color: #13382b;
+    font-size: clamp(2.1rem, 4.4vw, 3.45rem);
+    line-height: 1.05;
+  }
+
+  .intro-copy {
+    max-width: 650px;
+  }
+
+  .intro-copy p {
+    color: #283c32;
+    font-size: 1.02rem;
+    line-height: 1.78;
+  }
+
+  .program-facts {
+    border-block: 1px solid rgba(38, 51, 44, 0.08);
+    background: #faf7f1;
+  }
+
+  .facts-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .facts-row > div {
+    display: grid;
+    gap: 6px;
+    justify-items: center;
+    border-right: 1px solid rgba(38, 51, 44, 0.08);
+    padding: 22px 16px;
+    text-align: center;
+  }
+
+  .facts-row > div:last-child {
+    border-right: 0;
+  }
+
+  .facts-row svg {
+    color: var(--color-sage-dark);
+  }
+
+  .facts-row span {
+    color: var(--color-muted);
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .facts-row strong {
+    color: #13382b;
+    font-size: 0.96rem;
+    line-height: 1.35;
+  }
+
+  .program-section {
+    padding: clamp(62px, 8vw, 96px) 0;
+    scroll-margin-top: 120px;
+  }
+
+  .program-section h2 {
+    color: #13382b;
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-align: center;
+  }
+
+  .narrow {
+    max-width: 940px;
+  }
+
+  .recognition-section,
+  .benefits-section,
+  .editorial-section,
+  .faq-section {
+    background: #f2f5ef;
+  }
+
+  .recognition-list {
+    display: grid;
+    margin-top: 34px;
+  }
+
+  .recognition-item {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 18px;
+    align-items: center;
+    border-bottom: 1px solid rgba(38, 51, 44, 0.15);
+    padding: 16px 0;
+  }
+
+  .recognition-item span {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border-radius: 50%;
+    background: #78977c;
+    color: white;
+  }
+
+  .recognition-item p {
+    margin: 0;
+    color: #24382d;
+    font-weight: 750;
+    line-height: 1.45;
+  }
+
+  .process-section {
+    background: #fffefa;
+  }
+
+  .process-line {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--steps), minmax(0, 1fr));
+    gap: 26px;
+    margin-top: 46px;
+  }
+
+  .process-line::before {
+    position: absolute;
+    top: 24px;
+    right: calc(50% / var(--steps));
+    left: calc(50% / var(--steps));
+    height: 1px;
+    background: rgba(93, 120, 95, 0.42);
+    content: "";
+  }
+
+  .process-step {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .process-number {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 50px;
+    height: 50px;
+    place-items: center;
+    border: 1px solid rgba(93, 120, 95, 0.38);
+    border-radius: 50%;
+    background: #fffefa;
+    color: #13382b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.1rem;
+    margin-bottom: 34px;
+  }
+
+  .process-step svg {
+    color: #78977c;
+    margin-bottom: 18px;
+  }
+
+  .process-step h3 {
+    color: #13382b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.28rem;
+    line-height: 1.12;
+    margin-bottom: 10px;
+  }
+
+  .process-step p {
+    margin: 0;
+    max-width: 230px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    margin-top: 34px;
+  }
+
+  .benefit-card {
+    min-height: 235px;
+    border: 1px solid rgba(38, 51, 44, 0.08);
+    border-radius: 8px;
+    background: rgba(255, 254, 250, 0.92);
+    box-shadow: 0 18px 52px rgba(38, 51, 44, 0.06);
+    padding: 28px 24px;
+  }
+
+  .benefit-card svg {
+    color: #78977c;
+    margin-bottom: 20px;
+  }
+
+  .benefit-card h3,
+  .visit-card h2 {
+    color: #13382b;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.25rem;
+    line-height: 1.15;
+    margin-bottom: 12px;
+  }
+
+  .benefit-card p {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.58;
+  }
+
+  .visits-section {
+    background: #fffefa;
+  }
+
+  .visits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 34px;
+    max-width: 1040px;
+  }
+
+  .visit-card {
+    display: grid;
+    grid-template-columns: 86px 1fr;
+    gap: 24px;
+    border: 1px solid rgba(38, 51, 44, 0.18);
+    background: rgba(255, 254, 250, 0.8);
+    padding: 28px;
+  }
+
+  .visit-card > span {
+    display: grid;
+    width: 70px;
+    height: 70px;
+    place-items: center;
+    border-radius: 50%;
+    background: #e4ebe1;
+    color: #78977c;
+  }
+
+  .visit-card ul {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .visit-card li {
+    display: flex;
+    gap: 8px;
+    color: #2d4035;
+    font-size: 0.92rem;
+    line-height: 1.35;
+  }
+
+  .visit-card li svg {
+    flex: 0 0 auto;
+    color: #78977c;
+    margin-top: 2px;
+  }
+
+  .editorial-content,
+  .faq-wrap {
+    max-width: 920px;
+  }
+
+  .editorial-content {
+    display: grid;
+    gap: 34px;
+  }
+
+  .editorial-content h2 {
+    text-align: left;
+  }
+
+  .faq-list {
+    overflow: hidden;
+    border: 1px solid rgba(38, 51, 44, 0.11);
+    border-radius: 8px;
+    background: #fffefa;
+    margin-top: 28px;
+  }
+
+  .faq-list details + details {
+    border-top: 1px solid rgba(38, 51, 44, 0.1);
+  }
+
+  .faq-list summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    cursor: pointer;
+    font-weight: 750;
+    list-style: none;
+    padding: 18px 22px;
+  }
+
+  .faq-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-list summary span {
+    color: var(--color-sage-dark);
+    font-size: 1.35rem;
+    transition: transform 160ms ease;
+  }
+
+  .faq-list details[open] summary span {
+    transform: rotate(45deg);
+  }
+
+  .faq-list details p {
+    max-width: 760px;
+    padding: 0 22px 20px;
+  }
+
+  .final-section {
+    background: #5f7c64;
+    color: white;
+    padding: clamp(56px, 7vw, 86px) 0;
+    text-align: center;
+  }
+
+  .final-copy {
+    max-width: 820px;
+  }
+
+  .final-copy > span,
+  .final-copy h2,
+  .final-copy p {
+    color: white;
+  }
+
+  .final-copy h2 {
+    font-size: clamp(2.05rem, 4.4vw, 3.35rem);
+  }
+
+  .final-copy p {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .final-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .final-primary,
+  .final-secondary {
+    gap: 8px;
+  }
+
+  .final-primary {
+    background: white;
+    color: #13382b;
+  }
+
+  .final-secondary {
+    border-color: rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+
+  @media (max-width: 980px) {
+    .intro-grid,
+    .visits-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .intro-heading h2 {
+      max-width: 760px;
+    }
+
+    .process-line,
+    .benefits-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .process-line::before {
+      display: none;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .program-hero,
+    .program-hero-shade {
+      min-height: 560px;
+    }
+
+    .program-hero {
+      background-position: 58% center;
+    }
+
+    .program-hero-shade {
+      align-items: end;
+      padding: 72px 0 44px;
+    }
+
+    .program-hero-copy {
+      text-align: left;
+    }
+
+    .program-hero h1 {
+      margin-left: 0;
+      font-size: clamp(2.3rem, 11vw, 3.45rem);
+    }
+
+    .hero-kicker {
+      margin-left: 0;
+      font-size: 1.03rem;
+    }
+
+    .program-intro {
+      padding: 56px 0;
+    }
+
+    .intro-heading h2,
+    .program-section h2,
+    .final-copy h2 {
+      text-align: left;
+    }
+
+    .facts-row,
+    .process-line,
+    .benefits-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .facts-row > div {
+      justify-items: start;
+      border-right: 0;
+      border-bottom: 1px solid rgba(38, 51, 44, 0.08);
+      text-align: left;
+    }
+
+    .facts-row > div:last-child {
+      border-bottom: 0;
+    }
+
+    .recognition-item {
+      grid-template-columns: 44px 1fr;
+      gap: 14px;
+    }
+
+    .recognition-item span {
+      width: 38px;
+      height: 38px;
+    }
+
+    .process-step {
+      justify-items: start;
+      border-bottom: 1px solid rgba(38, 51, 44, 0.1);
+      padding-bottom: 22px;
+      text-align: left;
+    }
+
+    .process-number {
+      margin: 0 0 18px;
+    }
+
+    .process-step p {
+      max-width: none;
+    }
+
+    .visit-card {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 24px;
+    }
+
+    .final-actions {
+      justify-content: stretch;
+    }
+
+    .final-actions .button {
+      width: 100%;
+    }
+  }
+</style>
