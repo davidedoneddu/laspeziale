@@ -12,7 +12,7 @@ const updatedAt = settings.privacyUpdatedAt
 ---
 
 <MainLayout title="Privacy policy" description="Informativa sul trattamento dei dati personali del sito La Speziale.">
-  <LegalPage eyebrow="Informativa privacy" title="Privacy policy" intro="Come vengono trattati i dati personali quando visiti il sito o contatti La Speziale." updatedAt={updatedAt}>
+  <LegalPage title="Privacy policy" intro="Come vengono trattati i dati personali quando visiti il sito o contatti La Speziale." updatedAt={updatedAt}>
     <section>
       <h2>Titolare del trattamento</h2>
       <p><strong>{controller}</strong><br />{settings.address}<br />Email: <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>{settings.vatNumber && <><br />Partita IVA o codice fiscale: {settings.vatNumber}</>}</p>

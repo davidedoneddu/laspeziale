@@ -1,17 +1,15 @@
 ---
 interface Props {
-  eyebrow: string;
   title: string;
   intro: string;
   updatedAt: string;
 }
 
-const { eyebrow, title, intro, updatedAt } = Astro.props;
+const { title, intro, updatedAt } = Astro.props;
 ---
 
 <section class="legal-hero">
   <div class="container legal-hero-inner">
-    <p class="eyebrow">{eyebrow}</p>
     <h1>{title}</h1>
     <p class="lead">{intro}</p>
     <p class="legal-updated">Ultimo aggiornamento: {updatedAt}</p>
@@ -25,11 +23,11 @@ const { eyebrow, title, intro, updatedAt } = Astro.props;
 </section>
 
 <style>
-  .legal-hero { border-bottom:1px solid rgba(38,51,44,.08); background:var(--color-white); padding:72px 0 48px; }
+  .legal-hero { border-bottom:1px solid rgba(38,51,44,.08); background:var(--color-white); padding:64px 0 40px; }
   .legal-hero-inner { max-width:900px; }
   .legal-hero h1 { margin-bottom:20px; font-size:clamp(2.1rem,5vw,3.6rem); }
   .legal-updated { margin:24px 0 0; font-size:.9rem; font-weight:750; }
-  .legal-section { padding:64px 0 88px; }
+  .legal-section { padding:56px 0 64px; }
   .legal-content { max-width:860px; }
   .legal-content :global(section) { border-top:1px solid rgba(38,51,44,.1); padding:32px 0; }
   .legal-content :global(section:first-child) { border-top:0; padding-top:0; }
@@ -44,5 +42,5 @@ const { eyebrow, title, intro, updatedAt } = Astro.props;
   .legal-content :global(th), .legal-content :global(td) { border-bottom:1px solid rgba(38,51,44,.1); padding:14px; text-align:left; vertical-align:top; }
   .legal-content :global(th) { color:var(--color-ink); font-size:.86rem; }
   .legal-content :global(td) { color:var(--color-muted); font-size:.92rem; }
-  @media (max-width:640px) { .legal-hero { padding:52px 0 38px; } .legal-section { padding:44px 0 64px; } .legal-content :global(th), .legal-content :global(td) { min-width:150px; padding:12px; } }
+  @media (max-width:640px) { .legal-hero { padding:48px 0 32px; } .legal-section { padding:40px 0 48px; } .legal-content :global(th), .legal-content :global(td) { min-width:150px; padding:12px; } }
 </style>

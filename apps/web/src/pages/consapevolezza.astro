@@ -1,36 +1,38 @@
 ---
-import { ArrowRight, Eye, HeartHandshake, Sparkles, UserRoundCheck } from "@lucide/astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import CTASection from "../components/CTASection.astro";
 import { getCoachingPage } from "../lib/sanity";
 
 const page = await getCoachingPage();
 const audience = page.audienceItems || [];
+const methodSteps = page.methodSteps || [];
 const focusCards = [
   {
-    icon: UserRoundCheck,
-    title: "Perche nasce",
+    title: methodSteps[0]?.title || "Perché nasce",
+    subtitle: page.introTitle,
     text: page.introText,
   },
   {
-    icon: Eye,
-    title: "Il Tutor del Benessere",
-    text: "Attraverso il linguaggio del corpo aiuta a riconoscere il modo in cui ci si esprime, ci si percepisce e ci si relaziona con gli altri, favorendo una maggiore armonia tra cio che si vive interiormente e cio che si comunica. L'obiettivo non e cambiare la persona, ma aiutarla a valorizzare le proprie risorse, affrontare con maggiore serenita i cambiamenti e consolidare nel tempo un nuovo equilibrio.",
+    title: methodSteps[1]?.title || "Il Tutor del Benessere",
+    text:
+      methodSteps[1]?.text ||
+      "Attraverso il linguaggio del corpo aiuta a riconoscere il modo in cui ci si esprime, ci si percepisce e ci si relaziona con gli altri, favorendo una maggiore armonia tra ciò che si vive interiormente e ciò che si comunica. L'obiettivo non è cambiare la persona, ma aiutarla a valorizzare le proprie risorse, affrontare con maggiore serenità i cambiamenti e consolidare nel tempo un nuovo equilibrio.",
   },
   {
-    icon: Sparkles,
-    title: "Come si svolge",
-    text: "Ogni incontro parte dalla persona e dalla fase della vita che sta vivendo. Il linguaggio del corpo diventa uno strumento per osservare il modo in cui affrontiamo i cambiamenti, riconoscere cio che ci limita e sviluppare nuove modalita di vivere noi stessi. Il percorso offre spunti pratici da applicare nella quotidianita, affinche la consapevolezza possa trasformarsi in un cambiamento concreto e duraturo.",
+    title: methodSteps[2]?.title || "Come si svolge",
+    text:
+      methodSteps[2]?.text ||
+      "Ogni incontro parte dalla persona e dalla fase della vita che sta vivendo. Il linguaggio del corpo diventa uno strumento per osservare il modo in cui affrontiamo i cambiamenti, riconoscere ciò che ci limita e sviluppare nuove modalità di vivere noi stessi. Il percorso offre spunti pratici da applicare nella quotidianità, affinché la consapevolezza possa trasformarsi in un cambiamento concreto e duraturo.",
   },
 ];
 ---
 
 <MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
-  <section class="awareness-hero" style={`--awareness-image: url('${page.heroImageUrl || "/assets/old-site/consapevolezza.png"}')`}>
+  <section class="awareness-hero" style={`--awareness-image: url('${page.heroImageUrl || "/assets/old-site/consapevolezza-2026.jpg"}')`}>
     <div class="container awareness-hero-inner">
       <div class="awareness-copy">
-        <p class="eyebrow">{page.heroEyebrow || "Consulenza di Consapevolezza"}</p>
         <h1>{page.heroTitle}</h1>
+        {page.heroSubtitle && <p class="hero-subtitle">{page.heroSubtitle}</p>}
         {page.heroText && <p class="lead">{page.heroText}</p>}
         <div class="button-row">
           <a class="button button-primary" href="/contatti">Prenota una consulenza</a>
@@ -38,41 +40,23 @@ const focusCards = [
       </div>
       <div class="awareness-visual" aria-hidden="true">
         <div class="awareness-photo"></div>
-        <div class="awareness-card">
-          <span>Persona al centro</span>
-          <strong>Riconoscersi e il primo passo per stare bene con se stessi.</strong>
-        </div>
       </div>
-    </div>
-  </section>
-
-  <section class="section awareness-intro">
-    <div class="container intro-grid">
-      <div>
-        <p class="eyebrow">Perche nasce</p>
-        <h2>{page.introTitle}</h2>
-      </div>
-      {page.introText && <p>{page.introText}</p>}
     </div>
   </section>
 
   <section class="section awareness-focus">
     <div class="container">
       <header class="focus-head">
-        <p class="eyebrow">Il percorso</p>
-        <h2>{page.methodTitle || "Il linguaggio del corpo come strumento di osservazione e crescita."}</h2>
+        <p>{page.methodTitle || "Il linguaggio del corpo come strumento di osservazione e crescita."}</p>
       </header>
       <div class="focus-grid">
-        {focusCards.map((card) => {
-          const CardIcon = card.icon;
-          return (
+        {focusCards.map((card) => (
             <article>
-              <CardIcon size={30} stroke-width={1.7} aria-hidden="true" />
-              <h3>{card.title}</h3>
+              <h2>{card.title}</h2>
+              {card.subtitle && <p class="section-subtitle">{card.subtitle}</p>}
               {card.text && <p>{card.text}</p>}
             </article>
-          );
-        })}
+        ))}
       </div>
     </div>
   </section>
@@ -80,29 +64,16 @@ const focusCards = [
   <section class="section awareness-audience">
     <div class="container audience-panel">
       <div>
-        <p class="eyebrow">A chi e rivolta</p>
-        <h2>{page.audienceTitle || "A chi desidera dedicare tempo alla propria persona."}</h2>
+        <h2>{page.audienceTitle || "A chi è rivolta"}</h2>
       </div>
       <ul>
         {audience.map((item) => (
           <li>
-            <HeartHandshake size={18} stroke-width={2.2} aria-hidden="true" />
+            <span class="list-marker" aria-hidden="true">—</span>
             <span>{item}</span>
           </li>
         ))}
       </ul>
-    </div>
-  </section>
-
-  <section class="section awareness-close">
-    <div class="container close-panel">
-      <div>
-        <p class="eyebrow">Consapevolezza</p>
-        <h2>Ogni percorso inizia da una maggiore conoscenza di se.</h2>
-      </div>
-      <a class="text-link" href="/il-metodo">
-        Scopri il Metodo La Speziale <ArrowRight size={16} aria-hidden="true" />
-      </a>
     </div>
   </section>
 
@@ -114,7 +85,7 @@ const focusCards = [
     background:
       radial-gradient(circle at 12% 12%, rgba(197, 155, 39, 0.13), transparent 28%),
       linear-gradient(135deg, var(--color-white) 0%, var(--color-ivory) 54%, var(--color-beige) 100%);
-    padding: clamp(66px, 9vw, 118px) 0 clamp(54px, 7vw, 92px);
+    padding: clamp(56px, 6vw, 80px) 0;
   }
 
   .awareness-hero-inner {
@@ -129,84 +100,63 @@ const focusCards = [
     font-size: clamp(2.1rem, 4.4vw, 3.65rem);
   }
 
+  .hero-subtitle {
+    color: var(--color-primary);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.15rem, 2.3vw, 1.65rem);
+    font-weight: 700;
+    margin: 0 0 18px;
+  }
+
   .awareness-visual {
     position: relative;
-    min-height: 520px;
+    aspect-ratio: 3 / 2;
+    min-height: 0;
   }
 
   .awareness-photo {
     position: absolute;
-    inset: 0 0 54px 42px;
+    inset: 0;
     border-radius: var(--radius);
     background-image:
       linear-gradient(180deg, rgba(19, 56, 43, 0.05), rgba(19, 56, 43, 0.14)),
       var(--awareness-image);
     background-position: center;
-    background-size: cover;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, contain;
+    background-color: #eef2ec;
     box-shadow: var(--shadow-soft);
   }
 
-  .awareness-card {
-    position: absolute;
-    right: 26px;
-    bottom: 0;
-    max-width: 300px;
-    border: 1px solid rgba(197, 155, 39, 0.24);
-    border-radius: 22px;
-    background: rgba(255, 253, 248, 0.92);
-    box-shadow: 0 20px 54px rgba(19, 56, 43, 0.13);
-    padding: 24px;
-  }
-
-  .awareness-card span {
-    display: inline-flex;
-    margin-bottom: 14px;
-    border-radius: 999px;
-    background: rgba(197, 155, 39, 0.12);
-    color: var(--color-gold-dark);
-    font-size: 0.7rem;
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    padding: 7px 10px;
-    text-transform: uppercase;
-  }
-
-  .awareness-card strong {
-    color: var(--color-primary);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.42rem;
-    font-weight: 500;
-    line-height: 1.15;
-  }
-
-  .awareness-intro,
   .awareness-focus {
     background: var(--color-white);
   }
 
-  .intro-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: clamp(26px, 6vw, 72px);
-    align-items: start;
-  }
-
-  .intro-grid h2,
   .audience-panel h2,
-  .focus-head h2,
-  .close-panel h2 {
+  .focus-grid h2 {
     font-size: clamp(2rem, 4vw, 3.25rem);
   }
 
-  .intro-grid > p {
-    margin: 0;
-    font-size: 1.05rem;
-    line-height: 1.82;
+  .section-subtitle {
+    margin: 14px 0 0;
+    color: #244D3D;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.18rem, 2.2vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.35;
   }
 
   .focus-head {
     max-width: 780px;
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+  }
+
+  .focus-head p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: clamp(1.05rem, 1.7vw, 1.28rem);
+    font-weight: 500;
+    line-height: 1.55;
   }
 
   .focus-grid {
@@ -225,24 +175,25 @@ const focusCards = [
     padding: 26px;
   }
 
-  .focus-grid :global(svg) {
-    color: var(--color-tertiary);
-    margin-bottom: 20px;
-  }
-
-  .focus-grid h3 {
+  .focus-grid h2 {
+    margin-bottom: 14px;
     color: var(--color-primary);
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.45rem;
+    font-size: clamp(1.55rem, 2.5vw, 2rem);
     font-weight: 500;
+    line-height: 1.15;
+  }
+
+  .focus-grid .section-subtitle {
+    margin: 0 0 14px;
+    font-size: 1.08rem;
   }
 
   .focus-grid p {
     line-height: 1.7;
   }
 
-  .awareness-audience,
-  .awareness-close {
+  .awareness-audience {
     background: var(--color-ivory);
   }
 
@@ -267,8 +218,8 @@ const focusCards = [
 
   .audience-panel li {
     display: grid;
-    grid-template-columns: 22px 1fr;
-    gap: 12px;
+    grid-template-columns: 16px 1fr;
+    gap: 10px;
     align-items: start;
     border-bottom: 1px solid var(--color-border);
     color: var(--color-primary);
@@ -281,53 +232,23 @@ const focusCards = [
     padding-bottom: 0;
   }
 
-  .audience-panel :global(svg) {
-    color: var(--color-tertiary);
-    margin-top: 0.2em;
-  }
-
-  .close-panel {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 24px;
-    align-items: end;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    padding-top: 44px;
-    padding-bottom: 44px;
-  }
-
-  .text-link {
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    color: var(--color-gold-dark);
-    font-weight: 900;
-    white-space: nowrap;
+  .list-marker {
+    color: var(--color-primary);
+    font-weight: 700;
   }
 
   @media (max-width: 860px) {
     .awareness-hero-inner,
-    .intro-grid,
-    .audience-panel,
-    .close-panel {
+    .audience-panel {
       grid-template-columns: 1fr;
     }
 
     .awareness-visual {
-      min-height: 420px;
-    }
-
-    .awareness-photo {
-      inset: 0 0 46px 0;
+      min-height: 0;
     }
 
     .focus-grid {
       grid-template-columns: 1fr;
-    }
-
-    .text-link {
-      white-space: normal;
     }
   }
 </style>

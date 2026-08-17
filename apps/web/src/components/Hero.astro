@@ -4,7 +4,6 @@ interface Props {
   subtitle: string;
   subheading?: string;
   imageUrl?: string;
-  eyebrow?: string;
   primaryHref?: string;
   primaryLabel?: string;
   secondaryHref?: string;
@@ -17,20 +16,19 @@ const {
   subtitle,
   subheading,
   imageUrl = "/assets/old-site/hero-header.jpg",
-  eyebrow = "Studio nutrizionista La Speziale Milano",
   primaryHref = "/contatti",
   primaryLabel = "Prenota una consulenza",
   secondaryHref = "/programmi",
   secondaryLabel = "Scopri i programmi",
   showActions = true,
 } = Astro.props;
+
 ---
 
 <section class="hero" style={`--hero-image: url('${imageUrl}')`}>
   <div class="hero-image" aria-hidden="true"></div>
   <div class="hero-overlay">
     <div class="container hero-copy">
-      <p class="eyebrow">{eyebrow}</p>
       <h1>{title}</h1>
       {subheading && <p class="hero-subheading">{subheading}</p>}
       <p class="lead">{subtitle}</p>
@@ -47,18 +45,17 @@ const {
 <style>
   .hero {
     position: relative;
-    min-height: calc(100dvh - 76px);
+    min-height: min(760px, calc(100dvh - 76px));
     overflow: hidden;
     background: #fbfdfd;
   }
 
   .hero-image {
     position: absolute;
-    inset: -3%;
-    background-image:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.82) 36%, rgba(255, 255, 255, 0.32) 62%, rgba(255, 255, 255, 0.02)),
-      var(--hero-image);
-    background-position: 64% center;
+    inset: 0;
+    background-image: var(--hero-image);
+    background-position: 68% 54%;
+    background-repeat: no-repeat;
     background-size: cover;
     animation: hero-arrival 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
@@ -67,8 +64,9 @@ const {
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(circle at 80% 64%, rgba(120, 151, 124, 0.16), transparent 34%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(245, 249, 248, 0.42));
+      linear-gradient(90deg, rgba(244, 249, 245, 0.9), rgba(239, 247, 241, 0.68) 34%, rgba(210, 228, 214, 0.12) 68%, rgba(120, 151, 124, 0)),
+      radial-gradient(circle at 78% 64%, rgba(94, 137, 103, 0.12), transparent 40%),
+      linear-gradient(180deg, rgba(223, 237, 226, 0), rgba(215, 232, 219, 0.12));
     content: "";
     pointer-events: none;
   }
@@ -77,13 +75,13 @@ const {
     position: relative;
     z-index: 1;
     display: grid;
-    min-height: calc(100dvh - 76px);
+    min-height: min(760px, calc(100dvh - 76px));
     align-items: center;
     padding: 72px 0;
   }
 
   .hero-copy {
-    color: #13382b;
+    color: #244D3D;
   }
 
   .hero-copy > * {
@@ -102,16 +100,15 @@ const {
     animation-delay: 240ms;
   }
 
-  .eyebrow,
   .hero-subheading,
   .lead {
-    color: rgba(19, 56, 43, 0.78);
+    color: var(--color-muted);
   }
 
   h1 {
     max-width: 780px;
     margin-bottom: 24px;
-    color: #13382b;
+    color: #244D3D;
     font-size: clamp(2.25rem, 5vw, 4rem);
     text-shadow: 0 18px 46px rgba(255, 255, 255, 0.42);
   }
@@ -119,7 +116,7 @@ const {
   .hero-subheading {
     max-width: 760px;
     margin-bottom: 14px;
-    color: #13382b;
+    color: #244D3D;
     font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(1.18rem, 2.2vw, 1.65rem);
     font-weight: 700;
@@ -133,7 +130,7 @@ const {
   .hero-secondary {
     border-color: rgba(19, 56, 43, 0.26);
     background: rgba(255, 255, 255, 0.58);
-    color: #13382b;
+    color: #244D3D;
   }
 
   @keyframes hero-arrival {
@@ -168,18 +165,31 @@ const {
       min-height: 620px;
     }
 
-    .hero {
+    .hero-image {
+      background-position: 78% 32%;
+      background-size: cover;
     }
 
-    .hero-image {
-      background-image:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 34%, rgba(255, 255, 255, 0.42) 68%, rgba(255, 255, 255, 0.08) 100%),
-        var(--hero-image);
-      background-position: 64% center;
+    .hero-image::after {
+      background:
+        linear-gradient(180deg, rgba(244, 249, 245, 0.84) 0%, rgba(239, 247, 241, 0.6) 36%, rgba(211, 229, 215, 0.12) 70%, rgba(120, 151, 124, 0) 100%),
+        radial-gradient(circle at 72% 56%, rgba(94, 137, 103, 0.12), transparent 42%);
     }
 
     h1 {
       font-size: clamp(2.15rem, 10vw, 3rem);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .hero,
+    .hero-overlay {
+      min-height: 620px;
+    }
+
+    .hero-image {
+      background-position: 86% 30%;
+      background-size: cover;
     }
   }
 

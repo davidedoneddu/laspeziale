@@ -1,514 +1,335 @@
 ---
-import { Check } from "@lucide/astro";
+import CTASection from "../components/CTASection.astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import { getMethodPage } from "../lib/sanity";
 
 const page = await getMethodPage();
-
-const workSteps = [
-  {
-    number: "01",
-    title: "Conosciamo la persona",
-    text: "Ogni programma inizia dall'ascolto della tua storia, delle tue abitudini, dei tuoi obiettivi e delle difficolta che incontri nella vita quotidiana.",
-  },
-  {
-    number: "02",
-    title: "Conosciamo il tuo corpo",
-    text: "L'esame BIA analizza composizione corporea, massa muscolare, massa grassa e stato di idratazione, offrendo informazioni che il peso da solo non puo raccontare.",
-  },
-  {
-    number: "03",
-    title: "Costruiamo la strategia",
-    text: "Le informazioni raccolte vengono condivise tra i professionisti del Metodo, cosi ogni decisione nasce da una visione completa della persona e non da un singolo elemento.",
-  },
-  {
-    number: "04",
-    title: "Ti accompagniamo nel tempo",
-    text: "Ricevi un programma semplice da mettere in pratica, che evolve insieme ai risultati raggiunti e ai cambiamenti del tuo corpo.",
-  },
-];
-
-const pillars = [
-  {
-    number: "01",
-    title: "Nutrizione personalizzata",
-    role: "La Biologa Nutrizionista",
-    text: "Elabora il piano alimentare partendo dalla composizione corporea, dal metabolismo, dallo stile di vita e dagli obiettivi della persona, trasformando l'analisi in indicazioni concrete e sostenibili.",
-  },
-  {
-    number: "02",
-    title: "Il Consiglio Fitoterapico",
-    role: "La Farmacista specializzata in Fitoterapia",
-    text: "Quando e utile, integra il programma con piante officinali e nutraceutici selezionati in base alle esigenze della persona, valutando eventuali terapie farmacologiche e possibili interazioni.",
-  },
-  {
-    number: "03",
-    title: "Consapevolezza del corpo",
-    role: "Il Tutor del Benessere",
-    text: "Attraverso il linguaggio del corpo aiuta la persona a riconoscere i cambiamenti, valorizzare i progressi e trasformare il percorso in nuove abitudini da mantenere nel tempo.",
-  },
-];
-
-const visitBoxes = [
-  {
-    title: "Prima visita",
-    items: [
-      "Colloquio approfondito",
-      "Analisi dello stile di vita",
-      "Esame BIA",
-      "Definizione degli obiettivi",
-      "Piano alimentare personalizzato",
-    ],
-  },
-  {
-    title: "Controlli periodici",
-    items: [
-      "Monitoraggio della composizione corporea",
-      "Verifica dei risultati",
-      "Aggiornamento del programma",
-      "Adattamento alle nuove esigenze",
-    ],
-  },
-];
+const introParagraphs = (page.introText || "").split("\n").filter(Boolean);
+const resultParagraphs = (page.phytoText || "").split("\n").filter(Boolean);
+const workSteps = page.workSteps || [];
+const pillars = page.pillars || [];
+const visitBoxes = page.visitBoxes || [];
 ---
 
-<MainLayout
-  title={page.seo?.title || "Il Metodo La Speziale | La Speziale Milano"}
-  description={page.seo?.description || "Il Metodo La Speziale integra nutrizione personalizzata, consiglio fitoterapico e consapevolezza del corpo."}
-  image={page.seo?.imageUrl || page.heroImageUrl}
->
-  <main class="method-page">
-    <section class="method-hero" style={`--method-hero: url('${page.heroImageUrl || "/assets/old-site/hero-header.jpg"}')`}>
-      <div class="method-hero-overlay">
-        <div class="container method-hero-copy">
-          <p class="eyebrow">{page.heroEyebrow || "Il Metodo"}</p>
-          <h1>{page.heroTitle || "Il Metodo"}</h1>
-          <p class="hero-subtitle">L'equilibrio del corpo e il risultato. Il Metodo e il modo per raggiungerlo.</p>
-          <p class="hero-text">{page.heroText || "Tre competenze lavorano insieme per offrirti un unico programma, chiaro, coordinato e semplice da seguire."}</p>
+<MainLayout title={page.seo?.title} description={page.seo?.description} image={page.seo?.imageUrl || page.introImageUrl}>
+  <section class="method-hero">
+    <div class="container method-hero-grid">
+      <div class="method-hero-copy">
+        <h1>{page.introHeading}</h1>
+        {page.introTitle && <p class="hero-subtitle">{page.introTitle}</p>}
+        <div class="hero-text">
+          {introParagraphs.map((paragraph) => <p>{paragraph}</p>)}
         </div>
       </div>
-    </section>
+      {page.introImageUrl && (
+        <figure class="method-hero-figure">
+          <img src={page.introImageUrl} alt="Il Metodo La Speziale" />
+        </figure>
+      )}
+    </div>
+  </section>
 
-    <section class="method-section method-origin">
-      <div class="container split-section">
-        <div>
-          <p class="eyebrow">Il Metodo La Speziale</p>
-          <h2>La semplicita che vivi nasce dal lavoro che non vedi.</h2>
-        </div>
-        <div class="split-copy">
-          <p>Il Metodo La Speziale nasce da un principio semplice: osservare la persona nel suo insieme.</p>
-          <p>Biologa Nutrizionista, Farmacista specializzata in Fitoterapia e Tutor del Benessere condividono competenze, informazioni e obiettivi per costruire un'unica strategia.</p>
-          <p>Questo permette di trasformare valutazioni diverse in un solo programma, coordinato, personalizzato e facile da seguire, senza dover gestire indicazioni separate.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="method-section method-work">
-      <div class="container narrow">
-        <p class="eyebrow section-eyebrow">Come nasce il tuo programma</p>
-        <h2>Un metodo organizzato, costruito intorno alla persona.</h2>
-        <div class="work-timeline">
-          {workSteps.map((step) => (
-            <article>
-              <span>{step.number}</span>
-              <div>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="method-section method-pillars">
+  {(page.dietTitle || page.dietText || pillars.length > 0) && (
+    <section class="section method-competences">
       <div class="container">
-        <p class="eyebrow section-eyebrow">I tre pilastri del Metodo</p>
-        <h2>Tre competenze. Un'unica direzione.</h2>
-        <div class="pillar-grid">
-          {pillars.map((pillar) => (
-            <article>
-              <span>{pillar.number}</span>
-              <h3>{pillar.title}</h3>
-              <strong>{pillar.role}</strong>
-              <p>{pillar.text}</p>
-            </article>
-          ))}
+        <div class="section-heading centered">
+          {page.dietTitle && <h2>{page.dietTitle}</h2>}
+          {page.dietText && <p>{page.dietText}</p>}
         </div>
+        {pillars.length > 0 && (
+          <div class="competence-grid">
+            {pillars.map((pillar) => (
+              <article class="competence-card">
+                <h3>{pillar.title}</h3>
+                {pillar.role && <p class="role">{pillar.role}</p>}
+                {pillar.text && <p>{pillar.text}</p>}
+              </article>
+            ))}
+          </div>
+        )}
       </div>
     </section>
+  )}
 
-    <section class="method-section method-visits">
+  {(page.coreTitle || workSteps.length > 0) && (
+    <section class="section method-path">
+      <div class="container">
+        <div class="section-heading centered compact">
+          {page.coreTitle && <h2>{page.journeyTitle || "Il percorso"}</h2>}
+          {page.coreTitle && <p class="section-subtitle">{page.coreTitle}</p>}
+          {page.journeyHighlight && <p>{page.journeyHighlight}</p>}
+        </div>
+        {workSteps.length > 0 && (
+          <div class="steps-grid">
+            {workSteps.map((step, index) => (
+              <article class="step-card">
+                <span class="item-number">{step.number || String(index + 1).padStart(2, "0")}.</span>
+                <h3>{step.title}</h3>
+                {step.text && <p>{step.text}</p>}
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {visitBoxes.length > 0 && (
+    <section class="section method-visits">
       <div class="container visit-grid">
         {visitBoxes.map((box) => (
-          <article class="visit-card">
+          <article class="surface visit-card">
             <h2>{box.title}</h2>
             <ul>
-              {box.items.map((item) => (
-                <li><Check size={15} stroke-width={2.6} aria-hidden="true" />{item}</li>
-              ))}
+              {(box.items || []).map((item) => <li>{item}</li>)}
             </ul>
           </article>
         ))}
       </div>
     </section>
+  )}
 
-    <section class="method-section method-result">
+  {(page.phytoTitle || page.resultHighlight || resultParagraphs.length > 0) && (
+    <section class="section method-result">
       <div class="container result-copy">
-        <p class="eyebrow section-eyebrow">Il vero risultato</p>
-        <h2>Il vero risultato e vivere meglio il proprio corpo, ogni giorno.</h2>
-        <p>Piu energia, maggiore consapevolezza e un modo nuovo di affrontare i cambiamenti. Perche il benessere non nasce da una soluzione momentanea, ma da un metodo che cresce insieme alla persona e diventa parte della sua quotidianita.</p>
+        {page.phytoTitle && <h2>{page.phytoTitle}</h2>}
+        {page.resultHighlight && <p class="result-highlight">{page.resultHighlight}</p>}
+        {resultParagraphs.map((paragraph) => <p>{paragraph}</p>)}
       </div>
     </section>
+  )}
 
-    <section class="method-final">
-      <div class="container final-copy">
-        <h2>{page.cta?.title || "Il primo passo e conoscere cio di cui il tuo corpo ha davvero bisogno."}</h2>
-        <p>{page.cta?.text || "Ogni persona e diversa e ogni cambiamento merita un programma costruito sulle proprie esigenze."}</p>
-        <a class="button final-button" href={page.cta?.primaryLink || "/contatti"}>{page.cta?.primaryLabel || "Richiedi una consulenza"}</a>
-      </div>
-    </section>
-  </main>
+  {page.cta && <CTASection {...page.cta} immersive titleAsHeading={false} />}
 </MainLayout>
 
 <style>
-  .method-page {
-    background: #fffefa;
-  }
-
   .method-hero {
-    min-height: clamp(500px, 72vh, 760px);
-    background-image:
-      linear-gradient(180deg, rgba(16, 24, 20, 0.28), rgba(16, 24, 20, 0.62)),
-      var(--method-hero);
-    background-position: 64% center;
-    background-size: cover;
+    background:
+      radial-gradient(circle at 16% 12%, rgba(120, 151, 124, 0.13), transparent 32%),
+      linear-gradient(135deg, var(--color-white) 0%, var(--color-ivory) 62%, var(--color-beige) 100%);
+    padding: clamp(56px, 7vw, 92px) 0;
   }
 
-  .method-hero-overlay {
+  .method-hero-grid {
     display: grid;
-    min-height: clamp(500px, 72vh, 760px);
+    grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.08fr);
+    gap: clamp(34px, 5vw, 72px);
     align-items: center;
-    padding: 88px 0 76px;
   }
 
   .method-hero-copy {
-    max-width: 900px;
-    color: white;
-    text-align: center;
-  }
-
-  .method-hero .eyebrow,
-  .method-hero h1 {
-    color: white;
+    max-width: 620px;
   }
 
   .method-hero h1 {
-    font-size: clamp(3rem, 7vw, 5.7rem);
-    line-height: 0.98;
     margin-bottom: 18px;
+    color: var(--color-primary);
+    font-size: clamp(2.75rem, 5vw, 5rem);
+    line-height: 0.98;
   }
 
   .hero-subtitle {
-    color: rgba(255, 255, 255, 0.96);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.15rem, 2.3vw, 1.65rem);
-    font-weight: 700;
-    margin: 0 auto 18px;
+    margin: 0 0 26px;
+    color: var(--color-primary);
+    font-size: clamp(1.1rem, 1.8vw, 1.42rem);
+    font-weight: 800;
+    line-height: 1.35;
   }
 
-  .hero-text {
-    max-width: 740px;
-    color: rgba(255, 255, 255, 0.9);
-    margin: 0 auto;
-    font-size: clamp(1rem, 1.6vw, 1.18rem);
-    line-height: 1.6;
+  .hero-text p {
+    margin-bottom: 16px;
+    line-height: 1.72;
   }
 
-  .method-section {
-    padding: clamp(64px, 8vw, 108px) 0;
+  .method-hero-figure {
+    display: block;
+    margin: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
   }
 
-  .method-origin,
-  .method-visits,
-  .method-result {
-    background: #fffefa;
+  .method-hero-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: initial;
   }
 
-  .method-work,
-  .method-pillars {
-    background: #f2f5ef;
+  .section-heading {
+    max-width: 760px;
+    margin: 0 0 clamp(28px, 4vw, 44px);
   }
 
-  .split-section {
-    display: grid;
-    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-    gap: clamp(38px, 7vw, 96px);
-    align-items: start;
+  .section-heading.centered {
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
   }
 
-  .split-section h2,
-  .method-section h2,
-  .method-final h2 {
-    color: #13382b;
-    font-size: clamp(2.2rem, 4.6vw, 4rem);
-    line-height: 1.04;
-  }
-
-  .split-copy {
-    display: grid;
-    gap: 18px;
+  .section-heading.compact {
     max-width: 700px;
   }
 
-  .split-copy p,
-  .work-timeline p,
-  .pillar-grid p,
-  .result-copy p,
-  .final-copy p {
-    color: #3d4e45;
-    font-size: 1.02rem;
-    line-height: 1.78;
-    margin: 0;
+  .section-heading h2,
+  .method-result h2 {
+    color: var(--color-primary);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 1.05;
   }
 
-  .narrow {
-    max-width: 980px;
+  .section-heading p {
+    margin: 14px auto 0;
+    line-height: 1.65;
   }
 
-  .section-eyebrow {
-    margin-bottom: 12px;
-    text-align: center;
+  .section-subtitle,
+  .result-highlight {
+    color: var(--color-primary);
+    font-weight: 800;
   }
 
-  .method-work h2,
-  .method-pillars h2,
-  .result-copy h2 {
-    max-width: 880px;
-    margin: 0 auto 38px;
-    text-align: center;
-  }
-
-  .work-timeline {
-    position: relative;
-    display: grid;
-    gap: 0;
-    margin-top: 42px;
-  }
-
-  .work-timeline::before {
-    position: absolute;
-    top: 18px;
-    bottom: 18px;
-    left: 27px;
-    width: 1px;
-    background: rgba(93, 120, 95, 0.34);
-    content: "";
-  }
-
-  .work-timeline article {
-    position: relative;
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 26px;
-    padding: 0 0 34px;
-  }
-
-  .work-timeline article:last-child {
-    padding-bottom: 0;
-  }
-
-  .work-timeline span {
-    position: relative;
-    z-index: 1;
-    display: grid;
-    width: 56px;
-    height: 56px;
-    place-items: center;
-    border: 1px solid rgba(93, 120, 95, 0.28);
-    border-radius: 50%;
-    background: #fffefa;
-    color: #13382b;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.02rem;
-  }
-
-  .work-timeline h3 {
-    color: #13382b;
-    font-family: Georgia, "Times New Roman", serif;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-size: 1.1rem;
-    margin: 0 0 8px;
-  }
-
-  .pillar-grid {
+  .competence-grid,
+  .steps-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px;
+    border: 1px solid rgba(36, 77, 61, 0.14);
+    background: rgba(255, 253, 248, 0.76);
   }
 
-  .pillar-grid article {
-    border-top: 1px solid rgba(38, 51, 44, 0.14);
-    background: rgba(255, 254, 250, 0.82);
-    padding: 30px 24px;
+  .steps-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
-  .pillar-grid span {
+  .competence-card,
+  .step-card {
+    padding: clamp(22px, 3vw, 34px);
+  }
+
+  .competence-card + .competence-card,
+  .step-card + .step-card {
+    border-left: 1px solid rgba(36, 77, 61, 0.14);
+  }
+
+  .item-number {
     display: block;
-    color: rgba(19, 56, 43, 0.22);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(3.2rem, 7vw, 5rem);
-    line-height: 0.9;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
+    color: var(--color-primary);
+    font-weight: 800;
+    letter-spacing: 0.03em;
   }
 
-  .pillar-grid h3,
+  .competence-card h3,
+  .step-card h3,
   .visit-card h2 {
-    color: #13382b;
+    margin-bottom: 12px;
+    color: var(--color-primary);
     font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+    font-size: clamp(1.28rem, 2vw, 1.75rem);
+    font-weight: 500;
     line-height: 1.12;
-    margin: 0;
   }
 
-  .pillar-grid strong {
-    display: block;
-    color: #78977c;
-    font-size: 0.84rem;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    margin: 14px 0 12px;
-    text-transform: uppercase;
+  .role {
+    margin-bottom: 12px;
+    color: var(--color-primary);
+    font-size: 0.98rem;
+    font-weight: 800;
+  }
+
+  .competence-card p,
+  .step-card p,
+  .visit-card li {
+    line-height: 1.65;
   }
 
   .visit-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 34px;
-    max-width: 1040px;
+    gap: 24px;
   }
 
   .visit-card {
-    border: 1px solid rgba(38, 51, 44, 0.18);
-    background: rgba(255, 254, 250, 0.82);
-    padding: clamp(26px, 4vw, 42px);
-  }
-
-  .visit-card h2 {
-    margin-bottom: 18px;
-    text-transform: uppercase;
+    padding: clamp(24px, 3vw, 34px);
   }
 
   .visit-card ul {
     display: grid;
     gap: 10px;
-    list-style: none;
-    margin: 0;
+    margin: 18px 0 0;
     padding: 0;
+    list-style: none;
   }
 
-  .visit-card li {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    color: #30463a;
-    line-height: 1.45;
+  .visit-card li::before {
+    margin-right: 10px;
+    color: var(--color-primary);
+    content: "—";
   }
 
-  .visit-card svg {
-    flex: 0 0 auto;
-    color: #78977c;
-    margin-top: 3px;
+  .method-result {
+    background: var(--color-white);
   }
 
   .result-copy {
-    max-width: 880px;
+    max-width: 980px;
     text-align: center;
   }
 
-  .result-copy p {
-    max-width: 760px;
-    margin-inline: auto;
+  .result-highlight {
+    max-width: 780px;
+    margin: 22px auto 22px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.45rem, 2.5vw, 2.15rem);
+    line-height: 1.22;
   }
 
-  .method-final {
-    background: #78977c;
-    color: white;
-    padding: clamp(64px, 8vw, 96px) 0;
-    text-align: center;
+  .result-copy p:not(.result-highlight) {
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+    line-height: 1.72;
   }
 
-  .final-copy {
-    max-width: 850px;
-  }
-
-  .method-final h2,
-  .method-final p {
-    color: white;
-  }
-
-  .method-final p {
-    max-width: 760px;
-    margin: 0 auto;
-  }
-
-  .final-button {
-    margin-top: 28px;
-    background: white;
-    color: #13382b;
-  }
-
-  @media (max-width: 900px) {
-    .split-section,
-    .pillar-grid,
+  @media (max-width: 960px) {
+    .method-hero-grid,
+    .competence-grid,
+    .steps-grid,
     .visit-grid {
       grid-template-columns: 1fr;
     }
 
-    .section-eyebrow,
-    .method-work h2,
-    .method-pillars h2,
-    .result-copy h2 {
-      text-align: left;
+    .method-hero-copy {
+      max-width: none;
+    }
+
+    .competence-card + .competence-card,
+    .step-card + .step-card {
+      border-top: 1px solid rgba(36, 77, 61, 0.14);
+      border-left: 0;
+    }
+
+    .method-hero-figure {
+      min-height: 0;
     }
   }
 
-  @media (max-width: 620px) {
-    .method-hero,
-    .method-hero-overlay {
-      min-height: 560px;
-    }
-
+  @media (max-width: 560px) {
     .method-hero {
-      background-position: 64% center;
+      padding: 44px 0;
     }
 
-    .method-hero-overlay {
-      align-items: end;
-      padding: 72px 0 48px;
+    .method-hero h1 {
+      font-size: clamp(2.45rem, 14vw, 3.5rem);
     }
 
-    .method-hero-copy,
-    .method-final,
+    .section-heading.centered,
     .result-copy {
       text-align: left;
     }
 
-    .method-hero h1 {
-      font-size: clamp(2.7rem, 13vw, 4rem);
-    }
-
-    .method-section {
-      padding: 56px 0;
-    }
-
-    .work-timeline article {
-      gap: 18px;
-    }
-
-    .final-button {
-      width: 100%;
+    .result-highlight {
+      margin-left: 0;
     }
   }
 </style>

@@ -30,7 +30,6 @@ const productsHeroDisclaimer =
   <section class="shop-hero">
     <div class="container shop-hero-inner">
       <div class="shop-hero-copy">
-        <p class="eyebrow">{page.heroEyebrow || "Prodotti consigliati"}</p>
         <h1>{page.heroTitle || "La tua lista della spesa naturale"}</h1>
         <p class="lead">
           {productsHeroDisclaimer}
@@ -85,7 +84,6 @@ const productsHeroDisclaimer =
           return (
             <article class="product-row" data-product-row data-search={searchableText} data-category={categorySearch}>
               <div class="product-main">
-                <span>{categoryText}</span>
                 <h2><a href={`/prodotti/${product.slug}/`}>{product.title}</a></h2>
                 {product.excerpt && <p>{product.excerpt}</p>}
               </div>
@@ -156,7 +154,7 @@ const productsHeroDisclaimer =
     background:
       radial-gradient(circle at 18% 8%, rgba(197, 155, 39, 0.14), transparent 30%),
       linear-gradient(135deg, #fffdf8 0%, #fcfbf7 55%, #eef2ec 100%);
-    padding: clamp(68px, 10vw, 118px) 0 56px;
+    padding: clamp(56px, 7vw, 88px) 0 48px;
   }
 
   .shop-hero-inner {
@@ -164,7 +162,7 @@ const productsHeroDisclaimer =
   }
 
   .shop-hero h1 {
-    color: #13382b;
+    color: #244D3D;
     font-size: clamp(2.15rem, 4.6vw, 3.8rem);
   }
 
@@ -189,7 +187,7 @@ const productsHeroDisclaimer =
   .product-search {
     display: grid;
     gap: 8px;
-    color: #13382b;
+    color: #244D3D;
     font-size: 0.88rem;
     font-weight: 850;
   }
@@ -238,8 +236,8 @@ const productsHeroDisclaimer =
 
   .chip:hover,
   .chip.active {
-    border-color: #13382b;
-    background: #13382b;
+    border-color: #244D3D;
+    background: #244D3D;
     color: white;
   }
 
@@ -294,7 +292,7 @@ const productsHeroDisclaimer =
 
   .product-main span {
     display: block;
-    color: #c59b27;
+    color: #244D3D;
     font-size: 0.66rem;
     font-weight: 900;
     letter-spacing: 0.09em;
@@ -303,7 +301,7 @@ const productsHeroDisclaimer =
 
   .product-main h2 {
     margin: 4px 0 5px;
-    color: #13382b;
+    color: #244D3D;
     font-family: inherit;
     font-size: 1rem;
     font-weight: 850;
@@ -337,12 +335,12 @@ const productsHeroDisclaimer =
 
   .details-link {
     border: 1px solid rgba(19, 56, 43, 0.12);
-    color: #13382b;
+    color: #244D3D;
   }
 
   .buy-link {
     gap: 6px;
-    background: #13382b;
+    background: var(--color-cta);
     color: white;
   }
 

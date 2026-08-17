@@ -20,7 +20,7 @@ const paragraphs = blocksToText(therapy.description || []);
 const benefits = therapy.benefitCards || [];
 const products = therapy.recommendedProducts || [];
 const faqs = therapy.faqs || [];
-const heroImage = therapy.imageUrl || "/assets/old-site/fitoterapia.jpg";
+const heroImage = therapy.imageUrl || "/assets/old-site/fitoterapia-consulenza-2026.jpg";
 const finalCtaImage = therapy.finalCtaImageUrl || heroImage;
 const showOverview = isVisible(therapy.showOverview);
 const showBenefits = isVisible(therapy.showBenefits) && benefits.length > 0;
@@ -40,7 +40,6 @@ const anchors = [
   <article class="therapy-page">
     <header class="therapy-detail-hero" style={`--therapy-detail-hero: url('${heroImage}')`}>
       <div class="container therapy-copy">
-        <p class="eyebrow">{therapy.category || "Consiglio fitoterapico"}</p>
         <h1>{therapy.title}</h1>
         {therapy.excerpt && <p class="lead">{therapy.excerpt}</p>}
         <div class="hero-actions">
@@ -105,7 +104,6 @@ const anchors = [
                   {product.imageUrl ? <img src={product.imageUrl} alt={product.imageAlt || product.title} loading="lazy" /> : <span></span>}
                 </a>
                 <div>
-                  {product.category && <p class="eyebrow">{product.category}</p>}
                   <h3><a href={`/prodotti/${product.slug}/`}>{product.title}</a></h3>
                   {product.excerpt && <p>{product.excerpt}</p>}
                   <div class="related-actions">
@@ -158,8 +156,8 @@ const anchors = [
 
 <style>
   .therapy-page { background:#fffefa; }
-  .therapy-detail-hero { display:grid; min-height:72vh; align-items:end; background-image:linear-gradient(90deg,rgba(16,24,20,.76),rgba(16,24,20,.18)),var(--therapy-detail-hero); background-position:center; background-size:cover; padding:96px 0 80px; }
-  .therapy-copy, .therapy-copy h1, .therapy-copy .eyebrow, .therapy-copy .lead { color:white; }
+  .therapy-detail-hero { display:grid; min-height:68vh; align-items:end; background-image:linear-gradient(90deg,rgba(16,24,20,.76),rgba(16,24,20,.18)),var(--therapy-detail-hero); background-position:center; background-size:cover; padding:80px 0 64px; }
+  .therapy-copy, .therapy-copy h1, .therapy-copy .lead { color:white; }
   .therapy-copy { max-width:760px; }
   .hero-actions, .final-actions, .related-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
   .hero-secondary { border:1px solid rgba(255,255,255,.7); color:white; background:rgba(255,255,255,.08); }
@@ -185,7 +183,7 @@ const anchors = [
   .faq-list details + details { border-top:1px solid rgba(38,51,44,.1); }
   .faq-list summary { cursor:pointer; font-weight:850; padding:18px 20px; }
   .faq-list p { padding:0 20px 20px; }
-  .final-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:28px; align-items:center; border-radius:16px; background-image:linear-gradient(90deg,rgba(239,235,224,.96),rgba(239,235,224,.74)),var(--final-image); background-position:center; background-size:cover; padding:42px; box-shadow:var(--shadow-soft); }
+  .final-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:24px; align-items:center; border-radius:16px; background-image:linear-gradient(90deg,rgba(239,235,224,.96),rgba(239,235,224,.74)),var(--final-image); background-position:center; background-size:cover; padding:32px; box-shadow:var(--shadow-soft); }
   .final-card svg { color:var(--color-sage); }
-  @media (max-width:880px) { .overview-grid, .benefit-grid, .related-grid, .final-card { grid-template-columns:1fr; } .anchor-nav { top:68px; } }
+  @media (max-width:880px) { .therapy-detail-hero { min-height:560px; padding:64px 0 48px; } .overview-grid, .benefit-grid, .related-grid, .final-card { grid-template-columns:1fr; } .final-card { padding:24px; } .anchor-nav { top:68px; } }
 </style>

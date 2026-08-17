@@ -28,6 +28,8 @@ export type Program = {
   imageUrl?: string;
   heroImageUrl?: string;
   category?: string;
+  heroHighlight?: string;
+  heroText?: string;
   duration?: string;
   programType?: string;
   deliveryMode?: string;
@@ -35,7 +37,10 @@ export type Program = {
   price?: string;
   audience?: string[];
   descriptionTitle?: string;
+  projectHighlight?: string;
   description?: unknown[];
+  explanationTitle?: string;
+  explanationText?: unknown[];
   benefits?: string[];
   benefitCards?: {
     _key?: string;
@@ -58,6 +63,12 @@ export type Program = {
   showFaqs?: boolean;
   showExtraContent?: boolean;
   showFinalCta?: boolean;
+  showHeroCta?: boolean;
+  showFacts?: boolean;
+  showVisits?: boolean;
+  showExplanation?: boolean;
+  showResult?: boolean;
+  showSecondaryCtas?: boolean;
   showInMenu?: boolean;
   isFeatured?: boolean;
   ctaLabel?: string;
@@ -69,6 +80,10 @@ export type Program = {
   audienceTitle?: string;
   benefitsTitle?: string;
   processTitle?: string;
+  processHighlight?: string;
+  resultTitle?: string;
+  resultHighlight?: string;
+  resultText?: unknown[];
   faqsTitle?: string;
   finalWhatsappLabel?: string;
   finalEmailLabel?: string;
@@ -141,6 +156,8 @@ export type Homepage = {
   methodPhytoLabel?: string;
   methodPhytoTitle?: string;
   methodPhytoText?: string;
+  methodPhytoImageUrl?: string;
+  methodCoachingImageUrl?: string;
   methodPhytoItems?: string[];
   methodPhytoLinkLabel?: string;
   featuredProgramSlugs?: string[];
@@ -149,19 +166,21 @@ export type Homepage = {
 };
 
 export type MethodPage = {
-  heroEyebrow?: string;
-  heroTitle: string;
-  heroText?: string;
-  heroImageUrl?: string;
+  introHeading?: string;
   introTitle?: string;
   introText?: string;
+  introImageUrl?: string;
   coreEyebrow?: string;
   coreTitle?: string;
-  coreText?: string;
-  coreItems?: string[];
+  workSteps?: { _key?: string; number?: string; title?: string; text?: string }[];
   dietTitle?: string;
   dietText?: string;
+  pillars?: { _key?: string; title?: string; role?: string; text?: string }[];
+  visitBoxes?: { _key?: string; title?: string; items?: string[] }[];
+  journeyTitle?: string;
+  journeyHighlight?: string;
   phytoTitle?: string;
+  resultHighlight?: string;
   phytoText?: string;
   cta?: PageCta;
   seo?: Seo;
@@ -170,6 +189,7 @@ export type MethodPage = {
 export type CoachingPage = {
   heroEyebrow?: string;
   heroTitle: string;
+  heroSubtitle?: string;
   heroText?: string;
   heroImageUrl?: string;
   introTitle?: string;
@@ -313,13 +333,24 @@ export type TherapyLink = {
 export type TherapiesPage = {
   heroEyebrow?: string;
   heroTitle: string;
+  heroSubtitle?: string;
   heroText?: string;
   heroImageUrl?: string;
   contentTitle?: string;
   contentText?: string;
   gridTitle?: string;
   gridText?: string;
+  usefulTitle?: string;
+  usefulSubtitle?: string;
+  usefulItems?: string[];
+  includedTitle?: string;
+  includedItems?: string[];
+  expertiseTitle?: string;
+  expertiseSubtitle?: string;
+  expertiseText?: string;
   cardButtonLabel?: string;
+  faqsTitle?: string;
+  faqs?: { _key?: string; question?: string; answer?: string }[];
   cta?: PageCta;
   seo?: Seo;
 };
@@ -377,14 +408,14 @@ export const fallbackSettings: SiteSettings = {
   address: "Via San Giovanni sul Muro 13, 20121 Milano",
   locationText:
     "Ci trovi nel cuore di Milano, a pochi passi da Largo Cairoli, dal Castello Sforzesco e dal Teatro Dal Verme, in una zona facilmente raggiungibile con i mezzi pubblici.",
-  openingHours: "Martedi - Venerdi: 9:00 - 17:30\nSabato: 9:00 - 14:00\nOrario continuato",
+  openingHours: "Martedì - Venerdi: 9:00 - 17:30\nSabato: 9:00 - 14:00\nOrario continuato",
   contactText:
     "Puoi scriverci o chiamarci. Ti ricontatteremo entro 24 ore per fornirti tutte le informazioni di cui hai bisogno e programmare un primo incontro personalizzato.",
   whatsapp: "https://wa.me/393334063401",
-  instagram: "https://www.instagram.com/",
-  facebook: "https://www.facebook.com/",
+  instagram: "https://www.instagram.com/laspezialemilano/",
+  facebook: "https://www.facebook.com/laspeziale.it/",
   footerText: "Nutrizione integrata, fitoterapia e percorsi personalizzati nel cuore di Milano.",
-  globalCtaLabel: "Richiedi una consulenza",
+  globalCtaLabel: "Prenota una consulenza",
   globalCtaLink: "/contatti",
   privacyPolicyLink: "/privacy-policy",
   cookiePolicyLink: "/cookie-policy",
@@ -401,29 +432,29 @@ export const fallbackHomepage: Homepage = {
   heroTitle: "Il Metodo La Speziale",
   heroSubtitle:
     "Nutrizione personalizzata, consiglio fitoterapico e supporto al cambiamento in un unico percorso costruito intorno a te.",
-  heroImageUrl: "/assets/old-site/hero-movimento.png",
+  heroImageUrl: "/assets/old-site/hero-home-flow-2026.jpg",
   heroCtaLabel: "Scopri il percorso",
   heroCtaLink: "/programmi",
-  approachImageUrl: "/assets/old-site/nutrizione-integrata.jpg",
-  introEyebrow: "Perche nasce il Metodo La Speziale",
+  approachImageUrl: "/assets/old-site/home-metodo-competenze.png",
+  introEyebrow: "Perché un approccio diverso",
   introTitle: "La nutrizione cambia quando cambia il corpo.",
   introLead:
     "Nel corso degli anni abbiamo incontrato molte persone che, di fronte ai cambiamenti del proprio corpo, cercavano risposte diverse dai tradizionali schemi alimentari.",
   introBody:
-    "Peso piu difficile da gestire, metabolismo che rallenta, variazioni ormonali, gonfiore, perdita di energia o difficolta nel ritrovare il proprio equilibrio richiedono una valutazione piu ampia e competenze che lavorano insieme. Da questa esperienza nasce il Metodo La Speziale. Lavorare con tre professionisti non significa ricevere piu indicazioni o maggiore confusione. Significa avere un unico programma, costruito attraverso competenze diverse che condividono lo stesso obiettivo: aiutare la persona a raggiungere un risultato concreto, semplice da seguire e sostenibile nel tempo.",
+    "Peso più difficile da gestire, metabolismo che rallenta, variazioni ormonali, gonfiore e perdita di energia richiedono uno sguardo più ampio e competenze che lavorano insieme.\nDa questa esperienza nasce il Metodo La Speziale.\nLavorare con tre professionisti non significa ricevere più indicazioni o maggiore confusione. Al contrario, la loro collaborazione costruisce un unico percorso, semplice da seguire e facilmente integrabile nella vita di tutti i giorni.",
   value1Title: "La Dieta",
   value1Text: "Un piano alimentare su misura, realistico e monitorabile, pensato per entrare nella quotidianita senza restrizioni insostenibili.",
   value2Title: "La Fitoterapia",
   value2Text: "Uso mirato di piante officinali e nutraceutici di alto livello per sostenere metabolismo, drenaggio ed equilibrio ormonale.",
   value3Title: "Il Coaching",
-  value3Text: "Sostegno motivazionale e consapevolezza corporea per rendere il cambiamento piu stabile nel lungo termine.",
-  methodEyebrow: "Il Metodo La Speziale",
-  methodTitle: "Un metodo che mette ordine, non aggiunge complessita.",
+  value3Text: "Sostegno motivazionale e consapevolezza corporea per rendere il cambiamento più stabile nel lungo termine.",
+  methodEyebrow: "Un percorso, tre competenze",
+  methodTitle: "Un metodo che semplifica, non complica.",
   methodText:
-    "Tre professionisti osservano la persona da prospettive diverse e costruiscono insieme un'unica strategia. Tu ricevi un programma coordinato, nel quale ogni scelta segue la stessa direzione, evitando indicazioni separate e rendendo il percorso piu semplice da vivere.",
-  methodCoreEyebrow: "I tre pilastri",
+    "Tre professionisti condividono informazioni, obiettivi e strategie per costruire un unico percorso, personalizzato e coerente.\nTu non devi coordinare figure diverse né interpretare indicazioni separate: ricevi un programma chiaro, pensato per accompagnare i cambiamenti del tuo corpo con semplicità.",
+  methodCoreEyebrow: "Lavorare insieme fa la differenza",
   methodCoreText:
-    "Tre professionalita. Un unico metodo.",
+    "Tre professionalità. Un unico metodo.",
   methodCoreLinkLabel: "Scopri il metodo",
   methodDietLabel: "Percorsi dedicati",
   methodDietTitle: "Come possiamo aiutarti",
@@ -437,7 +468,9 @@ export const fallbackHomepage: Homepage = {
   methodPhytoLabel: "Consulenze",
   methodPhytoTitle: "Le stesse competenze, anche quando non serve l'intero Metodo.",
   methodPhytoText:
-    "Non tutte le esigenze richiedono un percorso multidisciplinare. In alcuni casi puoi richiedere una consulenza dedicata con la Farmacista specializzata in Fitoterapia o con il Tutor del Benessere, quando rappresenta la risposta piu adatta alle tue esigenze.",
+    "Non tutte le esigenze richiedono un percorso multidisciplinare.\nPer questo puoi richiedere anche una consulenza dedicata con la Farmacista specializzata in Fitoterapia o con il Tutor del Benessere, quando rappresenta la risposta più adatta alle tue necessità.",
+  methodPhytoImageUrl: "/assets/old-site/fitoterapia-consulenza-2026.jpg",
+  methodCoachingImageUrl: "/assets/old-site/consapevolezza-2026.jpg",
   methodPhytoItems: [
     "Fitoterapia mirata",
     "Coaching e consapevolezza",
@@ -445,9 +478,8 @@ export const fallbackHomepage: Homepage = {
   ],
   methodPhytoLinkLabel: "Vai alla fitoterapia",
   finalCta: {
-    eyebrow: "CTA finale",
     title: "Il tuo percorso inizia da qui.",
-    text: "Ascolteremo la tua storia, valuteremo le tue esigenze e costruiremo il programma piu adatto al tuo corpo e ai tuoi obiettivi.",
+    text: "Ascolteremo la tua storia, valuteremo le tue esigenze e costruiremo il percorso più adatto a te.",
     primaryLabel: "Richiedi una consulenza",
     primaryLink: "/contatti",
   },
@@ -462,59 +494,98 @@ const homepageStrategyOverrides: Partial<Homepage> = {
   introTitle: fallbackHomepage.introTitle,
   introLead: fallbackHomepage.introLead,
   introBody: fallbackHomepage.introBody,
-  value1Title: fallbackHomepage.value1Title,
-  value1Text: fallbackHomepage.value1Text,
-  value2Title: fallbackHomepage.value2Title,
-  value2Text: fallbackHomepage.value2Text,
-  value3Title: fallbackHomepage.value3Title,
-  value3Text: fallbackHomepage.value3Text,
   methodEyebrow: fallbackHomepage.methodEyebrow,
   methodTitle: fallbackHomepage.methodTitle,
   methodText: fallbackHomepage.methodText,
-  methodCoreEyebrow: fallbackHomepage.methodCoreEyebrow,
   methodCoreText: fallbackHomepage.methodCoreText,
-  methodCoreLinkLabel: fallbackHomepage.methodCoreLinkLabel,
-  methodDietLabel: fallbackHomepage.methodDietLabel,
-  methodDietTitle: fallbackHomepage.methodDietTitle,
-  methodDietText: fallbackHomepage.methodDietText,
-  methodDietItems: fallbackHomepage.methodDietItems,
-  methodPhytoLabel: fallbackHomepage.methodPhytoLabel,
   methodPhytoTitle: fallbackHomepage.methodPhytoTitle,
   methodPhytoText: fallbackHomepage.methodPhytoText,
-  methodPhytoItems: fallbackHomepage.methodPhytoItems,
-  methodPhytoLinkLabel: fallbackHomepage.methodPhytoLinkLabel,
+  methodPhytoImageUrl: fallbackHomepage.methodPhytoImageUrl,
+  methodCoachingImageUrl: fallbackHomepage.methodCoachingImageUrl,
   finalCta: fallbackHomepage.finalCta,
 };
 
 export const fallbackMethodPage: MethodPage = {
-  heroEyebrow: "Il Metodo",
-  heroTitle: "Il Metodo",
-  heroText:
-    "Tre competenze lavorano insieme per offrirti un unico programma, chiaro, coordinato e semplice da seguire.",
-  heroImageUrl: "/assets/old-site/hero-movimento.png",
-  introTitle: "La semplicita che vivi nasce dal lavoro che non vedi.",
+  introHeading: "Il Metodo La Speziale",
+  introTitle: "La semplicità che vivi nasce dal lavoro che non vedi.",
   introText:
-    "Il Metodo La Speziale nasce da un principio semplice: osservare la persona nel suo insieme. Biologa Nutrizionista, Farmacista specializzata in Fitoterapia e Tutor del Benessere condividono competenze, informazioni e obiettivi per costruire un'unica strategia. Questo permette di trasformare valutazioni diverse in un solo programma, coordinato, personalizzato e facile da seguire, senza dover gestire indicazioni separate.",
+    "Il Metodo La Speziale nasce da un principio semplice: osservare la persona nel suo insieme.\nBiologa Nutrizionista, Farmacista specializzata in Fitoterapia e Tutor del Benessere condividono competenze, informazioni e obiettivi per costruire un'unica strategia.\nQuesto permette di trasformare valutazioni diverse in un solo programma, coordinato, personalizzato e facile da seguire, senza dover gestire indicazioni separate.",
+  introImageUrl: "/assets/old-site/home-metodo-competenze.png",
   coreEyebrow: "Come nasce il tuo programma",
   coreTitle: "Un metodo organizzato, costruito intorno alla persona.",
-  coreText:
-    "Per te questo significa un unico programma, coerente e facile da seguire, senza dover gestire indicazioni separate.",
-  coreItems: [
-    "Conosciamo la persona",
-    "Conosciamo il tuo corpo",
-    "Costruiamo la strategia",
-    "Ti accompagniamo nel tempo",
+  workSteps: [
+    {
+      number: "01",
+      title: "Conosciamo la persona",
+      text: "Ogni programma inizia dall'ascolto della tua storia, delle tue abitudini, dei tuoi obiettivi e delle difficoltà che incontri nella vita quotidiana.",
+    },
+    {
+      number: "02",
+      title: "Conosciamo il tuo corpo",
+      text: "L'esame BIA analizza composizione corporea, massa muscolare, massa grassa e stato di idratazione, offrendo informazioni che il peso da solo non può raccontare.",
+    },
+    {
+      number: "03",
+      title: "Costruiamo la strategia",
+      text: "Le informazioni raccolte vengono condivise tra i professionisti del Metodo, così ogni decisione nasce da una visione completa della persona e non da un singolo elemento.",
+    },
+    {
+      number: "04",
+      title: "Accompagniamo il cambiamento",
+      text: "Ricevi un programma semplice da mettere in pratica, che evolve insieme ai risultati raggiunti e ai cambiamenti del tuo corpo.",
+    },
   ],
-  dietTitle: "I tre pilastri del Metodo",
+  dietTitle: "Tre competenze, un'unica strategia",
   dietText:
     "Tre competenze. Un'unica direzione.",
+  pillars: [
+    {
+      title: "Nutrizione personalizzata",
+      role: "La Biologa Nutrizionista",
+      text: "Elabora il piano alimentare partendo dalla composizione corporea, dal metabolismo, dallo stile di vita e dagli obiettivi della persona, trasformando la valutazione in indicazioni concrete e sostenibili.",
+    },
+    {
+      title: "Il Consiglio Fitoterapico",
+      role: "La Farmacista specializzata in Fitoterapia",
+      text: "Quando è utile, integra il programma con piante officinali e nutraceutici selezionati in base alle esigenze della persona, valutando eventuali terapie farmacologiche e possibili interazioni.",
+    },
+    {
+      title: "Consapevolezza del corpo",
+      role: "Il Tutor del Benessere",
+      text: "Attraverso il linguaggio del corpo aiuta la persona a riconoscere i cambiamenti, valorizzare i progressi e trasformare il percorso in nuove abitudini da mantenere nel tempo.",
+    },
+  ],
+  visitBoxes: [
+    {
+      title: "Prima visita",
+      items: [
+        "Colloquio approfondito",
+        "Analisi dello stile di vita",
+        "Esame BIA",
+        "Definizione degli obiettivi",
+        "Piano alimentare personalizzato",
+      ],
+    },
+    {
+      title: "Controlli periodici",
+      items: [
+        "Monitoraggio della composizione corporea",
+        "Verifica dei risultati",
+        "Aggiornamento del programma",
+        "Adattamento alle nuove esigenze",
+      ],
+    },
+  ],
+  journeyTitle: "Il percorso",
+  journeyHighlight:
+    "Un unico percorso, senza visite separate: le tre competenze lavorano in modo coordinato e confluiscono nello stesso programma.",
   phytoTitle: "Il vero risultato",
+  resultHighlight: "Il vero risultato è vivere meglio il proprio corpo, ogni giorno.",
   phytoText:
-    "Il vero risultato e vivere meglio il proprio corpo, ogni giorno.",
+    "Più energia, maggiore consapevolezza e un modo nuovo di affrontare i cambiamenti.\nPerché il benessere non nasce da una soluzione momentanea, ma da un metodo che cresce insieme alla persona e diventa parte della sua quotidianità.",
   cta: {
-    eyebrow: "CTA",
-    title: "Il primo passo e conoscere cio di cui il tuo corpo ha davvero bisogno.",
-    text: "Ogni persona e diversa e ogni cambiamento merita un programma costruito sulle proprie esigenze.",
+    title: "Il primo passo è conoscere ciò di cui il tuo corpo ha davvero bisogno.",
+    text: "Ogni persona è diversa e ogni cambiamento merita un programma costruito sulle proprie esigenze.",
     primaryLabel: "Richiedi una consulenza",
     primaryLink: "/contatti",
   },
@@ -528,30 +599,30 @@ export const fallbackMethodPage: MethodPage = {
 export const fallbackCoachingPage: CoachingPage = {
   heroEyebrow: "Consulenza di Consapevolezza",
   heroTitle: "Consulenza di Consapevolezza",
+  heroSubtitle: "Riconoscersi è il primo passo per stare bene con sé stessi.",
   heroText:
-    "Un percorso con il Tutor del Benessere per imparare a leggere il linguaggio del proprio corpo, valorizzare la propria persona e vivere con maggiore serenita ogni fase della vita.",
-  heroImageUrl: "/assets/old-site/consapevolezza.png",
-  introTitle: "Ogni cambiamento del corpo porta con se qualcosa di piu di un cambiamento fisico.",
+    "Un percorso con il Tutor del Benessere per imparare a leggere il linguaggio del proprio corpo, valorizzare la propria persona e vivere con maggiore serenità ogni fase della vita.",
+  heroImageUrl: "/assets/old-site/consapevolezza-2026.jpg",
+  introTitle: "Ogni cambiamento del corpo porta con sé qualcosa di più di un cambiamento fisico.",
   introText:
-    "Puo modificare il modo in cui ci percepiamo, il rapporto con la nostra immagine, la sicurezza con cui affrontiamo la quotidianita e la capacita di riconoscere il nostro valore. Questa consulenza nasce per aiutare la persona a comprendere questi cambiamenti, accoglierli e trasformarli in una nuova consapevolezza di se, affinche il benessere raggiunto possa diventare parte della propria vita.",
-  audienceTitle: "A chi desidera:",
+    "Può modificare il modo in cui ci percepiamo, il rapporto con la nostra immagine, la sicurezza con cui affrontiamo la quotidianita e la capacita di riconoscere il nostro valore. Questa consulenza nasce per aiutare la persona a comprendere questi cambiamenti, accoglierli e trasformarli in una nuova consapevolezza di sé, affinché il benessere raggiunto possa diventare parte della propria vita.",
+  audienceTitle: "A chi è rivolta",
   audienceItems: [
     "conoscere meglio se stesso;",
     "migliorare il rapporto con il proprio corpo;",
     "valorizzare la propria immagine;",
-    "affrontare con maggiore serenita una nuova fase della vita;",
+    "affrontare con maggiore serenità una nuova fase della vita;",
     "accrescere la fiducia nelle proprie risorse;",
     "dedicare del tempo alla propria persona.",
   ],
-  methodTitle: "Il Tutor del Benessere accompagna la persona in un percorso pratico di conoscenza di se.",
+  methodTitle: "Il Tutor del Benessere accompagna la persona in un percorso pratico di conoscenza di sé.",
   methodSteps: [
-    { title: "Perche nasce", text: "Ogni cambiamento del corpo porta con se qualcosa di piu di un cambiamento fisico." },
-    { title: "Il Tutor del Benessere", text: "Accompagna la persona in un percorso pratico di conoscenza di se attraverso il linguaggio del corpo." },
+    { title: "Perché nasce", text: "Ogni cambiamento del corpo porta con sé qualcosa di più di un cambiamento fisico." },
+    { title: "Il Tutor del Benessere", text: "Accompagna la persona in un percorso pratico di conoscenza di sé attraverso il linguaggio del corpo." },
     { title: "Come si svolge", text: "Ogni incontro parte dalla persona e dalla fase della vita che sta vivendo." },
   ],
   cta: {
-    eyebrow: "CTA",
-    title: "Ogni percorso inizia da una maggiore conoscenza di se.",
+    title: "Ogni percorso inizia da una maggiore conoscenza di sé.",
     text: "Prenota la tua Consulenza di Consapevolezza e scopri il valore di un percorso che ti aiuta a vivere con maggiore consapevolezza il rapporto con il tuo corpo e con te stesso.",
     primaryLabel: "Prenota una consulenza",
     primaryLink: "/contatti",
@@ -559,22 +630,22 @@ export const fallbackCoachingPage: CoachingPage = {
   seo: {
     title: "Consulenza di Consapevolezza | La Speziale Milano",
     description:
-      "Consulenza con il Tutor del Benessere per leggere il linguaggio del corpo, valorizzare la persona e vivere con maggiore serenita.",
+      "Consulenza con il Tutor del Benessere per leggere il linguaggio del corpo, valorizzare la persona e vivere con maggiore serenità.",
   },
 };
 
 export const fallbackProgramsPage: ProgramsPage = {
-  heroEyebrow: "Aree di intervento",
-  heroTitle: "Percorsi clinici costruiti intorno alla persona",
-  heroText: "Le aree di lavoro principali dello studio: peso e ricomposizione corporea, gonfiore e disturbi intestinali, salute femminile, anti-age e nutrizione sportiva.",
+  heroEyebrow: "Cosa trattiamo",
+  heroTitle: "Cosa trattiamo",
+  heroText: "Peso, intestino, cambiamenti ormonali, vitalità e attività fisica possono richiedere attenzioni diverse. Per questo il Metodo La Speziale si adatta all'obiettivo e alla fase che stai vivendo.",
   heroImageUrl: "/assets/old-site/hero-header.jpg",
-  listTitle: "Le aree che trattiamo",
-  listText: "Scegli l'esigenza piu vicina al tuo momento e scopri come viene costruito il percorso.",
-  cardButtonLabel: "Scopri di piu",
+  listTitle: "Trova il percorso più vicino a ciò che vuoi migliorare",
+  listText: "Cinque aree di intervento, costruite intorno a esigenze e obiettivi diversi.",
+  cardButtonLabel: "Scopri di più",
   methodEyebrow: "Come scegliere",
   methodTitle: "Il percorso completo parte dalla nutrizione, ma ogni bisogno ha la sua porta d'ingresso.",
   methodText:
-    "La Speziale distingue tra percorsi nutrizionali personalizzati e consulenze stand-alone: cosi ogni persona puo orientarsi verso la soluzione piu adatta al proprio momento.",
+    "La Speziale distingue tra percorsi nutrizionali personalizzati e consulenze stand-alone: così ogni persona può orientarsi verso la soluzione più adatta al proprio momento.",
   methodCoreEyebrow: "Il core del metodo",
   methodCoreText:
     "Il percorso completo unisce dieta personalizzata, consulenza, follow-up, eventuale fitoterapia e prodotti consigliati quando sono utili al risultato.",
@@ -591,7 +662,7 @@ export const fallbackProgramsPage: ProgramsPage = {
   cta: {
     eyebrow: "Contatto diretto",
     title: "Non sai quale percorso scegliere?",
-    text: "Contattaci per una prima consulenza e ti aiuteremo a orientarti.",
+    text: "Raccontaci cosa vorresti migliorare: ti aiuteremo a individuare il percorso da cui partire.",
     primaryLabel: "Scrivi su WhatsApp",
     secondaryLabel: "Invia una email",
   },
@@ -603,7 +674,7 @@ export const fallbackProgramsPage: ProgramsPage = {
 
 export const fallbackContactPage: ContactPage = {
   heroEyebrow: "Contatti",
-  heroTitle: "Il primo passo e conoscerci.",
+  heroTitle: "Il primo passo è conoscerci.",
   heroText: "Ogni percorso inizia dall'ascolto. Se desideri maggiori informazioni o vuoi prenotare una consulenza, saremo lieti di accoglierti nel nostro studio.",
   locationTitle: "Dove siamo",
   hoursTitle: "Orari di apertura",
@@ -621,7 +692,8 @@ export const fallbackContactPage: ContactPage = {
   addressTitle: "Indirizzo",
   contactsTitle: "Contatti",
   mapLabel: "Sede La Speziale, Milano",
-  mapQuery: "Via San Giovanni sul Muro 13, 20121 Milano",
+  mapQuery: "Studio Nutrizionista La Speziale Milano, Via San Giovanni sul Muro 13, Milano",
+  mapUrl: "https://www.google.com/maps/place/Studio+Nutrizionista+La+Speziale+Milano/@45.4664571,9.1809463,20z/data=!4m6!3m5!1s0x4786c6afe02fef15:0xe505ade915e2cc3c!8m2!3d45.4665897!4d9.1813446!16s%2Fg%2F1tfjpl38?hl=it&entry=ttu",
   seo: {
     title: "Contatti | Studio nutrizionista La Speziale Milano",
     description: "Contatta lo Studio nutrizionista La Speziale a Milano. Indirizzo, telefono, email e orari su appuntamento.",
@@ -634,17 +706,17 @@ export const fallbackTestimonialsPage: TestimonialsPage = {
   heroText: "Ogni persona arriva con una storia, esigenze e obiettivi diversi. Le testimonianze che trovi in questa pagina raccontano il percorso vissuto insieme a noi e il cambiamento che ciascuno ha costruito nel tempo.",
   sectionTitle: "Le loro esperienze",
   sectionText:
-    "Ogni testimonianza racconta un'esperienza personale. Non esistono percorsi uguali, perche ogni programma viene costruito sulle esigenze della persona. Queste sono alcune delle storie di chi ha scelto di affidarsi al Metodo La Speziale.",
+    "Ogni testimonianza racconta un'esperienza personale. Non esistono percorsi uguali, perché ogni programma viene costruito sulle esigenze della persona. Queste sono alcune delle storie di chi ha scelto di affidarsi al Metodo La Speziale.",
   showGoogleReviews: false,
   googleEyebrow: "Recensioni Google",
   googleTitle: "Le recensioni pubblicate su Google",
-  googleText: "Le recensioni raccontano l'esperienza diretta di chi ha intrapreso un percorso con il Metodo La Speziale. Sono pubblicate spontaneamente dai nostri pazienti e rappresentano il valore piu autentico del lavoro che svolgiamo ogni giorno.",
+  googleText: "Le recensioni raccontano l'esperienza diretta di chi ha intrapreso un percorso con il Metodo La Speziale. Sono pubblicate spontaneamente dai nostri pazienti e rappresentano il valore più autentico del lavoro che svolgiamo ogni giorno.",
   googleBusinessName: "La Speziale",
   googleButtonLabel: "Vedi tutte le recensioni su Google",
   cta: {
     eyebrow: "Contatto diretto",
     title: "Ogni percorso inizia dall'ascolto.",
-    text: "Ogni persona e diversa e merita un percorso costruito sulle proprie esigenze. Raccontaci la tua storia: insieme individueremo il progetto piu adatto per aiutarti a raggiungere i tuoi obiettivi.",
+    text: "Ogni persona è diversa e merita un percorso costruito sulle proprie esigenze. Raccontaci la tua storia: insieme individueremo il progetto più adatto per aiutarti a raggiungere i tuoi obiettivi.",
     primaryLabel: "Scrivi su WhatsApp",
     secondaryLabel: "Invia una email",
   },
@@ -658,8 +730,8 @@ export const fallbackProductsPage: ProductsPage = {
   heroEyebrow: "Prodotti consigliati",
   heroTitle: "La tua lista della spesa naturale",
   heroText:
-    "I prodotti presenti in questa pagina sono solo consigliati da La Speziale e non sono venduti direttamente dallo studio: il sito non e un ecommerce, non gestisce carrelli, pagamenti, spedizioni o assistenza sugli ordini. Le informazioni non sostituiscono una consulenza medica, nutrizionale o sanitaria personalizzata.",
-  heroImageUrl: "/assets/old-site/fitoterapia.jpg",
+    "I prodotti presenti in questa pagina sono solo consigliati da La Speziale e non sono venduti direttamente dallo studio: il sito non è un ecommerce, non gestisce carrelli, pagamenti, spedizioni o assistenza sugli ordini. Le informazioni non sostituiscono una consulenza medica, nutrizionale o sanitaria personalizzata.",
+  heroImageUrl: "/assets/old-site/fitoterapia-consulenza-2026.jpg",
   contentTitle: "Prodotti consigliati",
   contentText:
     "Lista consultabile dei prodotti consigliati, senza vendita diretta sul sito.",
@@ -729,7 +801,7 @@ export const fallbackProducts: Product[] = [
     excerpt: "Gocce con piante rilassanti per accompagnare riposo e rilassamento.",
     price: "Gocce",
     tags: ["sonno", "rilassamento", "valeriana", "passiflora", "escolzia"],
-    description: portableText("Formula pensata per supportare il rilassamento serale e una routine piu regolare prima del sonno."),
+    description: portableText("Formula pensata per supportare il rilassamento serale e una routine più regolare prima del sonno."),
     features: ["Con valeriana, passiflora ed escolzia", "Formato pratico in gocce", "Da inserire in una routine serale"],
   },
   {
@@ -759,7 +831,7 @@ export const fallbackProducts: Product[] = [
     excerpt: "Supporto digestivo con enzimi naturali e zenzero.",
     price: "Compresse",
     tags: ["enzimi", "zenzero", "digestione", "gonfiore"],
-    description: portableText("Un supporto da valutare quando digestione lenta e gonfiore richiedono un aiuto piu specifico."),
+    description: portableText("Un supporto da valutare quando digestione lenta e gonfiore richiedono un aiuto più specifico."),
     features: ["Con enzimi digestivi", "Zenzero selezionato", "Supporto dopo pasti impegnativi"],
   },
   {
@@ -769,7 +841,7 @@ export const fallbackProducts: Product[] = [
     excerpt: "Supporto fitoterapico per equilibrio femminile e ciclicita.",
     price: "Estratto secco",
     tags: ["agnocasto", "donna", "ormoni", "equilibrio", "ciclo"],
-    description: portableText("L'agnocasto puo essere valutato nei percorsi dedicati al benessere femminile e alla regolarita ciclica."),
+    description: portableText("L'agnocasto può essere valutato nei percorsi dedicati al benessere femminile e alla regolarità ciclica."),
     features: ["Estratto secco", "Supporto femminile", "Da valutare in consulenza"],
   },
   {
@@ -785,17 +857,17 @@ export const fallbackProducts: Product[] = [
   {
     title: "Tonico Ricostituente di Rodiola Rosea e Pappa Reale",
     slug: "tonico-rodiola-rosea-pappa-reale",
-    category: "Energia e Vitalita",
+    category: "Energia e Vitalità",
     excerpt: "Tonico naturale per energia, concentrazione e periodi di stanchezza.",
     price: "Tonico",
-    tags: ["rodiola", "pappa reale", "energia", "stanchezza", "vitalita"],
+    tags: ["rodiola", "pappa reale", "energia", "stanchezza", "vitalità"],
     description: portableText("Una proposta ricostituente per periodi di calo energetico e maggiore richiesta mentale."),
-    features: ["Con rodiola rosea", "Pappa reale", "Per energia e vitalita"],
+    features: ["Con rodiola rosea", "Pappa reale", "Per energia e vitalità"],
   },
   {
     title: "Tavolette di Spirulina BIO",
     slug: "tavolette-spirulina-bio",
-    category: "Energia e Vitalita",
+    category: "Energia e Vitalità",
     excerpt: "Spirulina bio in tavolette per supporto nutrizionale quotidiano.",
     price: "Tavolette BIO",
     tags: ["spirulina", "energia", "nutrienti", "bio"],
@@ -826,10 +898,10 @@ export const fallbackProducts: Product[] = [
     title: "Resveratrolo Puro Concentrato",
     slug: "resveratrolo-puro-concentrato",
     category: "Anti-Age e Cellule",
-    excerpt: "Supporto antiossidante per protocolli anti-age e longevita cellulare.",
+    excerpt: "Supporto antiossidante per protocolli anti-age e longevità cellulare.",
     price: "Capsule",
-    tags: ["resveratrolo", "anti-age", "antiossidante", "cellule", "longevita"],
-    description: portableText("Un attivo antiossidante da valutare in protocolli dedicati a prevenzione e longevita cellulare."),
+    tags: ["resveratrolo", "anti-age", "antiossidante", "cellule", "longevità"],
+    description: portableText("Un attivo antiossidante da valutare in protocolli dedicati a prevenzione e longevità cellulare."),
     features: ["Resveratrolo concentrato", "Supporto antiossidante", "Per protocolli anti-age"],
   },
   {
@@ -839,7 +911,7 @@ export const fallbackProducts: Product[] = [
     excerpt: "Coenzima Q10 vegetale per energia cellulare e supporto anti-age.",
     price: "Capsule",
     tags: ["q10", "coenzima", "anti-age", "energia", "cellule"],
-    description: portableText("Supporto utile nei protocolli orientati a energia cellulare, prevenzione e vitalita."),
+    description: portableText("Supporto utile nei protocolli orientati a energia cellulare, prevenzione e vitalità."),
     features: ["Coenzima Q10 vegetale", "Alto dosaggio", "Supporto a energia cellulare"],
   },
 ];
@@ -847,19 +919,55 @@ export const fallbackProducts: Product[] = [
 export const fallbackTherapiesPage: TherapiesPage = {
   heroEyebrow: "Il Consiglio Fitoterapico",
   heroTitle: "Il Consiglio Fitoterapico",
+  heroSubtitle: "Un buon rimedio naturale inizia sempre da una buona valutazione.",
   heroText:
     "Una consulenza con una Farmacista specializzata in Fitoterapia per individuare piante officinali e nutraceutici realmente adatti alla tua situazione.",
-  heroImageUrl: "/assets/old-site/fitoterapia.jpg",
-  contentTitle: "Perche richiedere un consiglio fitoterapico?",
+  heroImageUrl: "/assets/old-site/fitoterapia-consulenza-2026.jpg",
+  contentTitle: "Perché richiedere un consiglio fitoterapico?",
   contentText:
     "La scelta dipende dalla persona, dalle sue esigenze, dalle eventuali terapie in corso e dall'obiettivo che desidera raggiungere.",
   gridTitle: "Molti prodotti naturali sembrano simili, ma non lo sono.",
-  gridText: "Per questo il valore della consulenza non e il prodotto, ma la valutazione che porta a sceglierlo.",
+  gridText: "Per questo il valore della consulenza non è il prodotto, ma la valutazione professionale che porta a scegliere la soluzione più adatta.",
+  usefulTitle: "Quando può essere utile?",
+  usefulSubtitle: "Una consulenza mirata quando vuoi scegliere con metodo.",
+  usefulItems: [
+    "Vuoi un supporto naturale per un'esigenza specifica.",
+    "Assumi farmaci e desideri verificare eventuali interazioni.",
+    "Hai già provato diversi prodotti senza ottenere i risultati sperati.",
+    "Ti è stato consigliato un integratore e desideri un parere professionale.",
+    'Cerchi una scelta personalizzata, evitando il "fai da te".',
+  ],
+  includedTitle: "Cosa comprende",
+  includedItems: [
+    "Analisi delle tue esigenze.",
+    "Valutazione di eventuali farmaci e integratori già utilizzati.",
+    "Selezione di piante officinali e nutraceutici realmente indicati.",
+    "Indicazioni su modalità di utilizzo e durata.",
+    "Risposta ai tuoi dubbi e alle tue domande.",
+  ],
+  expertiseTitle: "Perché affidarsi a una Farmacista specializzata?",
+  expertiseSubtitle: "La fitoterapia richiede competenze specifiche.",
+  expertiseText:
+    "Conoscere le proprietà delle piante officinali significa anche saperne valutare qualità, possibili interazioni, controindicazioni e reale utilità. Ogni consiglio nasce dalla persona, dalle sue caratteristiche e dai suoi obiettivi, mai da una scelta standardizzata.",
   cardButtonLabel: "Richiedi una consulenza",
+  faqsTitle: "Domande frequenti",
+  faqs: [
+    {
+      question: "Devo portare esami o documentazione alla consulenza?",
+      answer: "Se disponibili e pertinenti, possono essere utili per avere un quadro più completo della situazione.",
+    },
+    {
+      question: "Posso fare una consulenza anche per prevenzione e benessere generale?",
+      answer: "Sì. Non è necessario avere un problema specifico: la consulenza può essere richiesta anche per sostenere il proprio benessere.",
+    },
+    {
+      question: "È previsto un controllo dopo la consulenza?",
+      answer: "Quando utile, può essere programmato un controllo per valutare l'andamento e l'eventuale necessità di modificare le indicazioni.",
+    },
+  ],
   cta: {
-    eyebrow: "CTA",
     title: "Hai bisogno di un consiglio professionale?",
-    text: "Prenota una consulenza e confrontati con una Farmacista specializzata in Fitoterapia per individuare la soluzione piu adatta alle tue esigenze.",
+    text: "Prenota una consulenza e confrontati con una Farmacista specializzata in Fitoterapia per individuare la soluzione più adatta alle tue esigenze.",
     primaryLabel: "Richiedi una consulenza",
     primaryLink: "/contatti",
   },
@@ -881,8 +989,8 @@ export const fallbackTherapies: Therapy[] = [
     slug: "capelli-unghie-fragili",
     order: 1,
     tagLabel: "Capelli",
-    excerpt: "Consigli fitoterapici e nutraceutici per capelli piu forti, unghie resistenti e bellezza che nasce da dentro.",
-    gridTitle: "Noti capelli piu deboli, spenti o unghie che si spezzano facilmente?",
+    excerpt: "Consigli fitoterapici e nutraceutici per capelli più forti, unghie resistenti e bellezza che nasce da dentro.",
+    gridTitle: "Noti capelli più deboli, spenti o unghie che si spezzano facilmente?",
     gridButtonLabel: "Nutri la tua bellezza da dentro",
     overviewTitle: "Quando capelli e unghie chiedono supporto",
     description: portableText("Stress, cambi di stagione, dieta incompleta e ritmi intensi possono indebolire il bulbo e la cheratina. Lozioni e shampoo lavorano in superficie, mentre un supporto nutraceutico mirato aiuta a nutrire capelli e unghie dall'interno."),
@@ -898,7 +1006,7 @@ export const fallbackTherapies: Therapy[] = [
     gridTitle: "Vuoi depurare l'organismo o cerchi un supporto per rimetterti in forma?",
     gridButtonLabel: "Scopri i miei consigli per la linea",
     overviewTitle: "Quando vuoi rimetterti in forma con gradualita",
-    description: portableText("Per raggiungere un obiettivo di peso o leggerezza non servono promesse rapide, ma una strategia sostenibile. Drenanti e depurativi possono aiutare il corpo a gestire liquidi in eccesso e routine alimentari piu ordinate."),
+    description: portableText("Per raggiungere un obiettivo di peso o leggerezza non servono promesse rapide, ma una strategia sostenibile. Drenanti e depurativi possono aiutare il corpo a gestire liquidi in eccesso e routine alimentari più ordinate."),
     recommendedProductsTitle: "Prodotti consigliati",
     recommendedProducts: recommendedFallbackProducts(["drenaspeziale-tisana-betulla-pilosella", "estratto-idroalcolico-puro-tarassaco"]),
   },
@@ -911,7 +1019,7 @@ export const fallbackTherapies: Therapy[] = [
     gridTitle: "Ti senti spesso senza forze o fai fatica a mantenere la concentrazione?",
     gridButtonLabel: "Trova la tua ricarica naturale",
     overviewTitle: "Quando ti senti spesso senza forze",
-    description: portableText("Lavoro intenso, studio, sonno irregolare e stress possono ridurre energia e concentrazione. Un supporto naturale ben scelto puo aiutare a recuperare vitalita rispettando i ritmi del corpo."),
+    description: portableText("Lavoro intenso, studio, sonno irregolare e stress possono ridurre energia e concentrazione. Un supporto naturale ben scelto può aiutare a recuperare vitalità rispettando i ritmi del corpo."),
     recommendedProductsTitle: "Prodotti consigliati",
     recommendedProducts: recommendedFallbackProducts(["ashwagandha-adattogena-ksm-66", "tonico-rodiola-rosea-pappa-reale", "tavolette-spirulina-bio"]),
   },
@@ -923,8 +1031,8 @@ export const fallbackTherapies: Therapy[] = [
     excerpt: "Soluzioni fitoterapiche per favorire calma, addormentamento e riposo realmente ristoratore.",
     gridTitle: "Fai fatica ad addormentarti o ti svegli spesso durante la notte?",
     gridButtonLabel: "Ritrova un riposo sereno",
-    overviewTitle: "Quando il riposo non e piu ristoratore",
-    description: portableText("Difficolta ad addormentarsi, risvegli notturni e tensioni serali possono compromettere benessere, fame, energia e umore. La fitoterapia puo aiutare a costruire una routine piu calma e regolare."),
+    overviewTitle: "Quando il riposo non è più ristoratore",
+    description: portableText("Difficoltà ad addormentarsi, risvegli notturni e tensioni serali possono compromettere benessere, fame, energia e umore. La fitoterapia può aiutare a costruire una routine più calma e regolare."),
     recommendedProductsTitle: "Prodotti consigliati",
     recommendedProducts: recommendedFallbackProducts(["melatospeziale-gocce-escolzia-valeriana-passiflora", "ashwagandha-adattogena-ksm-66"]),
   },
@@ -933,7 +1041,7 @@ export const fallbackTherapies: Therapy[] = [
     slug: "gonfiore-digestione-lenta",
     order: 5,
     tagLabel: "Gonfiore",
-    excerpt: "Estratti naturali e fermenti per pancia gonfia, pesantezza, digestione lenta e regolarita intestinale.",
+    excerpt: "Estratti naturali e fermenti per pancia gonfia, pesantezza, digestione lenta e regolarità intestinale.",
     gridTitle: "Soffri spesso di pancia gonfia, pesantezza o digestione lenta?",
     gridButtonLabel: "Torna a sentirti leggera",
     overviewTitle: "Quando l'intestino risente di stress e abitudini",
@@ -942,15 +1050,15 @@ export const fallbackTherapies: Therapy[] = [
     recommendedProducts: recommendedFallbackProducts(["tisana-finocchio-melissa-bio", "enzimi-digestivi-naturali-zenzero"]),
   },
   {
-    title: "Antiage e longevita cellulare",
+    title: "Antiage e longevità cellulare",
     slug: "antiage-longevita-cellulare",
     order: 6,
     tagLabel: "Antiage",
-    excerpt: "Antiossidanti e supporti nutraceutici per contrastare stress ossidativo e sostenere vitalita nel tempo.",
+    excerpt: "Antiossidanti e supporti nutraceutici per contrastare stress ossidativo e sostenere vitalità nel tempo.",
     gridTitle: "Vuoi contrastare l'invecchiamento cellulare e mantenerti giovane dentro e fuori?",
-    gridButtonLabel: "Scopri i segreti della longevita cellulare",
+    gridButtonLabel: "Scopri i segreti della longevità cellulare",
     overviewTitle: "Quando vuoi proteggere cellule e tessuti",
-    description: portableText("Il tempo passa per tutti, ma nutrizione, stile di vita e antiossidanti mirati possono aiutare a proteggere le cellule dai radicali liberi e sostenere elasticita, energia e vitalita."),
+    description: portableText("Il tempo passa per tutti, ma nutrizione, stile di vita e antiossidanti mirati possono aiutare a proteggere le cellule dai radicali liberi e sostenere elasticita, energia e vitalità."),
     recommendedProductsTitle: "Prodotti consigliati",
     recommendedProducts: recommendedFallbackProducts(["resveratrolo-puro-concentrato", "coenzima-q10-vegetale-alto-dosaggio"]),
   },
@@ -976,7 +1084,7 @@ export const fallbackTherapies: Therapy[] = [
     gridTitle: "Sbalzi d'umore, fastidi legati al ciclo o i primi sintomi della menopausa?",
     gridButtonLabel: "Sintonizzati con il tuo equilibrio",
     overviewTitle: "Quando il corpo femminile cambia ritmo",
-    description: portableText("Ciclo, sindrome premestruale, premenopausa e menopausa possono portare fastidi, vampate, tensione o sbalzi d'umore. La fitoterapia puo aiutare a sostenere equilibrio e qualita della vita."),
+    description: portableText("Ciclo, sindrome premestruale, premenopausa e menopausa possono portare fastidi, vampate, tensione o sbalzi d'umore. La fitoterapia può aiutare a sostenere equilibrio e qualità della vita."),
     recommendedProductsTitle: "Prodotti consigliati",
     recommendedProducts: recommendedFallbackProducts(["agnocasto-estratto-secco", "olio-enotera-spremuto-freddo"]),
   },
@@ -989,18 +1097,18 @@ export const fallbackTherapies: Therapy[] = [
     gridTitle: "Soffri di dolori articolari, tensioni muscolari o fastidi alla schiena?",
     gridButtonLabel: "Scopri i rimedi per muscoli e articolazioni",
     overviewTitle: "Quando infiammazione e tensioni limitano il movimento",
-    description: portableText("Posture scorrette, stress, allenamento o sforzi fisici possono infiammare muscoli e articolazioni. Un supporto naturale puo aiutare a lenire il fastidio e proteggere la mobilita quotidiana."),
+    description: portableText("Posture scorrette, stress, allenamento o sforzi fisici possono infiammare muscoli e articolazioni. Un supporto naturale può aiutare a lenire il fastidio e proteggere la mobilità quotidiana."),
   },
   {
     title: "Difese immunitarie",
     slug: "difese-immunitarie",
     order: 10,
     tagLabel: "Difese",
-    excerpt: "Rimedi naturali per rinforzare e preparare lo scudo immunitario nei cambi di stagione e nei periodi piu delicati.",
-    gridTitle: "Vuoi sostenere le difese dell'organismo nei periodi piu delicati?",
+    excerpt: "Rimedi naturali per rinforzare e preparare lo scudo immunitario nei cambi di stagione e nei periodi più delicati.",
+    gridTitle: "Vuoi sostenere le difese dell'organismo nei periodi più delicati?",
     gridButtonLabel: "Rinforza il tuo scudo naturale",
     overviewTitle: "Quando le difese hanno bisogno di supporto",
-    description: portableText("Cambi di stagione, stress e periodi di maggiore esposizione possono mettere alla prova il sistema immunitario. La fitoterapia puo aiutare a sostenere le normali difese in modo ragionato."),
+    description: portableText("Cambi di stagione, stress e periodi di maggiore esposizione possono mettere alla prova il sistema immunitario. La fitoterapia può aiutare a sostenere le normali difese in modo ragionato."),
     recommendedProductsTitle: "Prodotti consigliati",
     recommendedProducts: recommendedFallbackProducts(["echinacea-rosa-canina-concentrata", "estratto-sambuco-zinco"]),
   },
@@ -1020,7 +1128,7 @@ export const fallbackTherapies: Therapy[] = [
     { question: "La fitoterapia sostituisce il percorso nutrizionale?", answer: "No. La fitoterapia e un supporto integrativo e funziona meglio quando e inserita in una strategia personalizzata." },
   ],
   finalCtaTitle: `Vuoi approfondire ${therapy.title}?`,
-  finalCtaText: "Scrivici per capire quali prodotti o abitudini possono essere piu adatti alla tua situazione.",
+  finalCtaText: "Scrivici per capire quali prodotti o abitudini possono essere più adatti alla tua situazione.",
   ...therapy,
 }));
 
@@ -1032,7 +1140,7 @@ export const fallbackPrograms: Program[] = [
     imageUrl: "/assets/old-site/nutrizione-integrata.jpg",
     heroImageUrl: "/assets/old-site/hero-header.jpg",
     excerpt:
-      "Molto piu di una dieta: un metodo che integra alimentazione personalizzata, analisi della composizione corporea, fitoterapia e consapevolezza.",
+      "Molto più di una dieta: un metodo che integra alimentazione personalizzata, analisi della composizione corporea, fitoterapia e consapevolezza.",
     category: "Nutrizione e benessere",
     duration: "Percorso personalizzato con visite e controlli",
     programType: "Percorso su consulenza",
@@ -1055,7 +1163,7 @@ export const fallbackPrograms: Program[] = [
       { title: "Piano personalizzato", description: "Creazione di un percorso nutrizionale su misura." },
       { title: "Monitoraggio e supporto", description: "Controlli e aggiornamenti per accompagnare i risultati." },
     ],
-    ctaLabel: "Prenota una consulenza",
+    ctaLabel: "Richiedi una consulenza",
     ctaLink: "/contatti",
     blocks: [
       {
@@ -1111,25 +1219,25 @@ export const fallbackPrograms: Program[] = [
     title: "Fitoterapia Erbe officinali e Nutraceutici",
     slug: "fitoterapia-erbe-officinali-nutraceutici",
     order: 2,
-    imageUrl: "/assets/old-site/fitoterapia.jpg",
-    heroImageUrl: "/assets/old-site/fitoterapia.jpg",
+    imageUrl: "/assets/old-site/fitoterapia-consulenza-2026.jpg",
+    heroImageUrl: "/assets/old-site/fitoterapia-consulenza-2026.jpg",
     excerpt:
       "Un percorso naturale pensato per depurare, riequilibrare e mantenere il benessere, integrando erbe officinali e nutraceutici selezionati.",
     category: "Fitoterapia",
     benefitCards: [
-      { icon: "leaf", title: "Supporto a energia e vitalita", description: "Un sostegno naturale costruito sulle esigenze personali." },
+      { icon: "leaf", title: "Supporto a energia e vitalità", description: "Un sostegno naturale costruito sulle esigenze personali." },
       { icon: "heart", title: "Approccio naturale e personalizzato", description: "Indicazioni selezionate in base al percorso individuale." },
       { icon: "activity", title: "Integrazione con il percorso alimentare", description: "Un lavoro coordinato con alimentazione e stile di vita." },
     ],
-    ctaLabel: "Scopri di piu",
+    ctaLabel: "Scopri di più",
     ctaLink: "/contatti",
   },
   {
     title: "Gestione del peso, cellulite e ricomposizione corporea",
     slug: "gestione-peso-ricomposizione-corporea",
     order: 3,
-    imageUrl: "/assets/old-site/gestione-peso.jpg",
-    heroImageUrl: "/assets/old-site/gestione-peso.jpg",
+    imageUrl: "/assets/old-site/gestione-peso-2026.jpg",
+    heroImageUrl: "/assets/old-site/gestione-peso-2026.jpg",
     excerpt:
       "Un percorso personalizzato per ridurre la massa grassa, migliorare la composizione corporea e valorizzare la silhouette, senza rinunce e con risultati duraturi.",
     category: "Area clinica",
@@ -1164,7 +1272,7 @@ export const fallbackPrograms: Program[] = [
       { title: "Piano personalizzato", description: "Costruzione di una strategia alimentare concreta e sostenibile." },
       { title: "Follow-up", description: "Controlli e aggiornamenti per consolidare i risultati." },
     ],
-    ctaLabel: "Prenota una consulenza",
+    ctaLabel: "Richiedi una consulenza",
     ctaLink: "/contatti",
     seo: {
       title: "Gestione del Peso e Ricomposizione Corporea | La Speziale Milano",
@@ -1176,10 +1284,10 @@ export const fallbackPrograms: Program[] = [
     title: "Gonfiore e disturbi intestinali",
     slug: "gonfiore-disturbi-intestinali",
     order: 4,
-    imageUrl: "/assets/old-site/gonfiore-intestinale.jpg",
-    heroImageUrl: "/assets/old-site/gonfiore-intestinale.jpg",
+    imageUrl: "/assets/old-site/gonfiore-intestinale-2026.jpg",
+    heroImageUrl: "/assets/old-site/gonfiore-intestinale-2026.jpg",
     excerpt:
-      "Un percorso dedicato a digestione, gonfiore e funzionalita intestinale per aiutare il tuo organismo a ritrovare regolarita e leggerezza.",
+      "Un percorso dedicato a digestione, gonfiore e funzionalita intestinale per aiutare il tuo organismo a ritrovare regolarità e leggerezza.",
     category: "Area clinica",
     duration: "Percorso personalizzato",
     programType: "Percorso con dieta e consulenza",
@@ -1203,8 +1311,8 @@ export const fallbackPrograms: Program[] = [
     ],
     benefitCards: [
       { icon: "leaf", title: "Meno gonfiore", description: "Indicazioni mirate per ridurre tensione addominale e pesantezza." },
-      { icon: "activity", title: "Digestione piu leggera", description: "Strategie pratiche per pasti, ritmo alimentare e combinazioni." },
-      { icon: "heart", title: "Benessere intestinale", description: "Un lavoro sulle abitudini che influenzano comfort e regolarita." },
+      { icon: "activity", title: "Digestione più leggera", description: "Strategie pratiche per pasti, ritmo alimentare e combinazioni." },
+      { icon: "heart", title: "Benessere intestinale", description: "Un lavoro sulle abitudini che influenzano comfort e regolarità." },
       { icon: "target", title: "Maggiore chiarezza", description: "Monitoraggio per capire cosa sostiene davvero il tuo equilibrio." },
     ],
     processSteps: [
@@ -1218,17 +1326,17 @@ export const fallbackPrograms: Program[] = [
     seo: {
       title: "Gonfiore e disturbi intestinali | La Speziale Milano",
       description:
-        "Percorso nutrizionale a Milano per gonfiore, digestione lenta, irregolarita intestinale e benessere addominale.",
+        "Percorso nutrizionale a Milano per gonfiore, digestione lenta, irregolarità intestinale e benessere addominale.",
     },
   },
   {
     title: "Le fasi della donna",
     slug: "menopausa-premenopausa",
     order: 5,
-    imageUrl: "/assets/old-site/menopausa-premenopausa.jpg",
-    heroImageUrl: "/assets/old-site/menopausa-premenopausa.jpg",
+    imageUrl: "/assets/old-site/fasi-donna-2026.jpg",
+    heroImageUrl: "/assets/old-site/fasi-donna-2026.jpg",
     excerpt:
-      "PCOS, endometriosi, ciclo irregolare, fertilita, premenopausa e menopausa: un progetto che accompagna il corpo nelle diverse fasi della vita, adattandosi ai suoi nuovi bisogni.",
+      "PCOS, endometriosi, ciclo irregolare, fertilità, premenopausa e menopausa: un progetto che accompagna il corpo nelle diverse fasi della vita, adattandosi ai suoi nuovi bisogni.",
     category: "Benessere femminile",
     duration: "Percorso personalizzato",
     programType: "Percorso su consulenza",
@@ -1239,7 +1347,7 @@ export const fallbackPrograms: Program[] = [
     description: [
       {
         _type: "block",
-        children: [{ text: "Ogni donna vive la menopausa in modo diverso. Questo percorso e pensato per affrontare il cambiamento con piu energia, equilibrio e serenita, riducendo i sintomi e migliorando il benessere generale." }],
+        children: [{ text: "Ogni donna vive la menopausa in modo diverso. Questo percorso è pensato per affrontare il cambiamento con più energia, equilibrio e serenità, riducendo i sintomi e migliorando il benessere generale." }],
       },
     ],
     benefitCards: [
@@ -1256,12 +1364,12 @@ export const fallbackPrograms: Program[] = [
     faqs: [
       { question: "Quanto dura il percorso?", answer: "La durata viene definita in base alle esigenze e agli obiettivi personali." },
       { question: "Il piano alimentare e rigido?", answer: "No. Il piano e costruito per adattarsi alla quotidianita e favorire abitudini sostenibili." },
-      { question: "E incluso il supporto via WhatsApp?", answer: "Le modalita di supporto vengono concordate durante la consulenza." },
-      { question: "Posso fare il percorso online?", answer: "Si, il percorso puo essere svolto online o in studio." },
+      { question: "E incluso il supporto via WhatsApp?", answer: "Le modalità di supporto vengono concordate durante la consulenza." },
+      { question: "Posso fare il percorso online?", answer: "Sì, il percorso può essere svolto online o in studio." },
     ],
     finalCtaTitle: "Vuoi iniziare il percorso Menopausa & Premenopausa?",
     finalCtaText: "Scrivimi su WhatsApp o inviami una email per ricevere maggiori informazioni e prenotare la tua consulenza.",
-    ctaLabel: "Scopri di piu",
+    ctaLabel: "Scopri di più",
     ctaLink: "/contatti",
     seo: {
       title: "Menopausa e Premenopausa a Milano | La Speziale",
@@ -1270,16 +1378,16 @@ export const fallbackPrograms: Program[] = [
     },
   },
   {
-    title: "Longevita e Vitalita",
+    title: "Longevità e Vitalità",
     slug: "programma-anti-age",
     order: 6,
-    imageUrl: "/assets/old-site/anti-age.png",
-    heroImageUrl: "/assets/old-site/anti-age.png",
+    imageUrl: "/assets/old-site/vitalita-2026.jpg",
+    heroImageUrl: "/assets/old-site/vitalita-2026.jpg",
     excerpt:
-      "Un percorso dedicato a mantenere energia, forza, tono muscolare e vitalita, per vivere ogni fase della vita con maggiore equilibrio.",
+      "Un percorso dedicato a mantenere energia, forza, tono muscolare e vitalità, per vivere ogni fase della vita con maggiore equilibrio.",
     category: "Anti-age",
     benefitCards: [
-      { icon: "sparkles", title: "Prevenzione e vitalita", description: "Strategie orientate al benessere nel tempo." },
+      { icon: "sparkles", title: "Prevenzione e vitalità", description: "Strategie orientate al benessere nel tempo." },
       { icon: "heart", title: "Routine alimentari sostenibili", description: "Abitudini concrete da integrare nella quotidianita." },
       { icon: "leaf", title: "Supporto antinfiammatorio", description: "Scelte alimentari coerenti con gli obiettivi personali." },
     ],
@@ -1290,32 +1398,32 @@ export const fallbackPrograms: Program[] = [
     title: "Nutrizione Sportiva",
     slug: "nutrizione-sportiva",
     order: 7,
-    imageUrl: "/assets/old-site/sport.jpg",
-    heroImageUrl: "/assets/old-site/sport.jpg",
+    imageUrl: "/assets/old-site/sport-2026.jpg",
+    heroImageUrl: "/assets/old-site/sport-2026.jpg",
     excerpt:
       "Un'alimentazione personalizzata per migliorare composizione corporea, recupero ed energia, sostenendo ogni obiettivo sportivo.",
     category: "Sport",
     benefitCards: [
-      { icon: "dumbbell", title: "Energia per l'allenamento", description: "Nutrizione organizzata in funzione dell'attivita sportiva." },
+      { icon: "dumbbell", title: "Energia per l'allenamento", description: "Nutrizione organizzata in funzione dell'attività sportiva." },
       { icon: "activity", title: "Recupero migliore", description: "Indicazioni per sostenere recupero e composizione corporea." },
       { icon: "target", title: "Strategie pratiche", description: "Pasti e idratazione adattati a ritmi e obiettivi." },
     ],
-    ctaLabel: "Prenota una consulenza",
+    ctaLabel: "Richiedi una consulenza",
     ctaLink: "/contatti",
   },
   {
     title: "Consapevolezza e Motivazione",
     slug: "consapevolezza-motivazione",
     order: 6,
-    imageUrl: "/assets/old-site/consapevolezza.png",
-    heroImageUrl: "/assets/old-site/consapevolezza.png",
+    imageUrl: "/assets/old-site/consapevolezza-2026.jpg",
+    heroImageUrl: "/assets/old-site/consapevolezza-2026.jpg",
     excerpt:
       "Supporto motivazionale e strumenti di consapevolezza corporea per trasformare le abitudini con gradualita.",
     category: "Coaching alimentare",
     benefitCards: [
       { icon: "target", title: "Obiettivi realistici", description: "Traguardi progressivi compatibili con la vita quotidiana." },
       { icon: "heart", title: "Maggiore consapevolezza", description: "Strumenti per riconoscere abitudini e segnali del corpo." },
-      { icon: "activity", title: "Continuita nel tempo", description: "Un supporto pensato per rendere stabile il cambiamento." },
+      { icon: "activity", title: "Continuità nel tempo", description: "Un supporto pensato per rendere stabile il cambiamento." },
     ],
     ctaLabel: "Inizia il percorso",
     ctaLink: "/contatti",
@@ -1358,14 +1466,26 @@ function editorialBlocks(sections: [string, string[]][]): unknown[] {
 const clientProgramContentOverrides: Record<string, Partial<Program>> = {
   "gestione-peso-ricomposizione-corporea": {
     title: "Gestione del Peso e Ricomposizione Corporea",
+    imageUrl: "/assets/old-site/gestione-peso-2026.jpg",
+    heroImageUrl: "/assets/old-site/gestione-peso-2026.jpg",
     excerpt: "Perdere peso, aumentare la massa muscolare o ritrovare la propria forma fisica significa seguire un progetto costruito sulla persona, dove ogni scelta lavora nella stessa direzione.",
     category: "Gestione del peso e ricomposizione corporea",
-    descriptionTitle: "Ogni corpo cambia in modo diverso. Anche il progetto deve esserlo.",
+    heroHighlight: "Cambiare il proprio corpo richiede un progetto, non solo una dieta.",
+    heroText: "Perdere peso, aumentare la massa muscolare o ritrovare la propria forma fisica significa seguire un progetto costruito sulla persona, dove ogni scelta lavora nella stessa direzione.",
+    descriptionTitle: "Il progetto",
+    projectHighlight: "Ogni corpo cambia in modo diverso. Anche il progetto deve esserlo.",
     description: portableTextBlocks([
-      "Perdere peso e spesso l'obiettivo. Comprendere perche il corpo e cambiato e il punto di partenza.",
+      "Perdere peso è spesso l'obiettivo. Comprendere perché il corpo è cambiato è il punto di partenza.",
       "Metabolismo, composizione corporea, stile di vita, cambiamenti ormonali e abitudini influenzano il modo in cui ogni persona aumenta o perde peso.",
       "Per questo il nostro lavoro non inizia dalla dieta, ma dalla comprensione della persona e delle reali esigenze del suo corpo.",
     ], "peso-description"),
+    explanationTitle: "Cosa significa progettare il cambiamento",
+    explanationText: portableTextBlocks([
+      "Progettare il cambiamento significa costruire una strategia nella quale ogni scelta ha uno scopo preciso.",
+      "L'alimentazione rappresenta il punto di partenza, ma quando necessario può essere affiancata dal consiglio fitoterapico e da un supporto dedicato al cambiamento, affinché tutto lavori nella stessa direzione.",
+      "Non sono interventi separati, ma parti di un unico progetto costruito sulla persona.",
+      "È questa regia che rende il Metodo La Speziale diverso da un percorso nutrizionale tradizionale.",
+    ], "peso-explanation"),
     audienceTitle: "Ti riconosci in una di queste situazioni?",
     audience: [
       "Hai provato diverse diete senza riuscire a mantenere i risultati.",
@@ -1378,26 +1498,35 @@ const clientProgramContentOverrides: Record<string, Partial<Program>> = {
       "Cerchi un cambiamento stabile e non una soluzione temporanea.",
     ],
     processTitle: "Come prende forma il progetto",
+    processHighlight: "Ogni risultato nasce da una strategia costruita sulla persona.",
     processSteps: [
       { _key: "peso-step-1", title: "Conosciamo la persona", description: "Partiamo dalla tua storia, dalle abitudini, dallo stile di vita e dagli obiettivi che desideri raggiungere." },
-      { _key: "peso-step-2", title: "Conosciamo il tuo corpo", description: "L'esame BIA analizza massa grassa, massa muscolare, stato di idratazione e composizione corporea, offrendo informazioni che il peso, da solo, non puo raccontare." },
-      { _key: "peso-step-3", title: "Costruiamo la strategia", description: "Definiamo un progetto personalizzato che stabilisce priorita, strumenti e obiettivi, adattandosi alle caratteristiche della persona." },
-      { _key: "peso-step-4", title: "Accompagniamo il cambiamento", description: "Monitoriamo l'evoluzione della composizione corporea e aggiorniamo il progetto affinche continui a seguire i cambiamenti del tuo corpo e i risultati raggiunti." },
+      { _key: "peso-step-2", title: "Conosciamo il tuo corpo", description: "L'esame BIA analizza massa grassa, massa muscolare, stato di idratazione e composizione corporea, offrendo informazioni che il peso, da solo, non può raccontare." },
+      { _key: "peso-step-3", title: "Costruiamo la strategia", description: "Definiamo un progetto personalizzato che stabilisce priorità, strumenti e obiettivi, adattandosi alle caratteristiche della persona." },
+      { _key: "peso-step-4", title: "Accompagniamo il cambiamento", description: "Monitoriamo l'evoluzione della composizione corporea e aggiorniamo il progetto affinché continui a seguire i cambiamenti del tuo corpo e i risultati raggiunti." },
     ],
-    benefitsTitle: "Il risultato",
-    benefitCards: [
-      { _key: "peso-benefit-1", icon: "scale", title: "Oltre il peso", description: "Il risultato non e soltanto perdere peso. E ritrovare il proprio equilibrio." },
-      { _key: "peso-benefit-2", icon: "activity", title: "Composizione corporea", description: "L'obiettivo e migliorare la composizione corporea, ridurre la massa grassa quando necessario e valorizzare la forma fisica." },
-      { _key: "peso-benefit-3", icon: "target", title: "Risultati mantenibili", description: "Costruiamo abitudini che permettano di mantenere i risultati nel tempo, oltre cio che si vede sulla bilancia." },
+    resultTitle: "Il risultato",
+    resultHighlight: "Il risultato non è soltanto perdere peso. È ritrovare il proprio equilibrio.",
+    resultText: portableTextBlocks([
+      "L'obiettivo è migliorare la composizione corporea, ridurre la massa grassa quando necessario, valorizzare la forma fisica e costruire abitudini che permettano di mantenere i risultati nel tempo.",
+      "Perché il cambiamento più importante non è quello che si vede sulla bilancia, ma quello che il tuo corpo riesce a mantenere.",
+    ], "peso-result"),
+    faqsTitle: "Domande frequenti",
+    faqs: [
+      { question: "Perché il peso non racconta tutto?", answer: "Perché il cambiamento riguarda soprattutto la composizione corporea, non solo i chili." },
+      { question: "Perché a volte una dieta non basta?", answer: "Perché metabolismo, abitudini e cambiamenti del corpo possono richiedere una strategia più ampia." },
+      { question: "Come si fa a mantenere il risultato nel tempo?", answer: "Costruendo un percorso che cambia insieme al corpo e diventa sostenibile nella quotidianità." },
     ],
-    blocks: editorialBlocks([
-      ["Cosa significa progettare il cambiamento", [
-        "Progettare il cambiamento significa costruire una strategia nella quale ogni scelta ha uno scopo preciso.",
-        "L'alimentazione rappresenta il punto di partenza, ma quando necessario puo essere affiancata dal consiglio fitoterapico e da un supporto dedicato al cambiamento, affinche tutto lavori nella stessa direzione.",
-        "Non sono interventi separati, ma parti di un unico progetto costruito sulla persona.",
-        "E questa regia che rende il Metodo La Speziale diverso da un percorso nutrizionale tradizionale.",
-      ]],
-    ]),
+    benefitCards: [],
+    blocks: [],
+    showHeroCta: false,
+    showFacts: false,
+    showVisits: false,
+    showExplanation: true,
+    showBenefits: false,
+    showExtraContent: false,
+    showResult: true,
+    showSecondaryCtas: false,
     finalCtaTitle: "Ogni corpo ha una storia diversa. Anche il modo di raggiungere il risultato deve esserlo.",
     finalCtaText: "Raccontaci il cambiamento che desideri ottenere: costruiremo insieme un progetto personalizzato per aiutarti a raggiungerlo e mantenerlo nel tempo.",
     ctaLabel: "Richiedi una consulenza",
@@ -1409,61 +1538,89 @@ const clientProgramContentOverrides: Record<string, Partial<Program>> = {
   },
   "gonfiore-disturbi-intestinali": {
     title: "Gonfiore e disturbi intestinali",
-    excerpt: "Un progetto dedicato a chi desidera ritrovare un intestino piu equilibrato, una digestione serena e una migliore qualita di vita.",
+    imageUrl: "/assets/old-site/gonfiore-intestinale-2026.jpg",
+    heroImageUrl: "/assets/old-site/gonfiore-intestinale-2026.jpg",
+    excerpt: "Un progetto dedicato a chi desidera ritrovare un intestino più equilibrato, una digestione serena e una migliore qualità di vita.",
     category: "Gonfiore e disturbi intestinali",
-    descriptionTitle: "Ogni intestino e diverso. Anche il progetto deve esserlo.",
+    heroHighlight: "Il gonfiore non è il punto di partenza. È il punto da cui iniziare a capire.",
+    heroText: "Un progetto dedicato a chi desidera ritrovare un intestino più equilibrato, una digestione serena e una migliore qualità di vita.",
+    descriptionTitle: "Il progetto",
+    projectHighlight: "Ogni intestino è un ecosistema. Anche il progetto deve esserlo.",
     description: portableTextBlocks([
-      "Il gonfiore e solo uno dei segnali che l'intestino puo inviare.",
-      "Digestione, alimentazione, stile di vita, microbiota e caratteristiche della persona sono strettamente collegati e si influenzano a vicenda.",
-      "Per questo il nostro obiettivo non e intervenire sul singolo sintomo, ma costruire un progetto capace di aiutare l'intestino a ritrovare un equilibrio piu stabile e duraturo.",
+      "Il gonfiore è solo uno dei segnali che l'intestino può inviare.",
+      "Digestione, microbiota, alimentazione, stile di vita e caratteristiche della persona sono strettamente collegati e si influenzano a vicenda.",
+      "Per questo il nostro obiettivo non è intervenire su un singolo sintomo, ma sviluppare un progetto che riporti l'intestino verso un equilibrio più stabile e duraturo.",
     ], "intestino-description"),
     audienceTitle: "Ti riconosci in uno di questi problemi?",
     audience: [
       "Gonfiore addominale frequente.",
       "Pancia tesa anche mangiando poco.",
       "Digestione lenta o senso di pesantezza.",
-      "Reflusso o acidita.",
+      "Reflusso o acidità.",
       "Stitichezza, diarrea o intestino irregolare.",
       "Ti hanno parlato di disbiosi o di un'alterazione del microbiota intestinale.",
-      "Hai gia provato fermenti lattici o probiotici senza ottenere un miglioramento stabile.",
-      "Vorresti ritrovare leggerezza e vivere i pasti con maggiore serenita.",
+      "Hai già provato fermenti lattici o probiotici senza ottenere un miglioramento stabile.",
+      "Vorresti ritrovare leggerezza e vivere i pasti con maggiore serenità.",
     ],
     processTitle: "Come prende forma il progetto",
+    processHighlight: "Ogni intestino richiede una strategia diversa.",
     processSteps: [
       { _key: "intestino-step-1", title: "Comprendiamo il problema", description: "Partiamo dai sintomi, dalle abitudini e dalla tua storia per capire come il disturbo influisce sulla vita quotidiana." },
-      { _key: "intestino-step-2", title: "Individuiamo cio che influenza l'equilibrio intestinale", description: "Valutiamo alimentazione, digestione, microbiota, ritmo intestinale e tutti quei fattori che possono contribuire al problema." },
-      { _key: "intestino-step-3", title: "Organizziamo la strategia", description: "Ogni intervento viene inserito in un progetto coordinato, affinche alimentazione, eventuale consiglio fitoterapico e indicazioni pratiche lavorino nella stessa direzione." },
+      { _key: "intestino-step-2", title: "Individuiamo ciò che influenza l'equilibrio intestinale", description: "Valutiamo alimentazione, digestione, microbiota, ritmo intestinale e tutti quei fattori che possono contribuire al problema." },
+      { _key: "intestino-step-3", title: "Organizziamo la strategia", description: "Ogni intervento viene inserito in un progetto coordinato, affinché alimentazione, eventuale supporto fitoterapico e indicazioni pratiche lavorino nella stessa direzione." },
       { _key: "intestino-step-4", title: "Seguiamo l'evoluzione", description: "Monitoriamo i cambiamenti e adattiamo il progetto in base alla risposta dell'intestino e ai risultati ottenuti." },
     ],
-    benefitsTitle: "Il risultato",
-    benefitCards: [
-      { _key: "intestino-benefit-1", icon: "leaf", title: "Un equilibrio piu stabile", description: "Quando l'intestino ritrova il suo equilibrio, cambia anche il modo di vivere ogni giornata." },
-      { _key: "intestino-benefit-2", icon: "heart", title: "Pasti piu sereni", description: "Mangiare con serenita, sentirsi piu leggeri, ritrovare regolarita e benessere significa migliorare non solo la digestione, ma la qualita della vita." },
-      { _key: "intestino-benefit-3", icon: "target", title: "Benessere nel tempo", description: "L'obiettivo e costruire un equilibrio che possa accompagnarti nel tempo." },
+    resultTitle: "Il risultato",
+    resultHighlight: "Quando l'intestino ritrova il suo equilibrio, cambia anche il modo di vivere ogni giornata.",
+    resultText: portableTextBlocks([
+      "Mangiare con serenità, sentirsi più leggeri, ritrovare regolarità e benessere significa migliorare non solo la digestione, ma la qualità della vita.",
+      "L'obiettivo è costruire un equilibrio che possa accompagnarti nel tempo.",
+    ], "intestino-result"),
+    faqsTitle: "Domande frequenti",
+    faqs: [
+      { question: "Perché mi sento gonfio anche senza aver mangiato molto?", answer: "Può dipendere da fermentazione, transito intestinale o maggiore sensibilità dell'intestino." },
+      { question: "Perché il mio intestino reagisce in modo diverso agli stessi alimenti?", answer: "La risposta può cambiare in base a quantità, abbinamenti e condizioni dell'intestino." },
+      { question: "Gonfiore e aria nella pancia sono la stessa cosa?", answer: "Non sempre. Il gonfiore può essere legato anche a motilità e sensibilità intestinale." },
     ],
-    blocks: editorialBlocks([["Cosa significa riequilibrare l'intestino", [
-      "Riequilibrare l'intestino non significa eliminare soltanto il gonfiore.",
-      "Significa comprendere le cause che influenzano il suo funzionamento e costruire una strategia nella quale ogni scelta segue la stessa direzione.",
-      "L'alimentazione rappresenta il punto di partenza, ma quando necessario puo essere affiancata dal consiglio fitoterapico, affinche tutto il progetto lavori verso un unico obiettivo: favorire un intestino piu equilibrato e una migliore qualita della vita.",
-    ]]]),
+    benefitCards: [],
+    blocks: [],
+    showHeroCta: false,
+    showFacts: false,
+    showVisits: false,
+    showExplanation: false,
+    showBenefits: false,
+    showExtraContent: false,
+    showResult: true,
+    showSecondaryCtas: false,
     finalCtaTitle: "Ogni intestino ha una storia diversa. Iniziamo dalla tua.",
     finalCtaText: "Raccontaci i sintomi che stai vivendo: insieme costruiremo un progetto per aiutare il tuo intestino a ritrovare equilibrio, leggerezza e benessere.",
     ctaLabel: "Richiedi una consulenza",
     ctaLink: "/contatti",
     seo: {
       title: "Gonfiore e disturbi intestinali | La Speziale Milano",
-      description: "Un progetto per gonfiore addominale, digestione lenta, reflusso, acidita, microbiota e benessere intestinale.",
+      description: "Un progetto per gonfiore addominale, digestione lenta, reflusso, acidità, microbiota e benessere intestinale.",
     },
   },
   "menopausa-premenopausa": {
     title: "Le Fasi della Donna",
-    excerpt: "PCOS, endometriosi, ciclo irregolare, sindrome premestruale, fertilita, premenopausa e menopausa.",
+    imageUrl: "/assets/old-site/fasi-donna-2026.jpg",
+    heroImageUrl: "/assets/old-site/fasi-donna-2026.jpg",
+    excerpt: "PCOS, endometriosi, ciclo irregolare, sindrome premestruale, fertilità, premenopausa e menopausa.",
     category: "Le fasi della donna",
-    descriptionTitle: "Ogni fase porta nuove esigenze. Anche il progetto deve evolvere.",
+    heroHighlight: "Il corpo della donna cambia molte volte nella vita. Ogni fase richiede un progetto diverso.",
+    heroText: "PCOS, endometriosi, ciclo irregolare, sindrome premestruale, fertilità, premenopausa e menopausa.",
+    descriptionTitle: "Il progetto",
+    projectHighlight: "Ogni fase porta nuove esigenze. Anche il progetto deve evolvere.",
     description: portableTextBlocks([
       "Nel corso della vita il corpo della donna attraversa cambiamenti che possono influenzare metabolismo, peso, energia, digestione, composizione corporea e benessere generale.",
       "Per questo non proponiamo un programma uguale per tutte, ma un progetto che si adatta alla fase che stai vivendo, accompagnando il corpo nelle sue nuove esigenze.",
     ], "donna-description"),
+    explanationTitle: "Cosa significa accompagnare il cambiamento",
+    explanationText: portableTextBlocks([
+      "Ogni fase della vita presenta esigenze diverse e merita un approccio personalizzato.",
+      "L'alimentazione rappresenta il punto di partenza, ma quando necessario può essere affiancata dal consiglio fitoterapico, affinché ogni scelta lavori nella stessa direzione.",
+      "L'obiettivo non è affrontare soltanto il sintomo o il cambiamento del momento, ma accompagnare il corpo nel ritrovare un nuovo equilibrio.",
+    ], "donna-explanation"),
     audienceTitle: "Ti riconosci in una di queste situazioni?",
     audience: [
       "Sindrome dell'ovaio policistico (PCOS).",
@@ -1473,11 +1630,12 @@ const clientProgramContentOverrides: Record<string, Partial<Program>> = {
       "Ricerca di una gravidanza.",
       "Premenopausa.",
       "Menopausa.",
-      "Aumento di peso, gonfiore o difficolta a ritrovare il proprio equilibrio.",
+      "Aumento di peso, gonfiore o difficoltà a ritrovare il proprio equilibrio.",
       "Cambiamenti della composizione corporea.",
-      "Stanchezza, calo di energia o difficolta ad adattarsi ai cambiamenti del corpo.",
+      "Stanchezza, calo di energia o difficoltà ad adattarsi ai cambiamenti del corpo.",
     ],
     processTitle: "Come prende forma il progetto",
+    processHighlight: "Ogni fase richiede una strategia diversa.",
     processSteps: [
       { _key: "donna-step-1", title: "Comprendiamo il momento che stai vivendo", description: "Ogni fase della vita ha caratteristiche e bisogni diversi. Partiamo dalla tua storia, dai cambiamenti che stai vivendo e dagli obiettivi che desideri raggiungere." },
       { _key: "donna-step-2", title: "Osserviamo il corpo nel suo insieme", description: "Valutiamo alimentazione, composizione corporea, stile di vita e tutti gli elementi che possono influenzare il tuo benessere in questa fase della vita." },
@@ -1486,88 +1644,130 @@ const clientProgramContentOverrides: Record<string, Partial<Program>> = {
     ],
     benefitsTitle: "Ogni fase ha obiettivi diversi",
     benefitCards: [
-      { _key: "donna-benefit-1", icon: "heart", title: "Adolescenza ed eta fertile", description: "Favorire un'alimentazione che accompagni il corretto equilibrio del corpo e sostenga le diverse esigenze della donna." },
-      { _key: "donna-benefit-2", icon: "shield", title: "PCOS, endometriosi e ciclo", description: "Affrontare le difficolta legate a queste condizioni con un progetto nutrizionale costruito sulla persona e sul momento che sta vivendo." },
-      { _key: "donna-benefit-3", icon: "activity", title: "Premenopausa e menopausa", description: "Accompagnare il corpo nei cambiamenti che interessano metabolismo, composizione corporea, energia e qualita della vita." },
+      { _key: "donna-benefit-1", icon: "heart", title: "Adolescenza ed età fertile", description: "Favorire un'alimentazione che accompagni il corretto equilibrio del corpo e sostenga le diverse esigenze della donna." },
+      { _key: "donna-benefit-2", icon: "shield", title: "PCOS, endometriosi e ciclo", description: "Affrontare le difficoltà legate a queste condizioni con un progetto nutrizionale costruito sulla persona e sul momento che sta vivendo." },
+      { _key: "donna-benefit-3", icon: "activity", title: "Premenopausa e menopausa", description: "Accompagnare il corpo nei cambiamenti che interessano metabolismo, composizione corporea, energia e qualità della vita." },
     ],
-    blocks: editorialBlocks([
-      ["Cosa significa accompagnare il cambiamento", [
-        "Ogni fase della vita presenta esigenze diverse e merita un approccio personalizzato.",
-        "L'alimentazione rappresenta il punto di partenza, ma quando necessario puo essere affiancata dal consiglio fitoterapico, affinche ogni scelta lavori nella stessa direzione.",
-        "L'obiettivo non e affrontare soltanto il sintomo o il cambiamento del momento, ma accompagnare il corpo nel ritrovare un nuovo equilibrio.",
-      ]],
-      ["Il risultato", [
-        "Ogni fase puo diventare un nuovo equilibrio, non un limite.",
-        "Il nostro obiettivo e aiutarti a comprendere il tuo corpo, accompagnarne i cambiamenti e ritrovare benessere, energia e una forma fisica in sintonia con la fase della vita che stai vivendo.",
-      ]],
-    ]),
+    resultTitle: "Il risultato",
+    resultHighlight: "Ogni fase può diventare un nuovo equilibrio, non un limite.",
+    resultText: portableTextBlocks([
+      "Il nostro obiettivo è aiutarti a comprendere il tuo corpo, accompagnarne i cambiamenti e ritrovare benessere, energia e una forma fisica in sintonia con la fase della vita che stai vivendo.",
+    ], "donna-result"),
+    faqsTitle: "Domande frequenti",
+    faqs: [
+      { question: "Posso iniziare il percorso anche se sto già seguendo una terapia?", answer: "Sì. Le terapie in corso vengono considerate nella costruzione del percorso." },
+      { question: "Se ho già esami recenti, devo rifarli?", answer: "No. Gli esami disponibili vengono valutati e si considera solo ciò che può essere realmente utile." },
+      { question: "Posso rivolgermi a voi per un problema specifico come PCOS o endometriosi?", answer: "Sì. Il percorso viene costruito considerando la condizione specifica e il momento della vita." },
+    ],
+    blocks: [],
+    showHeroCta: false,
+    showFacts: false,
+    showVisits: false,
+    showExplanation: true,
+    showBenefits: true,
+    showExtraContent: false,
+    showResult: true,
+    showSecondaryCtas: false,
     finalCtaTitle: "Ogni fase della vita merita di essere vissuta al meglio.",
     finalCtaText: "Raccontaci il momento che stai attraversando: insieme costruiremo un progetto capace di accompagnare il tuo corpo nelle sue nuove esigenze.",
     ctaLabel: "Richiedi una consulenza",
     ctaLink: "/contatti",
     seo: {
       title: "Le Fasi della Donna | La Speziale Milano",
-      description: "Percorso per PCOS, endometriosi, ciclo irregolare, fertilita, premenopausa, menopausa e cambiamenti del corpo femminile.",
+      description: "Percorso per PCOS, endometriosi, ciclo irregolare, fertilità, premenopausa, menopausa e cambiamenti del corpo femminile.",
     },
   },
   "programma-anti-age": {
-    title: "Longevita e Vitalita",
-    excerpt: "Un progetto dedicato a chi desidera preservare energia, tono muscolare, vitalita e qualita della vita attraverso la nutrizione e uno stile di vita orientato alla longevita.",
-    category: "Longevita e vitalita",
-    descriptionTitle: "La longevita significa preparare il corpo al futuro.",
+    title: "Longevità e Vitalità",
+    imageUrl: "/assets/old-site/vitalita-2026.jpg",
+    heroImageUrl: "/assets/old-site/vitalita-2026.jpg",
+    excerpt: "Un progetto dedicato a chi desidera preservare energia, tono muscolare, vitalità e qualità della vita attraverso la nutrizione e uno stile di vita orientato alla longevità.",
+    category: "Longevità e vitalità",
+    heroHighlight: "Gli anni passano. Il benessere può continuare a crescere.",
+    heroText: "Un progetto dedicato a chi desidera preservare energia, tono muscolare, vitalità e qualità della vita attraverso la nutrizione e uno stile di vita orientato alla longevità.",
+    descriptionTitle: "Il progetto",
+    projectHighlight: "La longevità significa preparare il corpo al futuro.",
     description: portableTextBlocks([
-      "Prendersi cura del proprio corpo non significa inseguire la giovinezza, ma aiutarlo a mantenere nel tempo cio che lo fa stare bene.",
-      "Energia, massa muscolare, metabolismo, composizione corporea e vitalita cambiano con gli anni.",
-      "Per questo il nostro progetto nasce per accompagnare questi cambiamenti e aiutare il corpo a conservarne il potenziale piu a lungo.",
+      "Prendersi cura del proprio corpo non significa inseguire la giovinezza, ma aiutarlo a mantenere nel tempo ciò che lo fa stare bene.",
+      "Energia, massa muscolare, metabolismo, composizione corporea e vitalità cambiano con gli anni.",
+      "Per questo il nostro progetto nasce per accompagnare questi cambiamenti e aiutare il corpo a conservarne il potenziale più a lungo.",
     ], "longevita-description"),
+    explanationTitle: "Cosa significa prendersi cura del futuro",
+    explanationText: portableTextBlocks([
+      "Prendersi cura del proprio corpo significa fare oggi scelte che possano fare la differenza anche domani.",
+      "L'alimentazione rappresenta il punto di partenza, ma quando necessario può essere affiancata dal consiglio fitoterapico, affinché ogni scelta contribuisca a preservare energia, forza e qualità della vita.",
+      "L'obiettivo non è fermare il tempo, ma aiutare il corpo a mantenere il proprio equilibrio il più a lungo possibile.",
+    ], "longevita-explanation"),
     audienceTitle: "Ti riconosci in una di queste situazioni?",
     audience: [
       "Ti senti meno energico rispetto a qualche anno fa.",
       "Hai notato una perdita di tono muscolare.",
-      "Il metabolismo e cambiato.",
+      "Il metabolismo è cambiato.",
       "Vuoi prenderti cura del tuo corpo in modo preventivo.",
-      "Desideri mantenere forza, vitalita e autonomia nel tempo.",
+      "Desideri mantenere forza, vitalità e autonomia nel tempo.",
       "Vorresti sostenere pelle, capelli e unghie anche attraverso l'alimentazione.",
-      "Cerchi un approccio orientato alla prevenzione e alla qualita della vita.",
+      "Cerchi un approccio orientato alla prevenzione e alla qualità della vita.",
       "Vuoi invecchiare bene, non semplicemente invecchiare.",
     ],
     processTitle: "Come prende forma il progetto",
+    processHighlight: "Ogni scelta di oggi costruisce il benessere di domani.",
     processSteps: [
       { _key: "longevita-step-1", title: "Conosciamo il tuo punto di partenza", description: "Valutiamo composizione corporea, abitudini e obiettivi per comprendere quali aspetti preservare e quali migliorare." },
-      { _key: "longevita-step-2", title: "Individuiamo le priorita", description: "Ogni persona ha esigenze diverse: energia, tono muscolare, metabolismo, prevenzione o qualita della vita." },
+      { _key: "longevita-step-2", title: "Individuiamo le priorità", description: "Ogni persona ha esigenze diverse: energia, tono muscolare, metabolismo, prevenzione o qualità della vita." },
       { _key: "longevita-step-3", title: "Costruiamo la strategia", description: "Ogni intervento viene inserito in un progetto orientato a sostenere il corpo nel tempo, favorendo un equilibrio duraturo." },
       { _key: "longevita-step-4", title: "Accompagniamo l'evoluzione", description: "Il progetto viene adattato nel tempo per accompagnare i cambiamenti naturali del corpo e mantenerne il benessere." },
     ],
-    benefitsTitle: "Il risultato",
-    benefitCards: [
-      { _key: "longevita-benefit-1", icon: "sparkles", title: "Come vivi il tempo", description: "La longevita non si misura in anni. Si misura in come li vivi." },
-      { _key: "longevita-benefit-2", icon: "heart", title: "Energia e autonomia", description: "Il nostro obiettivo e aiutarti a mantenere energia, forza, autonomia e benessere." },
-      { _key: "longevita-benefit-3", icon: "target", title: "Il tempo come alleato", description: "Il progetto aiuta il corpo a mantenere il proprio equilibrio il piu a lungo possibile, affinche il tempo diventi un alleato e non un limite." },
+    resultTitle: "Il risultato",
+    resultHighlight: "La longevità non si misura in anni. Si misura in come li vivi.",
+    resultText: portableTextBlocks([
+      "Il nostro obiettivo è aiutarti a mantenere energia, forza, autonomia e benessere, affinché il tempo diventi un alleato e non un limite.",
+    ], "longevita-result"),
+    faqsTitle: "Domande frequenti",
+    faqs: [
+      { question: "Cosa posso fare oggi per sentirmi forte anche negli anni?", answer: "Proteggere il muscolo è una priorità: nutrizione mirata, movimento e sostegno nutraceutico possono lavorare nella stessa direzione." },
+      { question: "Si può sostenere la pelle anche dall'interno?", answer: "Alimentazione e fitoterapia possono contribuire a mantenere la pelle più elastica, idratata e vitale nel tempo." },
+      { question: "E quando il problema è soprattutto sentirsi meno energici?", answer: "Cerchiamo prima cosa può sottrarre energia nella quotidianità e interveniamo su alimentazione, recupero, movimento e, quando indicato, supporto fitoterapico." },
     ],
-    blocks: editorialBlocks([["Cosa significa prendersi cura del futuro", [
-      "Prendersi cura del proprio corpo significa fare oggi scelte che possano fare la differenza anche domani.",
-      "L'alimentazione rappresenta il punto di partenza, ma quando necessario puo essere affiancata dal consiglio fitoterapico, affinche ogni scelta contribuisca a preservare energia, forza e qualita della vita.",
-      "L'obiettivo non e fermare il tempo, ma aiutare il corpo a mantenere il proprio equilibrio il piu a lungo possibile.",
-    ]]]),
+    benefitCards: [],
+    blocks: [],
+    showHeroCta: false,
+    showFacts: false,
+    showVisits: false,
+    showExplanation: true,
+    showBenefits: false,
+    showExtraContent: false,
+    showResult: true,
+    showSecondaryCtas: false,
     finalCtaTitle: "Prendersi cura del futuro del tuo corpo inizia dalle scelte di oggi.",
-    finalCtaText: "Insieme costruiremo un progetto orientato a preservare vitalita, equilibrio e qualita della vita negli anni.",
+    finalCtaText: "Insieme costruiremo un progetto orientato a preservare vitalità, equilibrio e qualità della vita negli anni.",
     ctaLabel: "Richiedi una consulenza",
     ctaLink: "/contatti",
     seo: {
-      title: "Longevita e Vitalita | La Speziale Milano",
-      description: "Un progetto per preservare energia, tono muscolare, vitalita, autonomia e qualita della vita nel tempo.",
+      title: "Longevità e Vitalità | La Speziale Milano",
+      description: "Un progetto per preservare energia, tono muscolare, vitalità, autonomia e qualità della vita nel tempo.",
     },
   },
   "nutrizione-sportiva": {
     title: "Nutrizione Sportiva",
-    excerpt: "Un progetto dedicato a chi pratica attivita fisica e desidera migliorare performance, recupero, composizione corporea ed energia attraverso una nutrizione realmente integrata.",
+    imageUrl: "/assets/old-site/sport-2026.jpg",
+    heroImageUrl: "/assets/old-site/sport-2026.jpg",
+    excerpt: "Un progetto dedicato a chi pratica attività fisica e desidera migliorare performance, recupero, composizione corporea ed energia attraverso una nutrizione realmente integrata.",
     category: "Nutrizione sportiva",
-    descriptionTitle: "Ogni allenamento stimola il corpo. Il nostro progetto lo aiuta a rispondere.",
+    heroHighlight: "Allenarsi meglio significa nutrire meglio il proprio corpo.",
+    heroText: "Un progetto dedicato a chi pratica attività fisica e desidera migliorare performance, recupero, composizione corporea ed energia attraverso una nutrizione realmente integrata.",
+    descriptionTitle: "Il progetto",
+    projectHighlight: "Ogni allenamento stimola il corpo. Il nostro progetto lo aiuta a rispondere.",
     description: portableTextBlocks([
       "Allenarsi non significa soltanto consumare energia.",
       "Ogni disciplina richiede strategie nutrizionali diverse per sostenere performance, recupero e adattamento fisico.",
-      "Per questo sviluppiamo un progetto che accompagna il tuo allenamento, aiutando il corpo a utilizzare al meglio le proprie risorse prima, durante e dopo l'attivita sportiva.",
+      "Per questo sviluppiamo un progetto che accompagna il tuo allenamento, aiutando il corpo a utilizzare al meglio le proprie risorse prima, durante e dopo l'attività sportiva.",
     ], "sport-description"),
+    explanationTitle: "Cosa significa nutrire la performance",
+    explanationText: portableTextBlocks([
+      "Una buona alimentazione non serve soltanto a sostenere l'allenamento.",
+      "Significa fornire al corpo ciò di cui ha bisogno per affrontare lo sforzo, recuperare in modo efficace e adattarsi progressivamente al lavoro svolto.",
+      "Quando necessario, il progetto può essere affiancato dal consiglio fitoterapico, affinché ogni scelta contribuisca a sostenere gli obiettivi sportivi e il benessere dell'organismo.",
+    ], "sport-explanation"),
     audienceTitle: "Ti riconosci in uno di questi obiettivi?",
     audience: [
       "Migliorare la performance sportiva.",
@@ -1575,35 +1775,40 @@ const clientProgramContentOverrides: Record<string, Partial<Program>> = {
       "Aumentare la massa muscolare.",
       "Ridurre la massa grassa mantenendo la performance.",
       "Preparare una gara o una competizione.",
-      "Evitare cali di energia durante l'attivita fisica.",
+      "Evitare cali di energia durante l'attività fisica.",
       "Alimentarti in modo corretto in base allo sport che pratichi.",
-      "Ottenere risultati piu efficaci dal tuo allenamento.",
+      "Ottenere risultati più efficaci dal tuo allenamento.",
     ],
     processTitle: "Come prende forma il progetto",
+    processHighlight: "Ogni sport ha esigenze diverse.",
     processSteps: [
       { _key: "sport-step-1", title: "Conosciamo il tuo sport", description: "Partiamo dalla disciplina praticata, dalla frequenza degli allenamenti, dagli obiettivi e dalle caratteristiche del tuo corpo." },
       { _key: "sport-step-2", title: "Valutiamo il punto di partenza", description: "Analizziamo composizione corporea, alimentazione, recupero e fabbisogni energetici." },
       { _key: "sport-step-3", title: "Organizziamo la strategia", description: "Costruiamo un progetto nutrizionale che accompagna allenamenti, recupero e obiettivi sportivi, integrando eventuali supporti solo quando possono offrire un reale vantaggio." },
       { _key: "sport-step-4", title: "Adattiamo il programma", description: "Il progetto evolve insieme alla preparazione atletica, ai risultati e ai nuovi obiettivi." },
     ],
-    benefitsTitle: "Il risultato",
-    benefitCards: [
-      { _key: "sport-benefit-1", icon: "dumbbell", title: "Performance e recupero", description: "Quando alimentazione, recupero e allenamento lavorano nella stessa direzione, il corpo puo esprimere meglio il proprio potenziale." },
-      { _key: "sport-benefit-2", icon: "activity", title: "Continuita negli allenamenti", description: "L'obiettivo e costruire un equilibrio che permetta di allenarsi con continuita e recuperare piu efficacemente." },
-      { _key: "sport-benefit-3", icon: "target", title: "Risultati duraturi", description: "Non soltanto ottenere una prestazione migliore, ma raggiungere risultati duraturi." },
+    resultTitle: "Il risultato",
+    resultHighlight: "Allenarsi di più non sempre significa migliorare di più.",
+    resultText: portableTextBlocks([
+      "Quando alimentazione, recupero e allenamento lavorano nella stessa direzione, il corpo può esprimere meglio il proprio potenziale.",
+      "L'obiettivo non è soltanto ottenere una prestazione migliore, ma costruire un equilibrio che permetta di allenarsi con continuità, recuperare più efficacemente e raggiungere risultati duraturi.",
+    ], "sport-result"),
+    faqsTitle: "Domande frequenti",
+    faqs: [
+      { question: "Mi alleno, ma i risultati non arrivano. Perché?", answer: "Individuiamo cosa può limitare i risultati e adeguiamo nutrizione e recupero al tuo allenamento." },
+      { question: "Cosa mangiare prima e dopo l'allenamento?", answer: "Costruiamo scelte e combinazioni adatte al tuo sport, ai tuoi orari e all'obiettivo." },
+      { question: "Serve un programma anche se faccio sport per hobby?", answer: "Sì. Anche poche ore di attività possono beneficiare di una nutrizione costruita sul tipo di allenamento e sul risultato desiderato." },
     ],
-    blocks: editorialBlocks([
-      ["Cosa significa nutrire la performance", [
-        "Una buona alimentazione non serve soltanto a sostenere l'allenamento.",
-        "Significa fornire al corpo cio di cui ha bisogno per affrontare lo sforzo, recuperare in modo efficace e adattarsi progressivamente al lavoro svolto.",
-        "Quando necessario, il progetto puo essere affiancato dal consiglio fitoterapico, affinche ogni scelta contribuisca a sostenere gli obiettivi sportivi e il benessere dell'organismo.",
-      ]],
-      ["Il risultato", [
-        "Allenarsi di piu non sempre significa migliorare di piu.",
-        "Quando alimentazione, recupero e allenamento lavorano nella stessa direzione, il corpo puo esprimere meglio il proprio potenziale.",
-        "L'obiettivo non e soltanto ottenere una prestazione migliore, ma costruire un equilibrio che permetta di allenarsi con continuita, recuperare piu efficacemente e raggiungere risultati duraturi.",
-      ]],
-    ]),
+    benefitCards: [],
+    blocks: [],
+    showHeroCta: false,
+    showFacts: false,
+    showVisits: false,
+    showExplanation: true,
+    showBenefits: false,
+    showExtraContent: false,
+    showResult: true,
+    showSecondaryCtas: true,
     finalCtaTitle: "Ogni obiettivo sportivo merita una strategia costruita sulla persona.",
     finalCtaText: "Raccontaci lo sport che pratichi e il risultato che desideri raggiungere: costruiremo un progetto capace di accompagnare il tuo allenamento e valorizzare il lavoro che fai ogni giorno.",
     ctaLabel: "Richiedi una consulenza",
@@ -1634,7 +1839,7 @@ const activeProductSlugs = new Set([
   "coenzima-q10-vegetale-alto-dosaggio",
 ]);
 
-const flowHeroUrl = "/assets/old-site/hero-movimento.png";
+const flowHeroUrl = "/assets/old-site/hero-home-flow-2026.jpg";
 const retiredHeroImageFragments = [
   "hero-bright-wellbeing.png",
   "9e5a84ac52e56e73b4a8473edc2b321972b8f28e",
@@ -1795,7 +2000,7 @@ export const fallbackTestimonials: Testimonial[] = [
   {
     name: "Laura M.",
     role: "Percorso Nutrizione Integrata",
-    text: "Ho trovato un percorso chiaro e realistico. Non una dieta da seguire per qualche settimana, ma un metodo piu adatto alla mia vita quotidiana.",
+    text: "Ho trovato un percorso chiaro e realistico. Non una dieta da seguire per qualche settimana, ma un metodo più adatto alla mia vita quotidiana.",
   },
   {
     name: "Elena R.",
@@ -1898,6 +2103,8 @@ export async function getHomepage(): Promise<Homepage> {
       methodPhytoLabel,
       methodPhytoTitle,
       methodPhytoText,
+      "methodPhytoImageUrl": methodPhytoImage.asset->url,
+      "methodCoachingImageUrl": methodCoachingImage.asset->url,
       methodPhytoItems,
       methodPhytoLinkLabel,
       "featuredProgramSlugs": featuredPrograms[]->slug.current,
@@ -1928,19 +2135,21 @@ export async function getHomepage(): Promise<Homepage> {
 export async function getMethodPage(): Promise<MethodPage> {
   const page = await sanityFetch<MethodPage>(
     `*[_type == "methodPage"][0] {
-      heroEyebrow,
-      heroTitle,
-      heroText,
-      "heroImageUrl": heroImage.asset->url,
+      introHeading,
       introTitle,
       introText,
+      "introImageUrl": introImage.asset->url,
       coreEyebrow,
       coreTitle,
-      coreText,
-      coreItems,
+      workSteps,
       dietTitle,
       dietText,
+      pillars,
+      visitBoxes,
+      journeyTitle,
+      journeyHighlight,
       phytoTitle,
+      resultHighlight,
       phytoText,
       cta { eyebrow, title, text, primaryLabel, primaryLink, secondaryLabel, secondaryLink, "imageUrl": image.asset->url },
       seo { title, description, "imageUrl": image.asset->url }
@@ -1949,7 +2158,7 @@ export async function getMethodPage(): Promise<MethodPage> {
   if (!page) return fallbackMethodPage;
   return {
     ...mergeDefined(fallbackMethodPage, page),
-    heroImageUrl: replaceRetiredHeroImage(page.heroImageUrl || fallbackMethodPage.heroImageUrl),
+    introImageUrl: page.introImageUrl || fallbackMethodPage.introImageUrl,
     cta: mergePageCta(fallbackMethodPage.cta, page.cta),
     seo: replaceRetiredSeoImage(mergeSeo(fallbackMethodPage.seo, page.seo)),
   };
@@ -1960,6 +2169,7 @@ export async function getCoachingPage(): Promise<CoachingPage> {
     `*[_type == "coachingPage"][0] {
       heroEyebrow,
       heroTitle,
+      heroSubtitle,
       heroText,
       "heroImageUrl": heroImage.asset->url,
       introTitle,
@@ -1975,6 +2185,7 @@ export async function getCoachingPage(): Promise<CoachingPage> {
   if (!page) return fallbackCoachingPage;
   return {
     ...mergeDefined(fallbackCoachingPage, page),
+    heroImageUrl: "/assets/old-site/consapevolezza-2026.jpg",
     cta: mergePageCta(fallbackCoachingPage.cta, page.cta),
     seo: mergeSeo(fallbackCoachingPage.seo, page.seo),
   };
@@ -1991,6 +2202,8 @@ export async function getPrograms(): Promise<Program[]> {
       "imageUrl": coverImage.asset->url,
       "heroImageUrl": coverImage.asset->url,
       category,
+      heroHighlight,
+      heroText,
       duration,
       programType,
       deliveryMode,
@@ -2000,7 +2213,10 @@ export async function getPrograms(): Promise<Program[]> {
       purchaseLabel,
       audience,
       descriptionTitle,
+      projectHighlight,
       description,
+      explanationTitle,
+      explanationText,
       benefits,
       benefitCards,
       processSteps,
@@ -2013,6 +2229,12 @@ export async function getPrograms(): Promise<Program[]> {
       showFaqs,
       showExtraContent,
       showFinalCta,
+      showHeroCta,
+      showFacts,
+      showVisits,
+      showExplanation,
+      showResult,
+      showSecondaryCtas,
       showInMenu,
       isFeatured,
       ctaLabel,
@@ -2021,6 +2243,10 @@ export async function getPrograms(): Promise<Program[]> {
       audienceTitle,
       benefitsTitle,
       processTitle,
+      processHighlight,
+      resultTitle,
+      resultHighlight,
+      resultText,
       faqsTitle,
       finalCtaTitle,
       finalCtaText,
@@ -2142,7 +2368,13 @@ export async function getTherapiesPage(): Promise<TherapiesPage> {
   const page = await sanityFetch<TherapiesPage>(
     `*[_type == "therapiesPage"][0] {
       heroEyebrow, heroTitle, heroText, "heroImageUrl": heroImage.asset->url,
-      contentTitle, contentText, gridTitle, gridText, cardButtonLabel,
+      heroSubtitle,
+      contentTitle, contentText, gridTitle, gridText,
+      usefulTitle, usefulSubtitle, usefulItems, includedTitle, includedItems,
+      expertiseTitle, expertiseSubtitle, expertiseText,
+      cardButtonLabel,
+      faqsTitle,
+      faqs[] { _key, question, answer },
       cta { eyebrow, title, text, primaryLabel, primaryLink, secondaryLabel, secondaryLink, "imageUrl": image.asset->url },
       seo { title, description, "imageUrl": image.asset->url }
     }`,
@@ -2150,6 +2382,7 @@ export async function getTherapiesPage(): Promise<TherapiesPage> {
   if (!page) return fallbackTherapiesPage;
   return {
     ...mergeDefined(fallbackTherapiesPage, page),
+    heroImageUrl: "/assets/old-site/fitoterapia-consulenza-2026.jpg",
     cta: mergePageCta(fallbackTherapiesPage.cta, page.cta),
     seo: mergeSeo(fallbackTherapiesPage.seo, page.seo),
   };

@@ -5,6 +5,7 @@ export default defineCliConfig({
     projectId: 'h5heqcpt',
     dataset: 'production'
   },
+  studioHost: 'laspeziale',
   deployment: {
     /**
      * Enable auto-updates for studios.

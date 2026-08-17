@@ -1,4 +1,4 @@
-import {defineField, defineType} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 
 export const therapiesPage = defineType({
   name: 'therapiesPage',
@@ -7,6 +7,7 @@ export const therapiesPage = defineType({
   initialValue: {
     heroEyebrow: 'Il Consiglio Fitoterapico',
     heroTitle: 'Il Consiglio Fitoterapico',
+    heroSubtitle: 'Un buon rimedio naturale inizia sempre da una buona valutazione.',
     heroText:
       'Una consulenza con una Farmacista specializzata in Fitoterapia per individuare piante officinali e nutraceutici realmente adatti alla tua situazione.',
     contentTitle: 'Perche richiedere un consiglio fitoterapico?',
@@ -14,24 +15,78 @@ export const therapiesPage = defineType({
       "La scelta dipende dalla persona, dalle sue esigenze, dalle eventuali terapie in corso e dall'obiettivo che desidera raggiungere.",
     gridTitle: 'Molti prodotti naturali sembrano simili, ma non lo sono.',
     gridText: 'Per questo il valore della consulenza non e il prodotto, ma la valutazione che porta a sceglierlo.',
+    usefulTitle: 'Quando può essere utile?',
+    usefulSubtitle: 'Una consulenza mirata quando vuoi scegliere con metodo.',
+    usefulItems: [
+      "Vuoi un supporto naturale per un'esigenza specifica.",
+      'Assumi farmaci e desideri verificare eventuali interazioni.',
+      'Hai già provato diversi prodotti senza ottenere i risultati sperati.',
+      'Ti è stato consigliato un integratore e desideri un parere professionale.',
+      'Cerchi una scelta personalizzata, evitando il "fai da te".',
+    ],
+    includedTitle: 'Cosa comprende',
+    includedItems: [
+      'Analisi delle tue esigenze.',
+      'Valutazione di eventuali farmaci e integratori già utilizzati.',
+      'Selezione di piante officinali e nutraceutici realmente indicati.',
+      'Indicazioni su modalità di utilizzo e durata.',
+      'Risposta ai tuoi dubbi e alle tue domande.',
+    ],
+    expertiseTitle: 'Perché affidarsi a una Farmacista specializzata?',
+    expertiseSubtitle: 'La fitoterapia richiede competenze specifiche.',
+    expertiseText:
+      'Conoscere le proprietà delle piante officinali significa anche saperne valutare qualità, possibili interazioni, controindicazioni e reale utilità. Ogni consiglio nasce dalla persona, dalle sue caratteristiche e dai suoi obiettivi, mai da una scelta standardizzata.',
     cardButtonLabel: 'Richiedi una consulenza',
   },
   groups: [
     {name: 'hero', title: 'Apertura pagina', default: true},
     {name: 'content', title: 'Contenuto'},
+    {name: 'faqs', title: 'FAQ'},
     {name: 'cta', title: 'CTA finale'},
     {name: 'seo', title: 'SEO Google'},
   ],
   fields: [
     defineField({name: 'heroEyebrow', title: 'Etichetta', type: 'string', group: 'hero'}),
     defineField({name: 'heroTitle', title: 'Titolo', type: 'string', group: 'hero', validation: (rule) => rule.required()}),
+    defineField({name: 'heroSubtitle', title: 'Sottotitolo', type: 'text', rows: 2, group: 'hero'}),
     defineField({name: 'heroText', title: 'Testo introduttivo', type: 'text', rows: 3, group: 'hero'}),
     defineField({name: 'heroImage', title: 'Immagine hero', type: 'image', group: 'hero', options: {hotspot: true}, fields: [defineField({name: 'alt', title: 'Testo alternativo', type: 'string'})]}),
     defineField({name: 'contentTitle', title: 'Titolo contenuto', type: 'string', group: 'content'}),
     defineField({name: 'contentText', title: 'Testo contenuto', type: 'text', rows: 5, group: 'content'}),
     defineField({name: 'gridTitle', title: 'Titolo sopra la griglia', type: 'string', group: 'content'}),
     defineField({name: 'gridText', title: 'Testo sopra la griglia', type: 'text', rows: 3, group: 'content'}),
+    defineField({name: 'usefulTitle', title: 'Titolo sezione utilità', type: 'string', group: 'content'}),
+    defineField({name: 'usefulSubtitle', title: 'Sottotitolo sezione utilità', type: 'string', group: 'content'}),
+    defineField({name: 'usefulItems', title: 'Quando richiederla', type: 'array', group: 'content', of: [defineArrayMember({type: 'string'})]}),
+    defineField({name: 'includedTitle', title: 'Titolo cosa comprende', type: 'string', group: 'content'}),
+    defineField({name: 'includedItems', title: 'Cosa comprende', type: 'array', group: 'content', of: [defineArrayMember({type: 'string'})]}),
+    defineField({name: 'expertiseTitle', title: 'Etichetta competenza', type: 'string', group: 'content'}),
+    defineField({name: 'expertiseSubtitle', title: 'Titolo competenza', type: 'string', group: 'content'}),
+    defineField({name: 'expertiseText', title: 'Testo competenza', type: 'text', rows: 5, group: 'content'}),
     defineField({name: 'cardButtonLabel', title: 'Testo bottone card', type: 'string', group: 'content'}),
+    defineField({
+      name: 'faqsTitle',
+      title: 'Titolo sezione FAQ',
+      type: 'string',
+      group: 'faqs',
+      initialValue: 'Domande frequenti',
+    }),
+    defineField({
+      name: 'faqs',
+      title: 'Domande frequenti',
+      type: 'array',
+      group: 'faqs',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({name: 'question', title: 'Domanda', type: 'string', validation: (rule) => rule.required()}),
+            defineField({name: 'answer', title: 'Risposta', type: 'text', rows: 3, validation: (rule) => rule.required()}),
+          ],
+          preview: {select: {title: 'question', subtitle: 'answer'}},
+        }),
+      ],
+    }),
     defineField({name: 'cta', title: 'Contenuto CTA', type: 'pageCta', group: 'cta'}),
     defineField({name: 'seo', title: 'Titolo e descrizione Google', type: 'seo', group: 'seo'}),
   ],

@@ -85,7 +85,7 @@ const programSeeds = [
     title: 'Gonfiore e disturbi intestinali',
     slug: 'gonfiore-disturbi-intestinali',
     excerpt:
-      'Un percorso dedicato a digestione, gonfiore e funzionalita intestinale per aiutare il tuo organismo a ritrovare regolarita e leggerezza.',
+      'Un percorso dedicato a digestione, gonfiore e funzionalita intestinale per aiutare il tuo organismo a ritrovare regolarità e leggerezza.',
     category: 'Area clinica',
     order: 2,
     audience: [
@@ -93,7 +93,7 @@ const programSeeds = [
       'Chi nota digestione lenta, tensione o fastidi dopo i pasti',
       'Chi vuole capire il rapporto tra alimentazione, intestino e benessere quotidiano',
     ],
-    benefits: ['Meno gonfiore', 'Digestione piu leggera', 'Benessere intestinale', 'Maggiore chiarezza'],
+    benefits: ['Meno gonfiore', 'Digestione più leggera', 'Benessere intestinale', 'Maggiore chiarezza'],
     seoTitle: 'Gonfiore e disturbi intestinali | La Speziale Milano',
   },
   {
@@ -108,15 +108,15 @@ const programSeeds = [
     seoTitle: 'Menopausa e Premenopausa a Milano | La Speziale',
   },
   {
-    title: 'Longevita e Vitalita',
+    title: 'Longevità e Vitalità',
     slug: 'programma-anti-age',
     excerpt:
-      'Un percorso dedicato a mantenere energia, forza, tono muscolare e vitalita, per vivere ogni fase della vita con maggiore equilibrio.',
+      'Un percorso dedicato a mantenere energia, forza, tono muscolare e vitalità, per vivere ogni fase della vita con maggiore equilibrio.',
     category: 'Anti-age',
     order: 4,
-    audience: ['Chi vuole lavorare su prevenzione e vitalita'],
+    audience: ['Chi vuole lavorare su prevenzione e vitalità'],
     benefits: ['Prevenzione', 'Routine sostenibili', 'Supporto antinfiammatorio'],
-    seoTitle: 'Longevita e Anti-Age Milano | La Speziale',
+    seoTitle: 'Longevità e Anti-Age Milano | La Speziale',
   },
   {
     title: 'Nutrizione Sportiva',
@@ -214,7 +214,7 @@ const programs = await Promise.all(
       ],
       faqs: [
         {_key: `duration-${program.order}`, question: 'Quanto dura il percorso?', answer: 'La durata viene definita in base alle esigenze e agli obiettivi personali.'},
-        {_key: `online-${program.order}`, question: 'Posso seguire il percorso online?', answer: 'Si, quando previsto il percorso puo essere svolto online o in studio.'},
+        {_key: `online-${program.order}`, question: 'Posso seguire il percorso online?', answer: 'Sì, quando previsto il percorso può essere svolto online o in studio.'},
       ],
       ctaLabel: 'Prenota una consulenza',
       ctaLink: '/contatti',
@@ -290,7 +290,7 @@ const productSeeds = [
     title: 'MelatoSpeziale Gocce - Escolzia, Valeriana e Passiflora',
     slug: 'melatospeziale-gocce-escolzia-valeriana-passiflora',
     category: 'Stress e Sonno',
-    excerpt: 'Gocce rilassanti per favorire calma serale e qualita del riposo.',
+    excerpt: 'Gocce rilassanti per favorire calma serale e qualità del riposo.',
     price: 'Gocce',
     order: 5,
     tags: ['sonno', 'stress', 'valeriana', 'passiflora', 'escolzia'],
@@ -354,7 +354,7 @@ const productSeeds = [
     therapySlugs: ['equilibrio-femminile'],
     features: ['Supporto al ciclo', 'Da valutare in base alla storia ormonale', 'Non indicato per tutte le situazioni'],
     description:
-      'L agnocasto puo rientrare nei protocolli dedicati a equilibrio femminile, ciclo e sintomi premestruali.',
+      "L'agnocasto può rientrare nei protocolli dedicati a equilibrio femminile, ciclo e sintomi premestruali.",
   },
   {
     title: 'Perle di Olio di Enotera Spremuto a Freddo',
@@ -366,14 +366,14 @@ const productSeeds = [
     tags: ['enotera', 'ormonale', 'ciclo', 'pelle'],
     purchaseUrl: '',
     therapySlugs: ['equilibrio-femminile'],
-    features: ['Supporto al benessere femminile', 'Utile nei protocolli pelle-ciclo', 'Da usare con continuita'],
+    features: ['Supporto al benessere femminile', 'Utile nei protocolli pelle-ciclo', 'Da usare con continuità'],
     description:
       'Un supporto lipidico tradizionalmente utilizzato nei percorsi dedicati a equilibrio femminile e benessere cutaneo.',
   },
   {
     title: 'Tonico Ricostituente di Rodiola Rosea e Pappa Reale',
     slug: 'tonico-rodiola-rosea-pappa-reale',
-    category: 'Energia e Vitalita',
+    category: 'Energia e Vitalità',
     excerpt: 'Flaconcini ricostituenti per periodi di stanchezza e cambio stagione.',
     price: 'Flaconcini',
     order: 11,
@@ -387,16 +387,16 @@ const productSeeds = [
   {
     title: 'Tavolette di Spirulina BIO',
     slug: 'tavolette-spirulina-bio',
-    category: 'Energia e Vitalita',
-    excerpt: 'Superfood energetico per sostenere vitalita e apporto nutrizionale.',
+    category: 'Energia e Vitalità',
+    excerpt: 'Superfood energetico per sostenere vitalità e apporto nutrizionale.',
     price: 'Superfood 100 g',
     order: 12,
-    tags: ['spirulina', 'energia', 'superfood', 'vitalita'],
+    tags: ['spirulina', 'energia', 'superfood', 'vitalità'],
     purchaseUrl: '',
     therapySlugs: ['energia-concentrazione'],
     features: ['Supporto nutrizionale', 'Fonte vegetale', 'Utile in routine energetiche'],
     description:
-      'La spirulina puo accompagnare protocolli di energia e vitalita quando la routine alimentare necessita di supporto.',
+      'La spirulina può accompagnare protocolli di energia e vitalità quando la routine alimentare necessita di supporto.',
   },
   {
     title: 'Echinacea e Rosa Canina Concentrata',
@@ -410,7 +410,7 @@ const productSeeds = [
     therapySlugs: ['difese-immunitarie'],
     features: ['Supporto immunitario', 'Utile nei cambi stagionali', 'Con rosa canina'],
     description:
-      'Un sostegno naturale per preparare e supportare le difese dell organismo nei periodi piu delicati.',
+      "Un sostegno naturale per preparare e supportare le difese dell'organismo nei periodi più delicati.",
   },
   {
     title: 'Estratto di Sambuco e Zinco',
@@ -424,7 +424,7 @@ const productSeeds = [
     therapySlugs: ['difese-immunitarie'],
     features: ['Con zinco', 'Supporto stagionale', 'Formato pratico'],
     description:
-      'Prodotto pensato per i periodi freddi e per sostenere le normali difese dell organismo.',
+      "Prodotto pensato per i periodi freddi e per sostenere le normali difese dell'organismo.",
   },
   {
     title: 'Resveratrolo Puro Concentrato',
@@ -444,15 +444,15 @@ const productSeeds = [
     title: 'Coenzima Q10 Vegetale ad Alto Dosaggio',
     slug: 'coenzima-q10-vegetale-alto-dosaggio',
     category: 'Anti-Age e Cellule',
-    excerpt: 'Supporto nutraceutico per protezione cellulare e vitalita.',
+    excerpt: 'Supporto nutraceutico per protezione cellulare e vitalità.',
     price: 'Alto dosaggio',
     order: 16,
-    tags: ['q10', 'coenzima', 'antiage', 'cellule', 'vitalita'],
+    tags: ['q10', 'coenzima', 'antiage', 'cellule', 'vitalità'],
     purchaseUrl: '',
     therapySlugs: ['antiage-longevita-cellulare'],
-    features: ['Supporto cellulare', 'Orientato a vitalita e prevenzione', 'Da valutare in base al profilo personale'],
+    features: ['Supporto cellulare', 'Orientato a vitalità e prevenzione', 'Da valutare in base al profilo personale'],
     description:
-      'Il Coenzima Q10 puo essere inserito nei protocolli dedicati a energia cellulare e protezione antiossidante.',
+      'Il Coenzima Q10 può essere inserito nei protocolli dedicati a energia cellulare e protezione antiossidante.',
   },
 ]
 
@@ -559,10 +559,10 @@ const therapySeeds = [
     title: 'Capelli e unghie fragili',
     slug: 'capelli-unghie-fragili',
     excerpt:
-      'Consigli fitoterapici e nutraceutici per capelli piu forti, unghie resistenti e bellezza che nasce da dentro.',
+      'Consigli fitoterapici e nutraceutici per capelli più forti, unghie resistenti e bellezza che nasce da dentro.',
     order: 1,
     tagLabel: 'Capelli',
-    gridTitle: 'Noti capelli piu deboli, spenti o unghie che si spezzano facilmente?',
+    gridTitle: 'Noti capelli più deboli, spenti o unghie che si spezzano facilmente?',
     gridButtonLabel: 'Nutri la tua bellezza da dentro',
     heroPrimaryLabel: 'Nutri la tua bellezza da dentro',
     productSlugs: [],
@@ -594,7 +594,7 @@ const therapySeeds = [
     productSlugs: ['drenaspeziale-tisana-betulla-pilosella', 'estratto-idroalcolico-puro-tarassaco'],
     overviewTitle: 'Quando vuoi rimetterti in forma con gradualita',
     description:
-      'Per raggiungere un obiettivo di peso o leggerezza non servono promesse rapide, ma una strategia sostenibile. Drenanti e depurativi possono aiutare il corpo a gestire liquidi in eccesso e routine alimentari piu ordinate.',
+      'Per raggiungere un obiettivo di peso o leggerezza non servono promesse rapide, ma una strategia sostenibile. Drenanti e depurativi possono aiutare il corpo a gestire liquidi in eccesso e routine alimentari più ordinate.',
     benefits: [
       ['Drenaggio', 'Supporta la gestione dei liquidi in eccesso e della sensazione di gonfiore.'],
       ['Depurazione', 'Accompagna cambio stagione, alimentazione disordinata o periodi di maggiore carico.'],
@@ -619,11 +619,11 @@ const therapySeeds = [
     productSlugs: ['ashwagandha-adattogena-ksm-66', 'tonico-rodiola-rosea-pappa-reale', 'tavolette-spirulina-bio'],
     overviewTitle: 'Quando ti senti spesso senza forze',
     description:
-      'Lavoro intenso, studio, sonno irregolare e stress possono ridurre energia e concentrazione. Un supporto naturale ben scelto puo aiutare a recuperare vitalita rispettando i ritmi del corpo.',
+      'Lavoro intenso, studio, sonno irregolare e stress possono ridurre energia e concentrazione. Un supporto naturale ben scelto può aiutare a recuperare vitalità rispettando i ritmi del corpo.',
     benefits: [
-      ['Focus mentale', 'Aiuta a sostenere attenzione e lucidita nei periodi piu intensi.'],
-      ['Vitalita', 'Supporta la risposta dell organismo alla stanchezza quotidiana.'],
-      ['Adattamento allo stress', 'Puo affiancare strategie su sonno, alimentazione e recupero.'],
+      ['Focus mentale', 'Aiuta a sostenere attenzione e lucidità nei periodi più intensi.'],
+      ['Vitalità', "Supporta la risposta dell'organismo alla stanchezza quotidiana."],
+      ['Adattamento allo stress', 'Può affiancare strategie su sonno, alimentazione e recupero.'],
     ],
     notes: [
       'Prima di scegliere un tonico e utile distinguere stanchezza fisica, mentale o legata al sonno.',
@@ -642,9 +642,9 @@ const therapySeeds = [
     gridButtonLabel: 'Ritrova un riposo sereno',
     heroPrimaryLabel: 'Ritrova un riposo sereno',
     productSlugs: ['melatospeziale-gocce-escolzia-valeriana-passiflora', 'ashwagandha-adattogena-ksm-66'],
-    overviewTitle: 'Quando il riposo non e piu ristoratore',
+    overviewTitle: 'Quando il riposo non è più ristoratore',
     description:
-      'Difficolta ad addormentarsi, risvegli notturni e tensioni serali possono compromettere benessere, fame, energia e umore. La fitoterapia puo aiutare a costruire una routine piu calma e regolare.',
+      'Difficoltà ad addormentarsi, risvegli notturni e tensioni serali possono compromettere benessere, fame, energia e umore. La fitoterapia può aiutare a costruire una routine più calma e regolare.',
     benefits: [
       ['Addormentamento', 'Supporta il passaggio verso il sonno quando la mente resta attiva.'],
       ['Calma serale', 'Aiuta a ridurre tensione e iperattivazione della giornata.'],
@@ -660,7 +660,7 @@ const therapySeeds = [
     title: 'Gonfiore e digestione lenta',
     slug: 'gonfiore-digestione-lenta',
     excerpt:
-      'Estratti naturali e fermenti per pancia gonfia, pesantezza, digestione lenta e regolarita intestinale.',
+      'Estratti naturali e fermenti per pancia gonfia, pesantezza, digestione lenta e regolarità intestinale.',
     order: 5,
     tagLabel: 'Gonfiore',
     gridTitle: 'Soffri spesso di pancia gonfia, pesantezza o digestione lenta?',
@@ -672,8 +672,8 @@ const therapySeeds = [
       'Pancia gonfia, pesantezza e digestione lenta possono dipendere da stress, pasti frettolosi, disbiosi o routine alimentari poco regolari. La scelta del supporto va orientata sul sintomo prevalente.',
     benefits: [
       ['Meno gonfiore', 'Aiuta a distinguere gonfiore da fermentazione, digestione lenta o stipsi.'],
-      ['Regolarita', 'Supporta l equilibrio intestinale con fermenti o estratti mirati.'],
-      ['Digestione', 'Accompagna pasti piu gestibili e una routine alimentare piu ordinata.'],
+      ['Regolarità', 'Supporta l equilibrio intestinale con fermenti o estratti mirati.'],
+      ['Digestione', 'Accompagna pasti più gestibili e una routine alimentare più ordinata.'],
     ],
     notes: [
       'Gonfiore ricorrente, dolore o alterazioni importanti dell alvo meritano valutazione medica.',
@@ -682,29 +682,29 @@ const therapySeeds = [
     seoTitle: 'Fitoterapia per gonfiore e digestione lenta | La Speziale Milano',
   },
   {
-    title: 'Antiage e longevita cellulare',
+    title: 'Antiage e longevità cellulare',
     slug: 'antiage-longevita-cellulare',
     excerpt:
-      'Antiossidanti e supporti nutraceutici per contrastare stress ossidativo e sostenere vitalita nel tempo.',
+      'Antiossidanti e supporti nutraceutici per contrastare stress ossidativo e sostenere vitalità nel tempo.',
     order: 6,
     tagLabel: 'Antiage',
     gridTitle: "Vuoi contrastare l'invecchiamento cellulare e mantenerti giovane dentro e fuori?",
-    gridButtonLabel: 'Scopri i segreti della longevita cellulare',
-    heroPrimaryLabel: 'Scopri i segreti della longevita cellulare',
+    gridButtonLabel: 'Scopri i segreti della longevità cellulare',
+    heroPrimaryLabel: 'Scopri i segreti della longevità cellulare',
     productSlugs: ['resveratrolo-puro-concentrato', 'coenzima-q10-vegetale-alto-dosaggio'],
     overviewTitle: 'Quando vuoi proteggere cellule e tessuti',
     description:
-      'Il tempo passa per tutti, ma nutrizione, stile di vita e antiossidanti mirati possono aiutare a proteggere le cellule dai radicali liberi e sostenere elasticita, energia e vitalita.',
+      'Il tempo passa per tutti, ma nutrizione, stile di vita e antiossidanti mirati possono aiutare a proteggere le cellule dai radicali liberi e sostenere elasticita, energia e vitalità.',
     benefits: [
       ['Stress ossidativo', 'Supporta la protezione cellulare nei periodi di maggiore esposizione o stress.'],
-      ['Vitalita', 'Aiuta a sostenere energia e benessere nel tempo.'],
+      ['Vitalità', 'Aiuta a sostenere energia e benessere nel tempo.'],
       ['Prevenzione', 'Si integra con alimentazione antinfiammatoria, sonno e movimento.'],
     ],
     notes: [
       'La scelta di antiossidanti e molecole di supporto va personalizzata.',
       'In caso di terapie farmacologiche o patologie e importante verificare compatibilita e dosaggi.',
     ],
-    seoTitle: 'Fitoterapia antiage e longevita cellulare | La Speziale Milano',
+    seoTitle: 'Fitoterapia antiage e longevità cellulare | La Speziale Milano',
   },
   {
     title: 'Gambe pesanti e microcircolo',
@@ -721,7 +721,7 @@ const therapySeeds = [
     description:
       'Molte ore in piedi o seduti possono rallentare circolazione venosa e linfatica, aumentando pesantezza, gonfiore e fastidio. Il supporto naturale mira a microcircolo, vasi e drenaggio.',
     benefits: [
-      ['Leggerezza', 'Aiuta a impostare una routine per gambe piu leggere.'],
+      ['Leggerezza', 'Aiuta a impostare una routine per gambe più leggere.'],
       ['Microcircolo', 'Supporta il benessere dei capillari e della circolazione periferica.'],
       ['Drenaggio', 'Lavora meglio insieme a idratazione, movimento e pause attive.'],
     ],
@@ -735,7 +735,7 @@ const therapySeeds = [
     title: 'Equilibrio femminile',
     slug: 'equilibrio-femminile',
     excerpt:
-      'Rimedi fitoterapici per ciclo, sbalzi d umore, premenopausa, menopausa e benessere ormonale.',
+      "Rimedi fitoterapici per ciclo, sbalzi d'umore, premenopausa, menopausa e benessere ormonale.",
     order: 8,
     tagLabel: 'Donne',
     gridTitle: 'Sbalzi d umore, fastidi legati al ciclo o i primi sintomi della menopausa?',
@@ -744,7 +744,7 @@ const therapySeeds = [
     productSlugs: ['agnocasto-estratto-secco', 'olio-enotera-spremuto-freddo'],
     overviewTitle: 'Quando il corpo femminile cambia ritmo',
     description:
-      'Ciclo, sindrome premestruale, premenopausa e menopausa possono portare fastidi, vampate, tensione o sbalzi d umore. La fitoterapia puo aiutare a sostenere equilibrio e qualita della vita.',
+      "Ciclo, sindrome premestruale, premenopausa e menopausa possono portare fastidi, vampate, tensione o sbalzi d'umore. La fitoterapia può aiutare a sostenere equilibrio e qualità della vita.",
     benefits: [
       ['Equilibrio ormonale', 'Supporta le fasi di cambiamento con un approccio delicato.'],
       ['Sintomi quotidiani', 'Aiuta a orientare il supporto tra ciclo, umore e vampate.'],
@@ -769,11 +769,11 @@ const therapySeeds = [
     productSlugs: [],
     overviewTitle: 'Quando infiammazione e tensioni limitano il movimento',
     description:
-      'Posture scorrette, stress, allenamento o sforzi fisici possono infiammare muscoli e articolazioni. Un supporto naturale puo aiutare a lenire il fastidio e proteggere la mobilita quotidiana.',
+      'Posture scorrette, stress, allenamento o sforzi fisici possono infiammare muscoli e articolazioni. Un supporto naturale può aiutare a lenire il fastidio e proteggere la mobilità quotidiana.',
     benefits: [
-      ['Comfort articolare', 'Supporta mobilita e benessere delle articolazioni.'],
+      ['Comfort articolare', 'Supporta mobilità e benessere delle articolazioni.'],
       ['Tensioni muscolari', 'Aiuta nei periodi di rigidita o affaticamento fisico.'],
-      ['Approccio delicato', 'Puo essere valutato quando si cerca un supporto che non appesantisca lo stomaco.'],
+      ['Approccio delicato', 'Può essere valutato quando si cerca un supporto che non appesantisca lo stomaco.'],
     ],
     notes: [
       'Dolore persistente, trauma o limitazione importante vanno valutati dal medico.',
@@ -785,18 +785,18 @@ const therapySeeds = [
     title: 'Difese immunitarie',
     slug: 'difese-immunitarie',
     excerpt:
-      'Rimedi naturali per rinforzare e preparare lo scudo immunitario nei cambi di stagione e nei periodi piu delicati.',
+      'Rimedi naturali per rinforzare e preparare lo scudo immunitario nei cambi di stagione e nei periodi più delicati.',
     order: 10,
     tagLabel: 'Difese',
-    gridTitle: "Vuoi sostenere le difese dell'organismo nei periodi piu delicati?",
+    gridTitle: "Vuoi sostenere le difese dell'organismo nei periodi più delicati?",
     gridButtonLabel: 'Rinforza il tuo scudo naturale',
     heroPrimaryLabel: 'Rinforza il tuo scudo naturale',
     productSlugs: ['echinacea-rosa-canina-concentrata', 'estratto-sambuco-zinco'],
     overviewTitle: 'Quando le difese hanno bisogno di supporto',
     description:
-      'Cambi di stagione, stress e periodi di maggiore esposizione possono mettere alla prova il sistema immunitario. La fitoterapia puo aiutare a sostenere le normali difese in modo ragionato.',
+      'Cambi di stagione, stress e periodi di maggiore esposizione possono mettere alla prova il sistema immunitario. La fitoterapia può aiutare a sostenere le normali difese in modo ragionato.',
     benefits: [
-      ['Supporto stagionale', 'Aiuta a preparare l organismo nei momenti piu delicati.'],
+      ['Supporto stagionale', "Aiuta a preparare l'organismo nei momenti più delicati."],
       ['Difese naturali', 'Sostiene il normale funzionamento del sistema immunitario.'],
       ['Routine preventiva', 'Si integra con sonno, alimentazione e gestione dello stress.'],
     ],
@@ -829,7 +829,7 @@ const therapies = await Promise.all(
       showRecommendedProducts: therapy.productSlugs.length > 0,
       showFaqs: true,
       showFinalCta: true,
-      overviewTitle: therapy.overviewTitle || 'Quando puo essere utile',
+      overviewTitle: therapy.overviewTitle || 'Quando può essere utile',
       description: [
         {
           _type: 'block',
@@ -867,7 +867,7 @@ const therapies = await Promise.all(
         {_key: `therapy-faq-${therapy.order}-2`, question: 'La fitoterapia sostituisce il percorso nutrizionale?', answer: 'No. La fitoterapia e un supporto integrativo e funziona meglio quando e inserita in una strategia personalizzata.'},
       ],
       finalCtaTitle: `Vuoi approfondire ${therapy.title}?`,
-      finalCtaText: 'Scrivici per capire quali prodotti o abitudini possono essere piu adatti alla tua situazione.',
+      finalCtaText: 'Scrivici per capire quali prodotti o abitudini possono essere più adatti alla tua situazione.',
       seo: {
         _type: 'seo',
         title: therapy.seoTitle,
@@ -902,14 +902,14 @@ const faqs = await Promise.all([
     visible: true,
   }),
   upsertFaq('Ricevete solo su appuntamento?', {
-    answer: 'Si, lo studio riceve solo su appuntamento dal martedi al sabato.',
+    answer: 'Sì, lo studio riceve solo su appuntamento dal martedì al sabato.',
     category: 'Contatti',
     order: 2,
     visible: true,
   }),
   upsertFaq('I programmi possono essere combinati?', {
     answer:
-      'Si, i programmi possono essere seguiti singolarmente o combinati in base alle esigenze della persona.',
+      'Sì, i programmi possono essere seguiti singolarmente o combinati in base alle esigenze della persona.',
     category: 'Programmi',
     order: 3,
     visible: true,
@@ -944,13 +944,13 @@ await upsertSingleton('siteSettings', 'siteSettings', {
   address: 'Via San Giovanni Sul Muro 13, Milano',
   locationText:
     'Siamo nel centro di Milano, in un quartiere che unisce storia, cultura e dinamismo, a pochi passi da Largo Cairoli, dal Teatro Dal Verme e dal Castello Sforzesco.',
-  openingHours: 'Martedi - Venerdi: 9:00 - 17:30\nSabato: 9:00 - 14:00\nOrario continuato',
+  openingHours: 'Martedì - Venerdi: 9:00 - 17:30\nSabato: 9:00 - 14:00\nOrario continuato',
   contactText:
     'Puoi scriverci o chiamarci. Ti ricontatteremo entro 24 ore per fornirti tutte le informazioni di cui hai bisogno e programmare un primo incontro personalizzato.',
-  instagram: 'https://www.instagram.com/',
-  facebook: 'https://www.facebook.com/',
+  instagram: 'https://www.instagram.com/laspezialemilano/',
+  facebook: 'https://www.facebook.com/laspeziale.it/',
   whatsapp: 'https://wa.me/393334063401',
-  globalCtaLabel: 'Richiedi una consulenza',
+  globalCtaLabel: 'Prenota una consulenza',
   globalCtaLink: '/contatti',
   footerText: 'Nutrizione integrata, fitoterapia e percorsi personalizzati nel cuore di Milano.',
   privacyPolicyLink: '/privacy-policy',
@@ -969,27 +969,27 @@ await upsertSingleton('siteSettings', 'siteSettings', {
 await upsertSingleton('homepage', 'homepage', {
   heroTitle: 'Il Metodo La Speziale',
   heroSubtitle:
-    'Nutrizione personalizzata, consiglio fitoterapico e supporto al cambiamento in un unico programma costruito intorno a te.',
+    'Nutrizione personalizzata, consiglio fitoterapico e supporto al cambiamento in un unico percorso costruito intorno a te.',
   heroCtaLabel: 'Scopri il percorso',
   heroCtaLink: '/programmi',
-  introEyebrow: 'Perche nasce il Metodo La Speziale',
+  introEyebrow: 'Perché nasce il Metodo La Speziale',
   introTitle: 'La nutrizione cambia quando cambia il corpo.',
   introLead:
     'Nel corso degli anni abbiamo incontrato molte persone che, di fronte ai cambiamenti del proprio corpo, cercavano risposte diverse dai tradizionali schemi alimentari.',
   introBody:
-    'Peso piu difficile da gestire, metabolismo che rallenta, variazioni ormonali, gonfiore e perdita di energia richiedono una valutazione piu ampia e competenze che lavorano insieme. Da questa esperienza nasce il Metodo La Speziale. Lavorare con tre professionisti non significa ricevere piu indicazioni o maggiore confusione: al contrario, la nostra sinergia costruisce un unico percorso, semplice da seguire e facilmente integrabile nella vita di tutti i giorni.',
+    'Peso più difficile da gestire, metabolismo che rallenta, variazioni ormonali, gonfiore e perdita di energia richiedono uno sguardo più ampio e competenze che lavorano insieme.\nDa questa esperienza nasce il Metodo La Speziale.\nLavorare con tre professionisti non significa ricevere più indicazioni o maggiore confusione. Al contrario, la loro collaborazione costruisce un unico percorso, semplice da seguire e facilmente integrabile nella vita di tutti i giorni.',
   value1Title: 'La Dieta',
   value1Text: 'Un piano alimentare su misura, realistico e monitorabile, pensato per entrare nella quotidianita senza restrizioni insostenibili.',
   value2Title: 'La Fitoterapia',
   value2Text: 'Uso mirato di piante officinali e nutraceutici di alto livello per sostenere metabolismo, drenaggio ed equilibrio ormonale.',
   value3Title: 'Il Coaching',
-  value3Text: 'Sostegno motivazionale e consapevolezza corporea per rendere il cambiamento piu stabile nel lungo termine.',
+  value3Text: 'Sostegno motivazionale e consapevolezza corporea per rendere il cambiamento più stabile nel lungo termine.',
   methodEyebrow: 'Il Metodo La Speziale',
-  methodTitle: 'Un metodo che semplifica, non complica.',
+  methodTitle: 'Un metodo che mette ordine, non aggiunge complessità.',
   methodText:
-    'Non ricevi indicazioni separate da professionisti diversi. Ricevi un unico percorso, costruito intorno a te e sostenuto da competenze che lavorano insieme.',
+    'Tre professionisti condividono informazioni, obiettivi e strategie per costruire un unico percorso, personalizzato e coerente.\nTu non devi coordinare figure diverse né interpretare indicazioni separate: ricevi un programma chiaro, pensato per accompagnare i cambiamenti del tuo corpo con semplicità.',
   methodCoreEyebrow: 'I tre pilastri',
-  methodCoreText: 'Tre professionalita, un unico metodo snello.',
+  methodCoreText: 'Tre professionalità. Un unico metodo.',
   methodCoreLinkLabel: 'Scopri il metodo',
   methodDietLabel: 'Percorsi dedicati',
   methodDietTitle: 'Come possiamo aiutarti',
@@ -1001,9 +1001,9 @@ await upsertSingleton('homepage', 'homepage', {
     'Piano, monitoraggio e adattamenti',
   ],
   methodPhytoLabel: 'Consulenze autonome',
-  methodPhytoTitle: 'Le stesse competenze, anche in percorsi dedicati.',
+  methodPhytoTitle: "Le stesse competenze, anche quando non serve l'intero Metodo.",
   methodPhytoText:
-    'La Farmacista Fitoterapeuta e il Tutor del Benessere fanno parte del Metodo La Speziale, ma possono accompagnarti anche attraverso percorsi autonomi, quando rispondono meglio alle tue esigenze.',
+    'Non tutte le esigenze richiedono un percorso multidisciplinare.\nPer questo puoi richiedere anche una consulenza dedicata con la Farmacista specializzata in Fitoterapia o con il Tutor del Benessere, quando rappresenta la risposta più adatta alle tue necessità.',
   methodPhytoItems: [
     'Fitoterapia mirata',
     'Coaching e consapevolezza',
@@ -1015,7 +1015,7 @@ await upsertSingleton('homepage', 'homepage', {
     _type: 'pageCta',
     eyebrow: 'CTA finale',
     title: 'Il tuo percorso inizia da qui.',
-    text: 'Ascolteremo la tua storia, valuteremo le tue esigenze e costruiremo insieme il percorso piu adatto a te.',
+    text: 'Ascolteremo la tua storia, valuteremo le tue esigenze e costruiremo il percorso più adatto a te.',
     primaryLabel: 'Richiedi una consulenza',
     primaryLink: '/contatti',
   },
@@ -1028,33 +1028,40 @@ await upsertSingleton('homepage', 'homepage', {
 })
 
 await upsertSingleton('methodPage', 'methodPage', {
-  heroEyebrow: 'Il Metodo',
-  heroTitle: 'Il Metodo',
-  heroText:
-    'Tre competenze lavorano insieme per offrirti un unico programma, chiaro, coordinato e semplice da seguire.',
-  introTitle: 'La semplicita che vivi nasce dal lavoro che non vedi.',
+  introHeading: 'Il Metodo La Speziale',
+  introTitle: 'La semplicità che vivi nasce dal lavoro che non vedi.',
   introText:
-    'Il Metodo La Speziale nasce da un principio semplice: osservare la persona nel suo insieme. Biologa Nutrizionista, Farmacista Fitoterapeuta e Tutor del Benessere condividono informazioni, competenze e obiettivi per individuare la soluzione piu adatta a ogni situazione.',
+    "Il Metodo La Speziale nasce da un principio semplice: osservare la persona nel suo insieme.\nBiologa Nutrizionista, Farmacista specializzata in Fitoterapia e Tutor del Benessere condividono competenze, informazioni e obiettivi per costruire un'unica strategia.\nQuesto permette di trasformare valutazioni diverse in un solo programma, coordinato, personalizzato e facile da seguire, senza dover gestire indicazioni separate.",
   coreEyebrow: 'Come nasce il tuo programma',
-  coreTitle: 'Un metodo semplice, organizzato e costruito intorno a te.',
-  coreText:
-    'Per te questo significa un unico programma, coerente e facile da seguire, senza dover gestire indicazioni separate.',
-  coreItems: [
-    'Conosciamo la persona',
-    'Conosciamo il tuo corpo',
-    'Integriamo le competenze',
-    'Ti accompagniamo nel tempo',
+  coreTitle: 'Un metodo organizzato, costruito intorno alla persona.',
+  workSteps: [
+    {_type: 'object', _key: 'metodo-step-1', number: '01', title: 'Conosciamo la persona', text: "Ogni programma inizia dall'ascolto della tua storia, delle tue abitudini, dei tuoi obiettivi e delle difficoltà che incontri nella vita quotidiana."},
+    {_type: 'object', _key: 'metodo-step-2', number: '02', title: 'Conosciamo il tuo corpo', text: "L'esame BIA analizza composizione corporea, massa muscolare, massa grassa e stato di idratazione, offrendo informazioni che il peso da solo non può raccontare."},
+    {_type: 'object', _key: 'metodo-step-3', number: '03', title: 'Costruiamo la strategia', text: 'Le informazioni raccolte vengono condivise tra i professionisti del Metodo, così ogni decisione nasce da una visione completa della persona e non da un singolo elemento.'},
+    {_type: 'object', _key: 'metodo-step-4', number: '04', title: 'Accompagniamo il cambiamento', text: 'Ricevi un programma semplice da mettere in pratica, che evolve insieme ai risultati raggiunti e ai cambiamenti del tuo corpo.'},
   ],
   dietTitle: 'I tre pilastri del Metodo',
   dietText: "Tre competenze. Un'unica direzione.",
+  pillars: [
+    {_type: 'object', _key: 'metodo-pillar-1', number: '01', title: 'Nutrizione personalizzata', role: 'La Biologa Nutrizionista', text: 'Elabora il piano alimentare partendo dalla composizione corporea, dal metabolismo, dallo stile di vita e dagli obiettivi della persona, trasformando la valutazione in indicazioni concrete e sostenibili.'},
+    {_type: 'object', _key: 'metodo-pillar-2', number: '02', title: 'Il Consiglio Fitoterapico', role: 'La Farmacista specializzata in Fitoterapia', text: 'Quando è utile, integra il programma con piante officinali e nutraceutici selezionati in base alle esigenze della persona, valutando eventuali terapie farmacologiche e possibili interazioni.'},
+    {_type: 'object', _key: 'metodo-pillar-3', number: '03', title: 'Consapevolezza del corpo', role: 'Il Tutor del Benessere', text: 'Attraverso il linguaggio del corpo aiuta la persona a riconoscere i cambiamenti, valorizzare i progressi e trasformare il percorso in nuove abitudini da mantenere nel tempo.'},
+  ],
+  journeyTitle: 'Il percorso',
+  journeyHighlight:
+    'Un unico percorso, senza visite separate: le tre competenze lavorano in modo coordinato e confluiscono nello stesso programma.',
+  visitBoxes: [
+    {_type: 'object', _key: 'metodo-visit-1', title: 'Prima visita', items: ['Colloquio approfondito', 'Analisi dello stile di vita', 'Esame BIA', 'Definizione degli obiettivi', 'Piano alimentare personalizzato']},
+    {_type: 'object', _key: 'metodo-visit-2', title: 'Controlli periodici', items: ['Monitoraggio della composizione corporea', 'Verifica dei risultati', 'Aggiornamento del programma', 'Adattamento alle nuove esigenze']},
+  ],
   phytoTitle: 'Il vero risultato',
+  resultHighlight: 'Il vero risultato è vivere meglio il proprio corpo, ogni giorno.',
   phytoText:
-    'Il vero risultato e vivere meglio il proprio corpo, ogni giorno.',
+    'Più energia, maggiore consapevolezza e un modo nuovo di affrontare i cambiamenti.\nPerché il benessere non nasce da una soluzione momentanea, ma da un metodo che cresce insieme alla persona e diventa parte della sua quotidianità.',
   cta: {
     _type: 'pageCta',
-    eyebrow: 'CTA',
-    title: 'Il primo passo e conoscere cio di cui il tuo corpo ha davvero bisogno.',
-    text: 'Ogni persona e diversa e ogni cambiamento merita un approccio capace di evolvere insieme a lei. Richiedi una consulenza e scopri come il Metodo La Speziale puo accompagnarti verso un cambiamento concreto, semplice e duraturo.',
+    title: 'Il primo passo è conoscere ciò di cui il tuo corpo ha davvero bisogno.',
+    text: 'Ogni persona è diversa e ogni cambiamento merita un programma costruito sulle proprie esigenze.',
     primaryLabel: 'Richiedi una consulenza',
     primaryLink: '/contatti',
   },
@@ -1065,33 +1072,42 @@ await upsertSingleton('methodPage', 'methodPage', {
       'Il Metodo La Speziale: nutrizione personalizzata, consiglio fitoterapico e consapevolezza del corpo in un unico programma.',
   },
 })
+await client.patch('methodPage').unset([
+  'heroEyebrow',
+  'heroTitle',
+  'heroSubtitle',
+  'heroText',
+  'heroImage',
+  'coreText',
+  'coreItems',
+]).commit()
 
 await upsertSingleton('coachingPage', 'coachingPage', {
   heroEyebrow: 'Consulenza di Consapevolezza',
   heroTitle: 'Consulenza di Consapevolezza',
   heroText:
-    'Un percorso con il Tutor del Benessere per imparare a leggere il linguaggio del proprio corpo, valorizzare la propria persona e vivere con maggiore serenita ogni fase della vita.',
-  introTitle: 'Viviamo spesso rivolti verso cio che dobbiamo fare, dedicando poco tempo ad ascoltare noi stessi.',
+    'Un percorso con il Tutor del Benessere per imparare a leggere il linguaggio del proprio corpo, valorizzare la propria persona è vivere con maggiore serenità ogni fase della vita.',
+  introTitle: 'Viviamo spesso rivolti verso ciò che dobbiamo fare, dedicando poco tempo ad ascoltare noi stessi.',
   introText:
-    'Questa consulenza nasce per aiutare la persona a fermarsi, osservare il modo in cui vive il proprio corpo e riscoprire un rapporto piu autentico con se stessa.',
+    'Questa consulenza nasce per aiutare la persona a fermarsi, osservare il modo in cui vive il proprio corpo e riscoprire un rapporto più autentico con sé stessa.',
   audienceTitle: 'A chi desidera dedicare tempo alla propria persona.',
   audienceItems: [
     'Conoscersi meglio',
     'Migliorare il rapporto con il proprio corpo',
     'Valorizzare la propria immagine',
-    'Affrontare con maggiore serenita una nuova fase della vita',
+    'Affrontare con maggiore serenità una nuova fase della vita',
     'Dedicare del tempo alla propria persona',
   ],
-  methodTitle: 'Il Tutor del Benessere accompagna la persona in un percorso pratico di conoscenza di se.',
+  methodTitle: 'Il Tutor del Benessere accompagna la persona in un percorso pratico di conoscenza di sé.',
   methodSteps: [
-    {_key: 'perche-nasce', _type: 'object', title: 'Perche nasce', text: 'Viviamo spesso rivolti verso cio che dobbiamo fare, dedicando poco tempo ad ascoltare noi stessi.'},
-    {_key: 'tutor-benessere', _type: 'object', title: 'Il Tutor del Benessere', text: 'Accompagna la persona in un percorso pratico di conoscenza di se attraverso il linguaggio del corpo.'},
+    {_key: 'perche-nasce', _type: 'object', title: 'Perché nasce', text: 'Viviamo spesso rivolti verso ciò che dobbiamo fare, dedicando poco tempo ad ascoltare noi stessi.'},
+    {_key: 'tutor-benessere', _type: 'object', title: 'Il Tutor del Benessere', text: 'Accompagna la persona in un percorso pratico di conoscenza di sé attraverso il linguaggio del corpo.'},
     {_key: 'come-si-svolge', _type: 'object', title: 'Come si svolge', text: 'Ogni incontro parte dalla persona e dalla fase della vita che sta vivendo.'},
   ],
   cta: {
     _type: 'pageCta',
     eyebrow: 'CTA',
-    title: 'Ogni percorso inizia da una maggiore conoscenza di se.',
+    title: 'Ogni percorso inizia da una maggiore conoscenza di sé.',
     text: 'Prenota la tua Consulenza di Consapevolezza e scopri il valore di un approccio che mette la persona al centro.',
     primaryLabel: 'Prenota una consulenza',
     primaryLink: '/contatti',
@@ -1100,22 +1116,22 @@ await upsertSingleton('coachingPage', 'coachingPage', {
     _type: 'seo',
     title: 'Consulenza di Consapevolezza | La Speziale Milano',
     description:
-      'Consulenza con il Tutor del Benessere per leggere il linguaggio del corpo, valorizzare la persona e vivere con maggiore serenita.',
+      'Consulenza con il Tutor del Benessere per leggere il linguaggio del corpo, valorizzare la persona è vivere con maggiore serenità.',
   },
 })
 
 await upsertSingleton('programsPage', 'programsPage', {
   heroEyebrow: 'Cosa trattiamo',
-  heroTitle: 'Percorsi clinici costruiti intorno alla persona',
+  heroTitle: 'Cosa trattiamo',
   heroText:
-    'Le aree di lavoro principali dello studio: peso, menopausa, anti-age e nutrizione sportiva, sempre con un metodo personalizzato.',
-  listTitle: 'Le aree che trattiamo',
-  listText: 'Scegli l esigenza piu vicina al tuo momento.',
-  cardButtonLabel: 'Scopri di piu',
+    "Peso, intestino, cambiamenti ormonali, vitalitÃ  e attivitÃ  fisica possono richiedere attenzioni diverse. Per questo il Metodo La Speziale si adatta all'obiettivo e alla fase che stai vivendo.",
+  listTitle: 'Trova il percorso piÃ¹ vicino a ciÃ² che vuoi migliorare',
+  listText: 'Cinque aree di intervento, costruite intorno a esigenze e obiettivi diversi.',
+  cardButtonLabel: 'Scopri di più',
   methodEyebrow: 'Come scegliere',
   methodTitle: 'Il percorso completo parte dalla nutrizione, ma ogni bisogno ha la sua porta d ingresso.',
   methodText:
-    'La Speziale distingue tra percorsi nutrizionali personalizzati e consulenze stand-alone: cosi ogni persona puo orientarsi verso la soluzione piu adatta al proprio momento.',
+    'La Speziale distingue tra percorsi nutrizionali personalizzati e consulenze stand-alone: così ogni persona può orientarsi verso la soluzione più adatta al proprio momento.',
   methodCoreEyebrow: 'Il core del metodo',
   methodCoreText:
     'Il percorso completo unisce dieta personalizzata, consulenza, follow-up, eventuale fitoterapia e prodotti consigliati quando sono utili al risultato.',
@@ -1129,7 +1145,7 @@ await upsertSingleton('programsPage', 'programsPage', {
   methodPhytoText:
     'Per chi cerca fitoterapia, prodotti selezionati o consapevolezza alimentare senza avviare un percorso con dieta.',
   methodPhytoLinkLabel: 'Scopri le altre consulenze',
-  cta: {_type: 'pageCta', eyebrow: 'Contatto diretto', title: 'Non sai quale percorso scegliere?', text: 'Contattaci per una prima consulenza.', primaryLabel: 'Scrivi su WhatsApp', secondaryLabel: 'Invia una email'},
+  cta: {_type: 'pageCta', eyebrow: 'Contatto diretto', title: 'Non sai quale percorso scegliere?', text: 'Raccontaci cosa vorresti migliorare: ti aiuteremo a individuare il percorso da cui partire.', primaryLabel: 'Scrivi su WhatsApp', secondaryLabel: 'Invia una email'},
 })
 
 await upsertSingleton('contactPage', 'contactPage', {
@@ -1142,7 +1158,8 @@ await upsertSingleton('contactPage', 'contactPage', {
   addressTitle: 'Indirizzo',
   contactsTitle: 'Contatti',
   mapLabel: 'Sede La Speziale, Milano',
-  mapQuery: 'Via San Giovanni Sul Muro 13, Milano',
+  mapQuery: 'Studio Nutrizionista La Speziale Milano, Via San Giovanni sul Muro 13, Milano',
+  mapUrl: 'https://www.google.com/maps/place/Studio+Nutrizionista+La+Speziale+Milano/@45.4664571,9.1809463,20z/data=!4m6!3m5!1s0x4786c6afe02fef15:0xe505ade915e2cc3c!8m2!3d45.4665897!4d9.1813446!16s%2Fg%2F1tfjpl38?hl=it&entry=ttu',
 })
 
 await upsertSingleton('testimonialsPage', 'testimonialsPage', {
@@ -1151,7 +1168,7 @@ await upsertSingleton('testimonialsPage', 'testimonialsPage', {
 })
 
 await upsertSingleton('productsPage', 'productsPage', {
-  heroEyebrow: 'Prodotti consigliati', heroTitle: 'La tua lista della spesa naturale', heroText: 'I prodotti presenti in questa pagina sono solo consigliati da La Speziale e non sono venduti direttamente dallo studio: il sito non e un ecommerce, non gestisce carrelli, pagamenti, spedizioni o assistenza sugli ordini. Le informazioni non sostituiscono una consulenza medica, nutrizionale o sanitaria personalizzata.', contentTitle: 'Prodotti consigliati', contentText: 'Lista consultabile dei prodotti consigliati, senza vendita diretta sul sito.',
+  heroEyebrow: 'Prodotti consigliati', heroTitle: 'La tua lista della spesa naturale', heroText: 'I prodotti presenti in questa pagina sono solo consigliati da La Speziale e non sono venduti direttamente dallo studio: il sito non è un ecommerce, non gestisce carrelli, pagamenti, spedizioni o assistenza sugli ordini. Le informazioni non sostituiscono una consulenza medica, nutrizionale o sanitaria personalizzata.', contentTitle: 'Prodotti consigliati', contentText: 'Lista consultabile dei prodotti consigliati, senza vendita diretta sul sito.',
   gridTitle: 'Prodotti consigliati', gridText: 'Cerca il nome esatto del prodotto consigliato sul foglio oppure filtra per area di benessere.', searchLabel: 'Cerca un prodotto', searchPlaceholder: 'Digita il nome del prodotto consigliato sul foglio...', emptyText: 'Nessun prodotto corrisponde alla ricerca.', cardButtonLabel: 'Scopri il prodotto',
   cta: {_type: 'pageCta', eyebrow: 'Informazioni', title: 'Vuoi ricevere maggiori informazioni?', text: 'Contattaci direttamente.', primaryLabel: 'Scrivi su WhatsApp', secondaryLabel: 'Invia una email'},
 })
@@ -1161,18 +1178,18 @@ await upsertSingleton('therapiesPage', 'therapiesPage', {
   heroTitle: 'Il Consiglio Fitoterapico',
   heroText:
     'Una consulenza con una Farmacista specializzata in Fitoterapia per individuare piante officinali e nutraceutici realmente adatti alla tua situazione.',
-  contentTitle: 'Perche richiedere un consiglio fitoterapico?',
+  contentTitle: 'Perché richiedere un consiglio fitoterapico?',
   contentText:
     "La scelta dipende dalla persona, dalle sue esigenze, dalle eventuali terapie in corso e dall'obiettivo che desidera raggiungere.",
   gridTitle: 'Molti prodotti naturali sembrano simili, ma non lo sono.',
-  gridText: 'Per questo il valore della consulenza non e il prodotto, ma la valutazione che porta a sceglierlo.',
-  cardButtonLabel: 'Richiedi una consulenza',
+  gridText: 'Per questo il valore della consulenza non è il prodotto, ma la valutazione che porta a sceglierlo.',
+  cardButtonLabel: 'Prenota una consulenza',
   cta: {
     _type: 'pageCta',
     eyebrow: 'CTA',
     title: 'Hai bisogno di un consiglio professionale?',
-    text: 'Prenota una consulenza e confrontati con una Farmacista specializzata in Fitoterapia per individuare la soluzione piu adatta alle tue esigenze.',
-    primaryLabel: 'Richiedi una consulenza',
+    text: 'Prenota una consulenza e confrontati con una Farmacista specializzata in Fitoterapia per individuare la soluzione più adatta alle tue esigenze.',
+    primaryLabel: 'Prenota una consulenza',
     primaryLink: '/contatti',
   },
   seo: {

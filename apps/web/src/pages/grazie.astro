@@ -1,0 +1,50 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+---
+
+<MainLayout title="Richiesta inviata | La Speziale" description="Grazie per aver contattato La Speziale. Ti ricontatteremo appena possibile.">
+  <section class="page-hero thanks-hero">
+    <div class="container thanks-card">
+      <p class="thanks-kicker">Richiesta inviata</p>
+      <h1>Grazie, abbiamo ricevuto il tuo messaggio.</h1>
+      <p class="lead">
+        Ti ricontatteremo appena possibile per darti tutte le informazioni di cui hai bisogno.
+      </p>
+      <div class="button-row">
+        <a class="button button-primary" href="/contatti">Torna ai contatti</a>
+        <a class="button button-secondary" href="/">Vai alla Home</a>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<style>
+  .thanks-hero {
+    display: grid;
+    min-height: min(680px, calc(100dvh - 76px));
+    align-items: center;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(120, 151, 124, 0.18), transparent 28rem),
+      linear-gradient(180deg, var(--color-white), var(--color-ivory));
+  }
+
+  .thanks-card {
+    max-width: 760px;
+  }
+
+  .thanks-kicker {
+    margin-bottom: 14px;
+    color: var(--color-primary);
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .thanks-card h1 {
+    margin-bottom: 22px;
+  }
+
+  .thanks-card .lead {
+    margin-bottom: 30px;
+  }
+</style>

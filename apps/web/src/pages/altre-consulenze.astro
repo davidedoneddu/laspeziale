@@ -1,5 +1,5 @@
 ---
-import { ArrowRight, Leaf, MessageCircle, Sparkles } from "@lucide/astro";
+import { ArrowRight } from "@lucide/astro";
 import MainLayout from "../layouts/MainLayout.astro";
 import CTASection from "../components/CTASection.astro";
 import { getSiteSettings } from "../lib/sanity";
@@ -8,88 +8,71 @@ const settings = await getSiteSettings();
 ---
 
 <MainLayout
-  title="Altre consulenze | La Speziale Milano"
-  description="Consulenze stand-alone La Speziale: fitoterapia, rimedi naturali, consapevolezza alimentare e coaching senza percorso dieta."
+  title="Consulenze autonome | La Speziale Milano"
+  description="Consulenze autonome La Speziale: consiglio fitoterapico e percorso con il Tutor del Benessere."
 >
   <section class="consulting-hero">
     <div class="container consulting-hero-inner">
-      <div>
-        <p class="eyebrow">Altre consulenze</p>
-        <h1>Supporti mirati, anche senza iniziare una dieta.</h1>
+      <h1>A volte sai già da dove vuoi partire.</h1>
+      <div class="hero-copy">
         <p class="lead">
-          Non ogni bisogno richiede un piano alimentare completo. Alcune esigenze possono essere affrontate con una consulenza specifica, chiara e circoscritta.
+          Può essere un disturbo da affrontare con la fitoterapia oppure qualcosa che vuoi cambiare nelle tue abitudini e nel tuo stile di vita.
         </p>
-        <div class="button-row">
-          <a class="button button-primary" href="/contatti">Prenota una consulenza</a>
-          <a class="button button-secondary" href="#servizi">Scopri i servizi</a>
-        </div>
+        <p class="hero-highlight">In questi casi puoi scegliere direttamente la consulenza più adatta.</p>
+        <a class="button button-primary" href="#servizi">Scopri le consulenze</a>
       </div>
-      <aside class="consulting-note">
-        <span>Senza dieta</span>
-        <strong>Fitoterapia, prodotti consigliati e coaching sulle abitudini.</strong>
-        <p>Una porta d'ingresso piu leggera per lavorare su fastidi specifici, continuita e consapevolezza quotidiana.</p>
-      </aside>
     </div>
   </section>
 
   <section class="section consulting-services" id="servizi">
     <div class="container">
       <header class="services-head">
-        <p class="eyebrow">Servizi stand-alone</p>
-        <h2>Due consulenze indipendenti, costruite con lo stesso metodo La Speziale.</h2>
+        <h2>Due modi diversi di partire da ciò che ti serve.</h2>
       </header>
 
       <div class="services-grid">
-        <article class="service-card service-card-featured">
-          <div class="service-icon"><Leaf size={28} stroke-width={1.7} aria-hidden="true" /></div>
-          <p class="eyebrow">Rimedi naturali</p>
-          <h3>Consulenza Fitoterapica</h3>
-          <p>
-            Un aiuto naturale e mirato per fastidi specifici, disturbi stagionali, drenaggio, sonno, digestione, energia e benessere ormonale.
-          </p>
-          <a class="service-link" href="/fitoterapia">Vai alla fitoterapia <ArrowRight size={16} aria-hidden="true" /></a>
+        <article class="service-card">
+          <img
+            class="service-image"
+            src="/assets/old-site/fitoterapia-consulenza-2026.jpg"
+            alt="Piante officinali e preparazioni per la Consulenza Fitoterapica"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="service-copy">
+            <h3>Consulenza Fitoterapica</h3>
+            <p class="service-highlight">Quando cerchi una risposta mirata a un disturbo o a una fase particolare.</p>
+            <p>
+              La consulenza parte dall’ascolto delle tue esigenze, delle abitudini e di ciò che stai già assumendo, per individuare rimedi fitoterapici e nutraceutici adatti alla situazione.
+            </p>
+            <a class="service-link" href="/fitoterapia">Vai alla Fitoterapia <ArrowRight size={16} aria-hidden="true" /></a>
+          </div>
         </article>
 
         <article class="service-card">
-          <div class="service-icon"><Sparkles size={28} stroke-width={1.7} aria-hidden="true" /></div>
-          <p class="eyebrow">Abitudini e continuita</p>
-          <h3>Percorso di Consapevolezza e Coaching</h3>
-          <p>
-            Un percorso per osservare abitudini, fame, motivazione e rapporto con il corpo, senza rigidita e senza schemi alimentari complessi.
-          </p>
-          <a class="service-link" href="/consapevolezza">Scopri il coaching <ArrowRight size={16} aria-hidden="true" /></a>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="section consulting-choice">
-    <div class="container choice-panel">
-      <div>
-        <p class="eyebrow">Come scegliere</p>
-        <h2>Se serve un piano completo, parti dal Metodo. Se serve un supporto mirato, parti da qui.</h2>
-      </div>
-      <div class="choice-list">
-        <article>
-          <span>01</span>
-          <h3>Percorso completo</h3>
-          <p>Dieta personalizzata, consulenza, follow-up, fitoterapia e prodotti consigliati quando utili.</p>
-          <a href="/il-metodo">Approfondisci il Metodo</a>
-        </article>
-        <article>
-          <span>02</span>
-          <h3>Consulenza mirata</h3>
-          <p>Un intervento specifico per fastidi o abitudini, senza avviare un piano alimentare completo.</p>
-          <a href="/contatti">Chiedi orientamento</a>
+          <img
+            class="service-image"
+            src="/assets/old-site/consapevolezza-2026.jpg"
+            alt="Percorso con il Tutor del Benessere"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="service-copy">
+            <h3>Percorso con il Tutor del Benessere</h3>
+            <p class="service-highlight">Quando sai cosa vorresti cambiare, ma farlo nella quotidianità è la parte più difficile.</p>
+            <p>
+              Il percorso aiuta a trasformare obiettivi e intenzioni in abitudini più sostenibili, lavorando su motivazione, organizzazione e continuità.
+            </p>
+            <a class="service-link" href="/consapevolezza">Scopri il percorso <ArrowRight size={16} aria-hidden="true" /></a>
+          </div>
         </article>
       </div>
     </div>
   </section>
 
   <CTASection
-    eyebrow="Orientamento"
-    title="Vuoi capire quale consulenza fa per te?"
-    text="Scrivici: ti aiutiamo a scegliere tra percorso completo, fitoterapia e coaching."
+    title="Non sai quale scegliere?"
+    text="Raccontaci cosa vorresti affrontare: ti aiuteremo a capire da quale consulenza iniziare."
     primaryLabel="Scrivi su WhatsApp"
     primaryLink={settings.whatsapp || "/contatti"}
     secondaryLabel="Vai ai contatti"
@@ -100,56 +83,39 @@ const settings = await getSiteSettings();
 <style>
   .consulting-hero {
     background:
-      radial-gradient(circle at 15% 12%, rgba(197, 155, 39, 0.16), transparent 32%),
-      linear-gradient(135deg, var(--color-white) 0%, var(--color-ivory) 52%, var(--color-beige) 100%);
-    padding: clamp(72px, 10vw, 132px) 0 clamp(58px, 8vw, 96px);
+      radial-gradient(circle at 15% 12%, rgba(120, 151, 124, 0.15), transparent 34%),
+      linear-gradient(135deg, var(--color-white) 0%, var(--color-ivory) 56%, var(--color-beige) 100%);
+    padding: clamp(56px, 7vw, 88px) 0;
   }
 
   .consulting-hero-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
-    gap: clamp(30px, 6vw, 74px);
+    grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.68fr);
+    gap: clamp(28px, 6vw, 76px);
     align-items: end;
   }
 
   .consulting-hero h1 {
-    max-width: 900px;
+    max-width: 780px;
     color: var(--color-primary);
-    font-size: clamp(2.15rem, 4.6vw, 3.75rem);
+    font-size: clamp(2.35rem, 4.6vw, 4rem);
+    line-height: 1.04;
   }
 
-  .consulting-note {
-    border: 1px solid rgba(197, 155, 39, 0.22);
-    border-radius: var(--radius);
-    background: rgba(255, 253, 248, 0.78);
-    box-shadow: var(--shadow-soft);
-    padding: clamp(24px, 4vw, 32px);
+  .hero-copy {
+    max-width: 560px;
   }
 
-  .consulting-note span {
-    display: inline-flex;
+  .hero-copy .lead {
     margin-bottom: 18px;
-    border-radius: 999px;
-    background: rgba(197, 155, 39, 0.12);
-    color: var(--color-gold-dark);
-    font-size: 0.72rem;
-    font-weight: 900;
-    letter-spacing: 0.09em;
-    padding: 8px 12px;
-    text-transform: uppercase;
   }
 
-  .consulting-note strong {
-    display: block;
-    color: var(--color-primary);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.65rem;
-    font-weight: 500;
-    line-height: 1.12;
-  }
-
-  .consulting-note p {
-    margin: 16px 0 0;
+  .hero-highlight {
+    margin-bottom: 26px;
+    color: var(--color-ink);
+    font-size: 1.14rem;
+    font-weight: 800;
+    line-height: 1.55;
   }
 
   .consulting-services {
@@ -157,117 +123,106 @@ const settings = await getSiteSettings();
   }
 
   .services-head {
-    max-width: 780px;
-    margin-bottom: 34px;
+    max-width: 860px;
+    margin-bottom: clamp(28px, 4vw, 42px);
+  }
+
+  .services-head h2 {
+    margin-bottom: 0;
   }
 
   .services-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
+    gap: clamp(20px, 3vw, 30px);
   }
 
   .service-card {
-    display: flex;
-    min-height: 380px;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
     background: var(--color-white);
     box-shadow: var(--shadow-soft);
-    padding: clamp(26px, 4vw, 42px);
   }
 
-  .service-card-featured {
-    background:
-      radial-gradient(circle at 85% 15%, rgba(197, 155, 39, 0.16), transparent 30%),
-      var(--color-white);
+  .service-image {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #eef2ec;
+    object-fit: contain;
   }
 
-  .service-icon {
-    display: grid;
-    width: 58px;
-    height: 58px;
-    place-items: center;
-    border-radius: 50%;
-    background: rgba(197, 155, 39, 0.12);
-    color: var(--color-gold-dark);
-    margin-bottom: 24px;
+  .service-copy {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(24px, 4vw, 38px);
   }
 
   .service-card h3 {
-    max-width: 520px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    color: var(--color-primary);
     font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.9rem, 4vw, 3rem);
+    font-size: clamp(1.75rem, 2.8vw, 2.35rem);
     font-weight: 500;
+    line-height: 1.12;
   }
 
-  .service-card p:not(.eyebrow) {
+  .service-highlight {
+    margin-bottom: 16px;
+    color: var(--color-ink);
+    font-size: 1.02rem;
+    font-weight: 800;
+    line-height: 1.55;
+  }
+
+  .service-copy p:not(.service-highlight) {
     flex: 1;
     font-size: 1rem;
     line-height: 1.76;
   }
 
-  .service-link,
-  .choice-list a {
+  .service-link {
     display: inline-flex;
     gap: 8px;
     align-items: center;
-    color: var(--color-gold-dark);
-    font-weight: 900;
-  }
-
-  .consulting-choice {
-    background: var(--color-white);
-  }
-
-  .choice-panel {
-    display: grid;
-    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-    gap: clamp(28px, 6vw, 70px);
-    align-items: start;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-    padding-top: clamp(36px, 6vw, 64px);
-    padding-bottom: clamp(36px, 6vw, 64px);
-  }
-
-  .choice-list {
-    display: grid;
-    gap: 18px;
-  }
-
-  .choice-list article {
-    border: 1px solid var(--color-border);
-    border-radius: 20px;
-    background: var(--color-ivory);
-    padding: 24px;
-  }
-
-  .choice-list span {
-    display: block;
-    margin-bottom: 18px;
-    color: var(--color-gold-dark);
-    font-weight: 900;
-  }
-
-  .choice-list h3 {
+    align-self: flex-start;
+    margin-top: 22px;
     color: var(--color-primary);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.7rem;
-    font-weight: 500;
+    font-weight: 900;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 900px) {
     .consulting-hero-inner,
-    .services-grid,
-    .choice-panel {
+    .services-grid {
       grid-template-columns: 1fr;
     }
 
-    .service-card {
-      min-height: 0;
+    .consulting-hero-inner {
+      align-items: start;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .consulting-hero {
+      padding: 48px 0;
+    }
+
+    .hero-copy .button {
+      width: 100%;
+    }
+
+    .service-image {
+      aspect-ratio: 4 / 3;
+    }
+
+    .service-copy {
+      padding: 24px 20px;
     }
   }
 </style>

@@ -1,21 +1,13 @@
 ---
 import {
-  Activity,
   ArrowRight,
   BadgeCheck,
   CalendarDays,
   Check,
   ClipboardList,
-  Dumbbell,
-  Heart,
-  Leaf,
   Mail,
   MapPin,
   MessageCircle,
-  Scale,
-  ShieldCheck,
-  Sparkles,
-  Target,
   UserRound,
 } from "@lucide/astro";
 import MainLayout from "../../layouts/MainLayout.astro";
@@ -48,9 +40,17 @@ const showProcess = isVisible(program.showProcess);
 const showFaqs = isVisible(program.showFaqs);
 const showExtraContent = isVisible(program.showExtraContent);
 const showFinalCta = isVisible(program.showFinalCta);
+const showHeroCta = isVisible(program.showHeroCta);
+const showFacts = isVisible(program.showFacts);
+const showVisits = isVisible(program.showVisits);
+const showExplanation = program.showExplanation === true;
+const showResult = program.showResult === true;
+const showSecondaryCtas = isVisible(program.showSecondaryCtas);
 
 const descriptionParagraphs = blocksToText(program.description || []);
 const introParagraphs = descriptionParagraphs.length ? descriptionParagraphs : [program.excerpt];
+const explanationParagraphs = blocksToText(program.explanationText || []);
+const resultParagraphs = blocksToText(program.resultText || []);
 const audience = program.audience?.length
   ? program.audience
   : [
@@ -66,7 +66,7 @@ const benefits = (program.benefitCards?.length
     : []
 ).map((benefit) =>
   typeof benefit === "string"
-    ? { icon: "leaf", title: benefit, description: "Un risultato costruito sulle tue esigenze e monitorato nel tempo." }
+    ? { title: benefit, description: "Un risultato costruito sulle tue esigenze e monitorato nel tempo." }
     : benefit,
 );
 
@@ -85,20 +85,6 @@ const richTextBlocks = (program.blocks || []).filter((block) => {
 
 const faqs = program.faqs || [];
 const heroImage = program.heroImageUrl || program.imageUrl || "/assets/old-site/hero-header.jpg";
-
-const benefitIcons = {
-  leaf: Leaf,
-  heart: Heart,
-  scale: Scale,
-  activity: Activity,
-  target: Target,
-  shield: ShieldCheck,
-  dumbbell: Dumbbell,
-  sparkles: Sparkles,
-};
-
-const audienceIcons = [Scale, ClipboardList, Activity, Heart, Sparkles, Target];
-const stepIcons = [UserRound, Activity, Leaf, Target, BadgeCheck, Heart];
 
 const overviewItems = [
   {
@@ -137,12 +123,15 @@ const compactFacts = [
 >
   <article class="program-page">
     <header class="program-hero" style={`--program-hero: url('${heroImage}')`}>
-      <div class="program-hero-shade">
-        <div class="container program-hero-copy">
-          <p class="eyebrow">{program.category || "Programma personalizzato"}</p>
+      <div class="container program-hero-inner">
+        <div class="program-hero-copy">
           <h1>{program.title}</h1>
-          <p class="hero-kicker">{program.excerpt}</p>
-          <a class="button hero-button" href={program.ctaLink || "/contatti"}>{program.ctaLabel || "Richiedi una consulenza"}</a>
+          {program.heroHighlight && <p class="hero-highlight">{program.heroHighlight}</p>}
+          <p class="hero-kicker">{program.heroText || program.excerpt}</p>
+          {showHeroCta && <a class="button hero-button" href={program.ctaLink || "/contatti"}>{program.ctaLabel || "Richiedi una consulenza"}</a>}
+        </div>
+        <div class="program-hero-visual" aria-hidden="true">
+          <div class="program-hero-photo"></div>
         </div>
       </div>
     </header>
@@ -151,8 +140,8 @@ const compactFacts = [
       <section class="program-intro">
         <div class="container intro-grid">
           <div class="intro-heading">
-            <span aria-hidden="true">⌁</span>
             <h2>{program.descriptionTitle || "Capire il punto di partenza e il primo passo."}</h2>
+            {program.projectHighlight && <p class="section-highlight">{program.projectHighlight}</p>}
           </div>
           <div class="intro-copy">
             {introParagraphs.map((paragraph) => <p>{paragraph}</p>)}
@@ -161,7 +150,18 @@ const compactFacts = [
       </section>
     )}
 
-    <section class="program-facts" aria-label="Informazioni sul percorso">
+    {showExplanation && explanationParagraphs.length > 0 && (
+      <section class="program-section explanation-section">
+        <div class="container reading-column">
+          <h2>{program.explanationTitle || "Approfondimento"}</h2>
+          <div class="section-copy">
+            {explanationParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </div>
+      </section>
+    )}
+
+    {showFacts && <section class="program-facts" aria-label="Informazioni sul percorso">
       <div class="container facts-row">
         {compactFacts.map((fact) => {
           const FactIcon = fact.icon;
@@ -174,22 +174,19 @@ const compactFacts = [
           );
         })}
       </div>
-    </section>
+    </section>}
 
     {showAudience && audience.length > 0 && (
       <section class="program-section recognition-section">
         <div class="container narrow">
           <h2>{program.audienceTitle || "Ti riconosci in una di queste situazioni?"}</h2>
           <div class="recognition-list">
-            {audience.map((item, index) => {
-              const AudienceIcon = audienceIcons[index % audienceIcons.length];
-              return (
-                <div class="recognition-item">
-                  <span><AudienceIcon size={22} stroke-width={1.55} aria-hidden="true" /></span>
-                  <p>{item}</p>
-                </div>
-              );
-            })}
+            {audience.map((item, index) => (
+              <div class="recognition-item">
+                <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                <p>{item}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -199,18 +196,15 @@ const compactFacts = [
       <section class="program-section process-section" id="come-funziona">
         <div class="container">
           <h2>{program.processTitle || "Come costruiamo il tuo percorso"}</h2>
+          {program.processHighlight && <p class="section-highlight centered-highlight">{program.processHighlight}</p>}
           <div class="process-line" style={`--steps: ${processSteps.length}`}>
-            {processSteps.map((step, index) => {
-              const StepIcon = stepIcons[index % stepIcons.length];
-              return (
-                <article class="process-step">
-                  <span class="process-number">{String(index + 1).padStart(2, "0")}</span>
-                  <StepIcon size={38} stroke-width={1.35} aria-hidden="true" />
-                  <h3>{step.title}</h3>
-                  {step.description && <p>{step.description}</p>}
-                </article>
-              );
-            })}
+            {processSteps.map((step, index) => (
+              <article class="process-step">
+                <span class="process-number">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{step.title}</h3>
+                {step.description && <p>{step.description}</p>}
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -221,22 +215,19 @@ const compactFacts = [
         <div class="container">
           <h2>{program.benefitsTitle || "Cosa puoi ottenere"}</h2>
           <div class="benefits-grid">
-            {benefits.map((benefit) => {
-              const BenefitIcon = benefitIcons[benefit.icon as keyof typeof benefitIcons] || Leaf;
-              return (
-                <article class="benefit-card">
-                  <BenefitIcon size={42} stroke-width={1.45} aria-hidden="true" />
-                  <h3>{benefit.title || "Risultato personalizzato"}</h3>
-                  {benefit.description && <p>{benefit.description}</p>}
-                </article>
-              );
-            })}
+            {benefits.map((benefit, index) => (
+              <article class="benefit-card">
+                <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+                <h3>{benefit.title || "Risultato personalizzato"}</h3>
+                {benefit.description && <p>{benefit.description}</p>}
+              </article>
+            ))}
           </div>
         </div>
       </section>
     )}
 
-    <section class="program-section visits-section">
+    {showVisits && <section class="program-section visits-section">
       <div class="container visits-grid">
         {overviewItems.map((item) => {
           const VisitIcon = item.icon;
@@ -253,7 +244,7 @@ const compactFacts = [
           );
         })}
       </div>
-    </section>
+    </section>}
 
     {showExtraContent && richTextBlocks.length > 0 && (
       <section class="program-section editorial-section">
@@ -270,6 +261,18 @@ const compactFacts = [
       </section>
     )}
 
+    {showResult && resultParagraphs.length > 0 && (
+      <section class="program-section result-section">
+        <div class="container reading-column">
+          <h2>{program.resultTitle || "Il risultato"}</h2>
+          {program.resultHighlight && <p class="section-highlight result-highlight">{program.resultHighlight}</p>}
+          <div class="section-copy">
+            {resultParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </div>
+        </div>
+      </section>
+    )}
+
     {showFaqs && faqs.length > 0 && (
       <section class="program-section faq-section" id="faq">
         <div class="container faq-wrap">
@@ -277,7 +280,7 @@ const compactFacts = [
           <div class="faq-list">
             {faqs.map((faq) => (
               <details>
-                <summary>{faq.question}<span aria-hidden="true">+</span></summary>
+                <summary><h3>{faq.question}</h3><span aria-hidden="true">+</span></summary>
                 <p>{faq.answer}</p>
               </details>
             ))}
@@ -289,19 +292,18 @@ const compactFacts = [
     {showFinalCta && (
       <section class="final-section" id="contatti">
         <div class="container final-copy">
-          <span aria-hidden="true">⌁</span>
-          <h2>{program.finalCtaTitle || "Il primo passo e comprendere il tuo corpo."}</h2>
+          <p class="final-highlight">{program.finalCtaTitle || "Il primo passo è comprendere il tuo corpo."}</p>
           <p>{program.finalCtaText || "Ogni persona ha esigenze diverse. Prenota una consulenza: analizzeremo la tua situazione e costruiremo un percorso personalizzato."}</p>
           <div class="final-actions">
             <a class="button final-primary" href={program.ctaLink || "/contatti"}>
               {program.ctaLabel || "Richiedi una consulenza"} <ArrowRight size={16} aria-hidden="true" />
             </a>
-            <a class="button final-secondary" href={settings.whatsapp || "/contatti"}>
+            {showSecondaryCtas && <a class="button final-secondary" href={settings.whatsapp || "/contatti"}>
               <MessageCircle size={17} aria-hidden="true" /> WhatsApp
-            </a>
-            <a class="button final-secondary" href={`mailto:${settings.email}`}>
+            </a>}
+            {showSecondaryCtas && <a class="button final-secondary" href={`mailto:${settings.email}`}>
               <Mail size={17} aria-hidden="true" /> Email
-            </a>
+            </a>}
           </div>
         </div>
       </section>
@@ -315,43 +317,53 @@ const compactFacts = [
   }
 
   .program-hero {
-    min-height: clamp(460px, 66vh, 680px);
-    background-image:
-      linear-gradient(180deg, rgba(16, 24, 20, 0.24), rgba(16, 24, 20, 0.62)),
-      var(--program-hero);
-    background-position: center;
-    background-size: cover;
+    background:
+      radial-gradient(circle at 12% 12%, rgba(197, 155, 39, 0.13), transparent 28%),
+      linear-gradient(135deg, var(--color-white) 0%, var(--color-ivory) 54%, var(--color-beige) 100%);
+    padding: clamp(56px, 6vw, 80px) 0;
   }
 
-  .program-hero-shade {
+  .program-hero-inner {
     display: grid;
-    min-height: clamp(460px, 66vh, 680px);
+    grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.72fr);
+    gap: clamp(34px, 7vw, 86px);
     align-items: center;
-    padding: 76px 0 64px;
   }
 
   .program-hero-copy {
     max-width: 820px;
-    color: white;
-    text-align: center;
   }
 
   .program-hero h1 {
     max-width: 820px;
-    margin: 0 auto 16px;
-    color: white;
-    font-size: clamp(2.4rem, 6vw, 4.8rem);
-    line-height: 0.98;
+    margin: 0 0 16px;
+    color: var(--color-primary);
+    font-size: clamp(2.1rem, 4.8vw, 4rem);
+    line-height: 1.02;
   }
 
-  .program-hero .eyebrow,
   .hero-kicker {
-    color: rgba(255, 255, 255, 0.92);
+    color: var(--color-primary);
+  }
+
+  .hero-highlight,
+  .section-highlight,
+  .final-highlight {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .hero-highlight {
+    max-width: 650px;
+    margin: 0 0 14px;
+    color: #244D3D;
+    font-size: clamp(1.25rem, 2.15vw, 1.7rem);
   }
 
   .hero-kicker {
     max-width: 680px;
-    margin: 0 auto;
+    margin: 0;
     font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(1.05rem, 1.8vw, 1.35rem);
     line-height: 1.45;
@@ -359,12 +371,32 @@ const compactFacts = [
 
   .hero-button {
     margin-top: 28px;
-    background: rgba(255, 255, 255, 0.94);
-    color: #13382b;
+    background: var(--color-cta);
+    color: white;
+  }
+
+  .program-hero-visual {
+    aspect-ratio: 3 / 2;
+    min-height: 0;
+  }
+
+  .program-hero-photo {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    border-radius: var(--radius);
+    background-image:
+      linear-gradient(180deg, rgba(19, 56, 43, 0.04), rgba(19, 56, 43, 0.12)),
+      var(--program-hero);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, contain;
+    background-color: #eef2ec;
+    box-shadow: var(--shadow-soft);
   }
 
   .program-intro {
-    padding: clamp(62px, 8vw, 104px) 0;
+    padding: clamp(48px, 5vw, 64px) 0;
     background: #fffefa;
   }
 
@@ -375,20 +407,15 @@ const compactFacts = [
     align-items: start;
   }
 
-  .intro-heading span,
-  .final-copy > span {
-    display: block;
-    color: var(--color-sage-dark);
-    font-size: 1.6rem;
-    line-height: 1;
-    margin-bottom: 12px;
+  .intro-heading h2,
+  .program-section h2 {
+    line-height: 1.1;
   }
 
   .intro-heading h2 {
     max-width: 12ch;
-    color: #13382b;
-    font-size: clamp(2.1rem, 4.4vw, 3.45rem);
-    line-height: 1.05;
+    color: #244D3D;
+    font-size: clamp(2rem, 4vw, 3rem);
   }
 
   .intro-copy {
@@ -396,7 +423,45 @@ const compactFacts = [
   }
 
   .intro-copy p {
-    color: #283c32;
+    color: var(--color-muted);
+    font-size: 1.02rem;
+    line-height: 1.78;
+  }
+
+  .section-highlight {
+    max-width: 32ch;
+    margin: 22px 0 0;
+    color: #244D3D;
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+  }
+
+  .section-highlight.result-highlight {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .centered-highlight {
+    margin: 16px auto 0;
+    text-align: center;
+  }
+
+  .reading-column {
+    max-width: 920px;
+  }
+
+  .reading-column > h2 {
+    text-align: left;
+  }
+
+  .section-copy {
+    display: grid;
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .section-copy p {
+    margin: 0;
+    color: #244D3D;
     font-size: 1.02rem;
     line-height: 1.78;
   }
@@ -437,18 +502,18 @@ const compactFacts = [
   }
 
   .facts-row strong {
-    color: #13382b;
+    color: #244D3D;
     font-size: 0.96rem;
     line-height: 1.35;
   }
 
   .program-section {
-    padding: clamp(62px, 8vw, 96px) 0;
+    padding: clamp(48px, 5vw, 64px) 0;
     scroll-margin-top: 120px;
   }
 
   .program-section h2 {
-    color: #13382b;
+    color: #244D3D;
     font-size: clamp(2rem, 4vw, 3rem);
     text-align: center;
   }
@@ -464,6 +529,15 @@ const compactFacts = [
     background: #f2f5ef;
   }
 
+  .explanation-section,
+  .result-section {
+    background: #fffefa;
+  }
+
+  .result-section {
+    border-top: 1px solid rgba(38, 51, 44, 0.08);
+  }
+
   .recognition-list {
     display: grid;
     margin-top: 34px;
@@ -471,26 +545,23 @@ const compactFacts = [
 
   .recognition-item {
     display: grid;
-    grid-template-columns: 54px 1fr;
-    gap: 18px;
+    grid-template-columns: 56px 1fr;
+    gap: 20px;
     align-items: center;
     border-bottom: 1px solid rgba(38, 51, 44, 0.15);
-    padding: 16px 0;
+    padding: 18px 0;
   }
 
   .recognition-item span {
-    display: grid;
-    width: 44px;
-    height: 44px;
-    place-items: center;
-    border-radius: 50%;
-    background: #78977c;
-    color: white;
+    color: rgba(19, 56, 43, 0.42);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.35rem;
+    line-height: 1;
   }
 
   .recognition-item p {
     margin: 0;
-    color: #24382d;
+    color: #244D3D;
     font-weight: 750;
     line-height: 1.45;
   }
@@ -509,7 +580,7 @@ const compactFacts = [
 
   .process-line::before {
     position: absolute;
-    top: 24px;
+    top: 32px;
     right: calc(50% / var(--steps));
     left: calc(50% / var(--steps));
     height: 1px;
@@ -528,28 +599,29 @@ const compactFacts = [
     position: relative;
     z-index: 1;
     display: grid;
-    width: 50px;
-    height: 50px;
+    width: 64px;
+    height: 64px;
     place-items: center;
     border: 1px solid rgba(93, 120, 95, 0.38);
     border-radius: 50%;
     background: #fffefa;
-    color: #13382b;
+    color: #244D3D;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.1rem;
-    margin-bottom: 34px;
+    font-size: 1.18rem;
+    margin-bottom: 24px;
   }
 
-  .process-step svg {
-    color: #78977c;
-    margin-bottom: 18px;
+  .process-step h3,
+  .benefit-card h3,
+  .faq-list summary h3 {
+    color: #244D3D;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
   }
 
   .process-step h3 {
-    color: #13382b;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.28rem;
-    line-height: 1.12;
     margin-bottom: 10px;
   }
 
@@ -568,6 +640,7 @@ const compactFacts = [
   }
 
   .benefit-card {
+    position: relative;
     min-height: 235px;
     border: 1px solid rgba(38, 51, 44, 0.08);
     border-radius: 8px;
@@ -576,17 +649,21 @@ const compactFacts = [
     padding: 28px 24px;
   }
 
-  .benefit-card svg {
-    color: #78977c;
-    margin-bottom: 20px;
+  .benefit-card > span {
+    display: block;
+    color: rgba(19, 56, 43, 0.28);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.45rem;
+    line-height: 1;
+    margin-bottom: 22px;
   }
 
   .benefit-card h3,
   .visit-card h2 {
-    color: #13382b;
+    color: #244D3D;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.25rem;
-    line-height: 1.15;
+    line-height: 1.2;
     margin-bottom: 12px;
   }
 
@@ -637,7 +714,7 @@ const compactFacts = [
   .visit-card li {
     display: flex;
     gap: 8px;
-    color: #2d4035;
+    color: #244D3D;
     font-size: 0.92rem;
     line-height: 1.35;
   }
@@ -685,6 +762,10 @@ const compactFacts = [
     padding: 18px 22px;
   }
 
+  .faq-list summary h3 {
+    margin: 0;
+  }
+
   .faq-list summary::-webkit-details-marker {
     display: none;
   }
@@ -705,9 +786,9 @@ const compactFacts = [
   }
 
   .final-section {
-    background: #5f7c64;
+    background: var(--color-cta-surface);
     color: white;
-    padding: clamp(56px, 7vw, 86px) 0;
+    padding: clamp(48px, 5vw, 64px) 0;
     text-align: center;
   }
 
@@ -715,14 +796,15 @@ const compactFacts = [
     max-width: 820px;
   }
 
-  .final-copy > span,
-  .final-copy h2,
+  .final-copy .final-highlight,
   .final-copy p {
     color: white;
   }
 
-  .final-copy h2 {
-    font-size: clamp(2.05rem, 4.4vw, 3.35rem);
+  .final-highlight {
+    max-width: 760px;
+    margin: 0 auto 18px;
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
   }
 
   .final-copy p {
@@ -745,7 +827,7 @@ const compactFacts = [
 
   .final-primary {
     background: white;
-    color: #13382b;
+    color: #244D3D;
   }
 
   .final-secondary {
@@ -755,6 +837,7 @@ const compactFacts = [
   }
 
   @media (max-width: 980px) {
+    .program-hero-inner,
     .intro-grid,
     .visits-grid {
       grid-template-columns: 1fr;
@@ -775,41 +858,35 @@ const compactFacts = [
   }
 
   @media (max-width: 680px) {
-    .program-hero,
-    .program-hero-shade {
-      min-height: 560px;
-    }
-
     .program-hero {
-      background-position: 58% center;
-    }
-
-    .program-hero-shade {
-      align-items: end;
-      padding: 72px 0 44px;
-    }
-
-    .program-hero-copy {
-      text-align: left;
+      padding: 52px 0 56px;
     }
 
     .program-hero h1 {
-      margin-left: 0;
       font-size: clamp(2.3rem, 11vw, 3.45rem);
     }
 
     .hero-kicker {
-      margin-left: 0;
       font-size: 1.03rem;
     }
 
+    .program-hero-visual,
+    .program-hero-photo {
+      min-height: 0;
+    }
+
     .program-intro {
-      padding: 56px 0;
+      padding: 48px 0;
     }
 
     .intro-heading h2,
     .program-section h2,
-    .final-copy h2 {
+    .final-highlight {
+      text-align: left;
+    }
+
+    .centered-highlight {
+      margin-inline: 0;
       text-align: left;
     }
 

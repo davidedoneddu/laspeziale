@@ -1,55 +1,45 @@
 ---
-import { ArrowRight, CircleCheck, Leaf, ShieldCheck } from "@lucide/astro";
+import { ArrowRight, CircleCheck } from "@lucide/astro";
 import MainLayout from "../../layouts/MainLayout.astro";
 import { getTherapiesPage } from "../../lib/sanity";
 
 const page = await getTherapiesPage();
 
-const usefulItems = [
-  "Vuoi un supporto naturale per un'esigenza specifica.",
-  "Assumi farmaci e desideri verificare eventuali interazioni.",
-  "Hai gia provato diversi prodotti senza ottenere i risultati sperati.",
-  "Ti e stato consigliato un integratore e desideri un parere professionale.",
-  'Cerchi una scelta personalizzata, evitando il "fai da te".',
-];
-
-const includedItems = [
-  "Analisi delle tue esigenze.",
-  "Valutazione di eventuali farmaci e integratori gia utilizzati.",
-  "Selezione di piante officinali e nutraceutici realmente indicati.",
-  "Indicazioni su modalita di utilizzo e durata.",
-  "Risposta ai tuoi dubbi e alle tue domande.",
-];
+const usefulItems = page.usefulItems || [];
+const includedItems = page.includedItems || [];
+const faqs = page.faqs || [];
+const expertiseParagraphs = (page.expertiseText || "")
+  .split(/\n+/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
 ---
 
 <MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
-  <section class="phyto-hero">
+  <section class="phyto-hero" style={`--phyto-image: url('${page.heroImageUrl || "/assets/old-site/fitoterapia-consulenza-2026.jpg"}')`}>
     <div class="container phyto-hero-inner">
       <div class="phyto-hero-copy">
-        <p class="eyebrow">{page.heroEyebrow || "Il Consiglio Fitoterapico"}</p>
         <h1>{page.heroTitle}</h1>
+        {page.heroSubtitle && <p class="hero-subtitle">{page.heroSubtitle}</p>}
         {page.heroText && <p class="lead">{page.heroText}</p>}
         <div class="button-row">
           <a class="button phyto-primary" href="#prenota">Richiedi una consulenza</a>
         </div>
       </div>
-      <aside class="phyto-note" aria-label="Consiglio fitoterapico">
-        <span>Valutazione professionale</span>
-        <strong>Un buon rimedio naturale inizia sempre da una buona valutazione.</strong>
-        <p>La scelta nasce dalla persona, dalle sue esigenze, dalle eventuali terapie in corso e dall'obiettivo da raggiungere.</p>
-      </aside>
+      <div class="phyto-visual" role="img" aria-label="Piante officinali e preparazioni per il Consiglio Fitoterapico">
+        <div class="phyto-photo"></div>
+      </div>
     </div>
   </section>
 
   <section class="section phyto-intro">
     <div class="container split-panel">
       <div>
-        <p class="eyebrow">{page.contentTitle || "Perche richiedere un consiglio fitoterapico?"}</p>
-        <h2>{page.gridTitle || "Molti prodotti naturali sembrano simili, ma non lo sono."}</h2>
+        <h2>{page.contentTitle || "Perché richiedere un consiglio fitoterapico?"}</h2>
+        <p class="section-subtitle">{page.gridTitle || "Molti prodotti naturali sembrano simili, ma non lo sono."}</p>
       </div>
       <div class="split-copy">
         <p>La scelta dipende dalla persona, dalle sue esigenze, dalle eventuali terapie in corso e dall'obiettivo che desidera raggiungere.</p>
-        <p>Per questo il valore della consulenza non e il prodotto, ma la valutazione professionale che porta a scegliere la soluzione piu adatta.</p>
+        <p>{page.gridText || "Per questo il valore della consulenza non è il prodotto, ma la valutazione professionale che porta a scegliere la soluzione più adatta."}</p>
       </div>
     </div>
   </section>
@@ -57,8 +47,8 @@ const includedItems = [
   <section class="section phyto-service">
     <div class="container service-panel">
       <div>
-        <p class="eyebrow">Quando puo essere utile?</p>
-        <h2>Una consulenza mirata quando vuoi scegliere con metodo.</h2>
+        <h2>{page.usefulTitle || "Quando può essere utile?"}</h2>
+        <p class="section-subtitle">{page.usefulSubtitle || "Una consulenza mirata quando vuoi scegliere con metodo."}</p>
       </div>
       <div class="service-columns">
         <article>
@@ -70,7 +60,7 @@ const includedItems = [
           </ul>
         </article>
         <article>
-          <h3>Cosa comprende</h3>
+          <h3>{page.includedTitle || "Cosa comprende"}</h3>
           <ul>
             {includedItems.map((item) => (
               <li><CircleCheck size={16} stroke-width={2.5} aria-hidden="true" />{item}</li>
@@ -83,22 +73,44 @@ const includedItems = [
 
   <section class="section phyto-expertise">
     <div class="container expertise-grid">
-      <div class="expertise-icon"><Leaf size={30} stroke-width={1.8} aria-hidden="true" /></div>
       <div>
-        <p class="eyebrow">Perche affidarsi a una Farmacista specializzata?</p>
-        <h2>La fitoterapia richiede competenze specifiche.</h2>
-        <p>Conoscere le proprieta delle piante officinali significa anche saperne valutare qualita, possibili interazioni, controindicazioni e reale utilita.</p>
-        <p>Ogni consiglio nasce dalla persona, dalle sue caratteristiche e dai suoi obiettivi, mai da una scelta standardizzata.</p>
+        <h2>{page.expertiseTitle || "Perché affidarsi a una Farmacista specializzata?"}</h2>
+        <p class="section-subtitle">{page.expertiseSubtitle || "La fitoterapia richiede competenze specifiche."}</p>
+        {expertiseParagraphs.length
+          ? expertiseParagraphs.map((paragraph) => <p>{paragraph}</p>)
+          : (
+              <>
+                <p>Conoscere le proprietà delle piante officinali significa anche saperne valutare qualità, possibili interazioni, controindicazioni e reale utilità.</p>
+                <p>Ogni consiglio nasce dalla persona, dalle sue caratteristiche e dai suoi obiettivi, mai da una scelta standardizzata.</p>
+              </>
+            )}
       </div>
-      <div class="expertise-icon secondary"><ShieldCheck size={30} stroke-width={1.8} aria-hidden="true" /></div>
     </div>
   </section>
 
+  {faqs.length > 0 && (
+    <section class="section phyto-faq" aria-labelledby="phyto-faq-title">
+      <div class="container faq-panel">
+        <h2 id="phyto-faq-title">{page.faqsTitle || "Domande frequenti"}</h2>
+        <div class="faq-list">
+          {faqs.map((faq) => (
+            <details>
+              <summary>
+                <span>{faq.question}</span>
+                <span class="faq-symbol" aria-hidden="true">+</span>
+              </summary>
+              <p>{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
   <section class="section phyto-booking" id="prenota">
     <div class="container booking-panel">
-      <p class="eyebrow">{page.cta?.eyebrow || "CTA"}</p>
       <h2>{page.cta?.title || "Hai bisogno di un consiglio professionale?"}</h2>
-      <p>{page.cta?.text || "Prenota una consulenza e confrontati con una Farmacista specializzata in Fitoterapia per individuare la soluzione piu adatta alle tue esigenze."}</p>
+      <p>{page.cta?.text || "Prenota una consulenza e confrontati con una Farmacista specializzata in Fitoterapia per individuare la soluzione più adatta alle tue esigenze."}</p>
       <a class="button booking-button" href={page.cta?.primaryLink || "/contatti"}>
         {page.cta?.primaryLabel || "Richiedi una consulenza"} <ArrowRight size={16} aria-hidden="true" />
       </a>
@@ -107,18 +119,28 @@ const includedItems = [
 </MainLayout>
 
 <style>
+  .section-subtitle {
+    max-width: 680px;
+    margin: 14px 0 0;
+    color: #244D3D;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.18rem, 2.2vw, 1.55rem);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
   .phyto-hero {
     background:
       radial-gradient(circle at 12% 10%, rgba(197, 155, 39, 0.14), transparent 30%),
       linear-gradient(135deg, #fffdf8 0%, #fcfbf7 46%, #eef2ec 100%);
-    padding: clamp(72px, 10vw, 132px) 0 clamp(56px, 8vw, 100px);
+    padding: clamp(56px, 6vw, 80px) 0;
   }
 
   .phyto-hero-inner {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
-    gap: clamp(28px, 6vw, 78px);
-    align-items: end;
+    grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.72fr);
+    gap: clamp(34px, 7vw, 86px);
+    align-items: center;
   }
 
   .phyto-hero-copy {
@@ -127,8 +149,16 @@ const includedItems = [
 
   .phyto-hero h1 {
     max-width: 900px;
-    color: #13382b;
+    color: #244D3D;
     font-size: clamp(2.15rem, 4.7vw, 3.85rem);
+  }
+
+  .hero-subtitle {
+    color: #244D3D;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.15rem, 2.3vw, 1.65rem);
+    font-weight: 700;
+    margin: 0 0 18px;
   }
 
   .phyto-primary {
@@ -141,43 +171,39 @@ const includedItems = [
     background: #a8801d;
   }
 
-  .phyto-note {
-    border: 1px solid rgba(197, 155, 39, 0.2);
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.78);
-    box-shadow: 0 24px 70px rgba(46, 58, 54, 0.1);
-    padding: 28px;
+  .phyto-visual {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    min-height: 0;
   }
 
-  .phyto-note span {
-    display: inline-flex;
-    margin-bottom: 18px;
-    border-radius: 999px;
-    background: rgba(197, 155, 39, 0.12);
-    color: #9b7619;
-    font-size: 0.72rem;
-    font-weight: 900;
-    letter-spacing: 0.09em;
-    padding: 8px 12px;
-    text-transform: uppercase;
-  }
-
-  .phyto-note strong {
-    display: block;
-    color: #13382b;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.7rem;
-    font-weight: 500;
-    line-height: 1.1;
-  }
-
-  .phyto-note p {
-    margin: 16px 0 0;
+  .phyto-photo {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background-image:
+      linear-gradient(180deg, rgba(19, 56, 43, 0.03), rgba(19, 56, 43, 0.1)),
+      var(--phyto-image);
+    background-position: 48% center;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, contain;
+    background-color: #eef2ec;
+    box-shadow: var(--shadow-soft);
   }
 
   .phyto-intro,
+  .phyto-faq,
   .phyto-booking {
     background: #fcfbf7;
+  }
+
+  .phyto-faq {
+    padding-bottom: 24px;
+  }
+
+  .phyto-booking {
+    padding-top: 24px;
+    padding-bottom: 48px;
   }
 
   .split-panel {
@@ -191,7 +217,7 @@ const includedItems = [
   .service-panel h2,
   .expertise-grid h2,
   .booking-panel h2 {
-    color: #13382b;
+    color: #244D3D;
     font-size: clamp(2rem, 4vw, 3.4rem);
     line-height: 1.06;
   }
@@ -204,7 +230,7 @@ const includedItems = [
 
   .split-copy p,
   .expertise-grid p {
-    color: #3d4e45;
+    color: #4F5B55;
     font-size: 1.04rem;
     line-height: 1.78;
     margin: 0;
@@ -225,7 +251,7 @@ const includedItems = [
   }
 
   .service-panel h2 {
-    color: #4b3a15;
+    color: #244D3D;
   }
 
   .service-columns {
@@ -241,7 +267,7 @@ const includedItems = [
   }
 
   .service-columns h3 {
-    color: #4b3a15;
+    color: #244D3D;
     margin-bottom: 12px;
   }
 
@@ -257,13 +283,13 @@ const includedItems = [
     display: flex;
     gap: 10px;
     align-items: flex-start;
-    color: #5d4b20;
+    color: #244D3D;
     line-height: 1.55;
   }
 
   .service-columns svg {
     flex: 0 0 auto;
-    color: #9b7619;
+    color: #244D3D;
     margin-top: 4px;
   }
 
@@ -272,11 +298,7 @@ const includedItems = [
   }
 
   .expertise-grid {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: clamp(22px, 4vw, 44px);
-    align-items: center;
-    max-width: 1040px;
+    max-width: 900px;
   }
 
   .expertise-grid h2 {
@@ -287,67 +309,161 @@ const includedItems = [
     margin-top: 14px;
   }
 
-  .expertise-icon {
-    display: grid;
-    width: 68px;
-    height: 68px;
-    place-items: center;
-    border-radius: 50%;
-    background: rgba(197, 155, 39, 0.13);
-    color: #9b7619;
+  .faq-panel {
+    max-width: 980px;
   }
 
-  .expertise-icon.secondary {
-    background: rgba(120, 151, 124, 0.16);
-    color: #13382b;
+  .faq-panel h2 {
+    margin-bottom: 30px;
+    color: #244D3D;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+  }
+
+  .faq-list {
+    overflow: hidden;
+    border: 1px solid rgba(38, 51, 44, 0.12);
+    border-radius: var(--radius);
+    background: white;
+  }
+
+  .faq-list details + details {
+    border-top: 1px solid rgba(38, 51, 44, 0.1);
+  }
+
+  .faq-list summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    cursor: pointer;
+    color: #244D3D;
+    font-weight: 800;
+    line-height: 1.45;
+    padding: 20px 24px;
+    list-style: none;
+  }
+
+  .faq-list summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-symbol {
+    color: #244D3D;
+    font-size: 1.5rem;
+    font-weight: 500;
+    transition: transform 180ms ease;
+  }
+
+  .faq-list details[open] .faq-symbol {
+    transform: rotate(45deg);
+  }
+
+  .faq-list details p {
+    max-width: 720px;
+    margin: 0;
+    color: #4F5B55;
+    line-height: 1.7;
+    padding: 0 24px 22px;
   }
 
   .booking-panel {
-    max-width: 820px;
-    border-radius: 30px;
-    background: #13382b;
-    color: white;
-    box-shadow: 0 28px 80px rgba(19, 56, 43, 0.18);
-    padding: clamp(34px, 6vw, 58px);
-    text-align: center;
+    display: grid;
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    column-gap: clamp(40px, 6vw, 88px);
+    align-items: center;
+    border-radius: 28px;
+    background:
+      radial-gradient(circle at 8% 18%, rgba(120, 151, 124, 0.18), transparent 36%),
+      linear-gradient(135deg, rgba(232, 234, 223, 0.82), rgba(255, 247, 223, 0.62)),
+      var(--color-white);
+    color: var(--color-ink);
+    padding: clamp(40px, 5vw, 64px);
+    text-align: left;
   }
 
   .booking-panel .eyebrow {
-    color: #c59b27;
+    color: #244D3D;
   }
 
   .booking-panel h2,
   .booking-panel p {
-    margin-right: auto;
-    margin-left: auto;
-    color: white;
+    grid-column: 1;
+  }
+
+  .booking-panel h2 {
+    color: var(--color-primary);
+    margin-bottom: 16px;
+    font-size: clamp(2.35rem, 4vw, 3.35rem);
   }
 
   .booking-panel p {
-    max-width: 650px;
-    color: rgba(255, 255, 255, 0.78);
+    max-width: 720px;
+    margin-bottom: 0;
+    color: var(--color-muted);
   }
 
   .booking-button {
     display: inline-flex;
+    grid-column: 2;
+    grid-row: 1 / 3;
     gap: 8px;
     align-items: center;
-    margin-top: 12px;
-    background: #c59b27;
+    background: var(--color-cta);
     color: white;
+    white-space: nowrap;
+  }
+
+  .booking-button:hover,
+  .booking-button:focus {
+    background: var(--color-cta-hover);
   }
 
   @media (max-width: 980px) {
     .phyto-hero-inner,
     .split-panel,
     .service-panel,
-    .service-columns,
-    .expertise-grid {
+    .service-columns {
       grid-template-columns: 1fr;
     }
 
-    .expertise-icon.secondary {
-      display: none;
+    .phyto-visual {
+      min-height: 0;
+    }
+
+    .phyto-faq {
+      padding-bottom: 20px;
+    }
+
+    .phyto-booking {
+      padding-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    .booking-panel {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 0;
+      padding: 32px 24px;
+    }
+
+    .booking-button {
+      width: fit-content;
+      grid-column: 1;
+      grid-row: auto;
+      margin-top: 24px;
+    }
+
+  }
+
+  @media (max-width: 560px) {
+    .booking-panel h2 {
+      font-size: clamp(2rem, 10vw, 2.55rem);
+    }
+
+    .booking-button {
+      width: 100%;
     }
   }
 </style>

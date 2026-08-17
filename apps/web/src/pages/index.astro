@@ -2,29 +2,48 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import Hero from "../components/Hero.astro";
 import CTASection from "../components/CTASection.astro";
-import { getHomepage, getPrograms, getTestimonials } from "../lib/sanity";
+import { getHomepage, getPrograms } from "../lib/sanity";
 
-const [homepage, programs, testimonials] = await Promise.all([
+const [homepage, programs] = await Promise.all([
   getHomepage(),
   getPrograms(),
-  getTestimonials(),
 ]);
-const selectedPrograms = (homepage.featuredProgramSlugs || [])
-  .map((slug) => programs.find((program) => program.slug === slug))
-  .filter(Boolean);
-const featuredPrograms = (selectedPrograms.length ? selectedPrograms : programs.filter((program) => program.isFeatured)).slice(0, 3);
-const visibleFeaturedPrograms = featuredPrograms.length ? featuredPrograms : programs.slice(0, 3);
-const clinicalProgramSlugs = new Set([
-  "gestione-peso-ricomposizione-corporea",
-  "gonfiore-disturbi-intestinali",
-  "menopausa-premenopausa",
-  "programma-anti-age",
-  "nutrizione-sportiva",
-]);
-const helpPrograms = (programs.length ? programs : visibleFeaturedPrograms)
-  .filter((program) => clinicalProgramSlugs.has(program.slug))
-  .slice(0, 5);
-const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeaturedPrograms;
+const homeProgramContent = [
+  {
+    slug: "gestione-peso-ricomposizione-corporea",
+    title: "Gestione del peso, cellulite e ricomposizione corporea",
+    highlight: "Ritrovare la forma fisica significa ritrovare il proprio equilibrio.",
+    text: "Un percorso personalizzato per ridurre la massa grassa, migliorare la composizione corporea e valorizzare la silhouette, senza rinunce e con risultati duraturi.",
+  },
+  {
+    slug: "gonfiore-disturbi-intestinali",
+    title: "Gonfiore e disturbi intestinali",
+    highlight: "Quando l'intestino ritrova equilibrio, cambia anche il benessere quotidiano.",
+    text: "Un percorso dedicato a digestione, gonfiore e funzionalità intestinale per aiutare l'organismo a ritrovare regolarità e leggerezza.",
+  },
+  {
+    slug: "menopausa-premenopausa",
+    title: "Le fasi della donna",
+    highlight: "Il corpo della donna cambia molte volte nella vita.",
+    text: "PCOS, endometriosi, ciclo irregolare, fertilità, premenopausa e menopausa: un percorso che accompagna il corpo nelle diverse fasi della vita, adattandosi ai suoi nuovi bisogni.",
+  },
+  {
+    slug: "programma-anti-age",
+    title: "Longevità e vitalità",
+    highlight: "L'età cambia. Il benessere può continuare a crescere.",
+    text: "Un percorso dedicato a mantenere energia, forza, tono muscolare e vitalità, per vivere ogni fase della vita con maggiore equilibrio.",
+  },
+  {
+    slug: "nutrizione-sportiva",
+    title: "Nutrizione sportiva",
+    highlight: "Allenarsi meglio significa nutrirsi meglio.",
+    text: "Un'alimentazione personalizzata per migliorare composizione corporea, recupero ed energia, sostenendo ogni obiettivo sportivo.",
+  },
+];
+const visibleHelpPrograms = homeProgramContent.map((content) => ({
+  ...content,
+  program: programs.find((program) => program.slug === content.slug),
+}));
 ---
 
 <MainLayout title={homepage.seo?.title} description={homepage.seo?.description}>
@@ -33,7 +52,6 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     subtitle={homepage.heroSubtitle}
     subheading="Quando il corpo cambia, serve un approccio diverso."
     imageUrl={homepage.heroImageUrl}
-    eyebrow="Inizia il tuo viaggio"
     primaryHref={homepage.heroCtaLink || "/programmi"}
     primaryLabel={homepage.heroCtaLabel || "Scopri il percorso"}
     secondaryHref="/contatti"
@@ -42,84 +60,68 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
   />
 
   <section class="studio-intro">
-    <div class="studio-wordmark" aria-hidden="true">La Speziale</div>
     <div class="container intro-layout">
       <div class="intro-visual reveal reveal-image">
-        <div
-          class="intro-photo"
-          style={homepage.approachImageUrl ? `--approach-image: url('${homepage.approachImageUrl}')` : undefined}
-          role={homepage.approachImageUrl ? "img" : undefined}
-          aria-label={homepage.approachImageUrl ? "Lo studio La Speziale e il suo approccio integrato" : undefined}
-          aria-hidden={homepage.approachImageUrl ? undefined : "true"}
-        ></div>
-        <p class="intro-caption">Nutrizione personalizzata, consiglio fitoterapico e supporto al cambiamento lavorano insieme.</p>
+        <img class="intro-photo" src={homepage.approachImageUrl || "/assets/old-site/home-metodo-competenze.png"} alt="Tre professionisti collaborano alla costruzione del Metodo La Speziale" />
       </div>
       <div class="intro-copy reveal">
-        <p class="eyebrow">{homepage.introEyebrow}</p>
-        <h2>{homepage.introTitle}</h2>
-        <p class="intro-lead">{homepage.introLead}</p>
-        <p class="intro-body">{homepage.introBody}</p>
+        <h2>{homepage.introEyebrow || "Perché un approccio diverso"}</h2>
+        <p class="section-subtitle">{homepage.introTitle}</p>
+        <div class="section-body">
+          <p>{homepage.introLead}</p>
+          {homepage.introBody.split(/\n+/).filter(Boolean).map((paragraph) => <p>{paragraph}</p>)}
+        </div>
       </div>
+    </div>
+  </section>
+
+  <section class="studio-space">
+    <div class="container studio-space-inner reveal">
+      <div class="studio-space-heading">
+        <h2>Anche lo spazio fa parte del percorso.</h2>
+        <p>Sentirsi accolti cambia il modo di iniziare.</p>
+      </div>
+      <p class="studio-space-text">
+        Fuori, il ritmo veloce di Milano. Dentro, un luogo raccolto dove il tempo rallenta e l’attenzione torna sulla persona. Intorno, oggetti e dettagli raccontano l’antica arte dello Speziale, da cui nasce il nostro nome, reinterpretata oggi nel nostro modo di accogliere e lavorare.
+      </p>
     </div>
   </section>
 
   <section class="method-paths">
     <div class="container method-layout">
       <header class="method-heading reveal">
-        <p class="eyebrow">{homepage.methodEyebrow}</p>
-        <h2>{homepage.methodTitle}</h2>
-        <p>{homepage.methodText}</p>
+        <h2>{homepage.methodEyebrow || "Un percorso, tre competenze"}</h2>
+        <p class="section-subtitle">{homepage.methodTitle}</p>
+        <div class="method-body">{homepage.methodText.split(/\n+/).filter(Boolean).map((paragraph) => <p>{paragraph}</p>)}</div>
       </header>
 
       <div class="method-board reveal">
         <section class="method-chapter method-chapter-core" aria-labelledby="core-pillars-title">
           <div class="method-chapter-head">
-            <span>01</span>
             <div>
-              <p class="eyebrow">{homepage.methodCoreEyebrow}</p>
-              <h3 id="core-pillars-title">Tre professionalita. Un unico metodo.</h3>
+              <h2 id="core-pillars-title">{homepage.methodCoreEyebrow || "Lavorare insieme fa la differenza"}</h2>
+              <p class="chapter-subtitle">Tre professionalità. Un unico metodo.</p>
             </div>
           </div>
           <div class="pillar-grid">
             <article>
-              <span>01</span>
-              <h4>Nutrizione personalizzata</h4>
-              <p><strong>La Biologa Nutrizionista</strong> elabora un piano alimentare costruito sulla composizione corporea, sul metabolismo, sullo stile di vita e sugli obiettivi della persona, trasformando la nutrizione in uno strumento concreto e sostenibile.</p>
+              <h3>Nutrizione personalizzata</h3>
+              <p class="role">La Biologa Nutrizionista</p>
+              <p>Costruisce un piano alimentare personalizzato partendo dalla composizione corporea, dal metabolismo e dalle esigenze della persona, con un approccio concreto e facilmente applicabile nella vita quotidiana.</p>
             </article>
             <article>
-              <span>02</span>
-              <h4>Il Consiglio Fitoterapico</h4>
-              <p><strong>La Farmacista specializzata in Fitoterapia</strong> quando necessario, individua piante officinali e nutraceutici realmente adatti alla persona, valutando obiettivi, eventuali terapie farmacologiche e possibili interazioni.</p>
+              <h3>Consiglio fitoterapico</h3>
+              <p class="role">La Farmacista specializzata in Fitoterapia</p>
+              <p>Valuta quando piante officinali e nutraceutici possono rappresentare un supporto utile, individuando le soluzioni più adatte in base alla situazione e agli obiettivi della persona.</p>
             </article>
             <article>
-              <span>03</span>
-              <h4>Consapevolezza del corpo</h4>
-              <p><strong>Il Tutor del Benessere</strong> aiuta la persona a comprendere il linguaggio del proprio corpo, riconoscere i cambiamenti e trasformarli in nuove abitudini attraverso un percorso di maggiore consapevolezza.</p>
+              <h3>Supporto al cambiamento</h3>
+              <p class="role">Il Tutor del Benessere</p>
+              <p>Accompagna la persona nello sviluppo di nuove abitudini, aiutandola a comprendere i cambiamenti del proprio corpo e a viverli con maggiore consapevolezza.</p>
             </article>
           </div>
-          <p class="method-note">{homepage.methodCoreText}</p>
-          <a class="text-link" href="/il-metodo">
-            {homepage.methodCoreLinkLabel} <span aria-hidden="true">-&gt;</span>
-          </a>
         </section>
 
-        <section class="method-chapter" aria-labelledby="core-areas-title">
-          <div class="method-chapter-head">
-            <span>02</span>
-            <div>
-              <p class="eyebrow">Come possiamo aiutarti</p>
-              <h3 id="core-areas-title">{homepage.methodDietTitle}</h3>
-            </div>
-          </div>
-          <p>{homepage.methodDietText}</p>
-          <ul class="method-area-list">
-            <li><strong>Gestione del peso e ricomposizione corporea</strong><span>Ritrovare la forma fisica significa ritrovare il proprio equilibrio.</span></li>
-            <li><strong>Gonfiore e disturbi intestinali</strong><span>Quando l'intestino ritrova equilibrio, cambia anche il benessere quotidiano.</span></li>
-            <li><strong>Le fasi della donna</strong><span>Il corpo della donna cambia molte volte nella vita.</span></li>
-            <li><strong>Longevita e vitalita</strong><span>Gli anni passano. Il benessere puo continuare a crescere.</span></li>
-            <li><strong>Nutrizione sportiva</strong><span>Allenarsi meglio significa nutrire meglio il proprio corpo.</span></li>
-          </ul>
-        </section>
       </div>
     </div>
   </section>
@@ -127,35 +129,27 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
   <section class="program-experience" data-horizontal-programs>
     <div class="program-sticky">
       <div class="container program-heading reveal">
-        <p class="eyebrow">Percorsi dedicati</p>
         <h2>Come possiamo aiutarti</h2>
-        <p>Ogni persona ha esigenze diverse. Per questo abbiamo sviluppato percorsi dedicati ai principali bisogni che incontriamo ogni giorno nel nostro studio.</p>
+        <div>
+          <p class="section-subtitle">Ogni cambiamento del corpo richiede attenzioni diverse.</p>
+          <p>Per questo abbiamo sviluppato percorsi dedicati ai principali bisogni che incontriamo ogni giorno nel nostro studio.</p>
+        </div>
       </div>
       <div class="program-viewport">
         <div class="program-track">
         {
-          visibleHelpPrograms.map((program, index) => (
+          visibleHelpPrograms.map(({ program, ...content }) => (
             <article class="program-card">
-              <div class="program-image" style={`--program-image: url('${program.imageUrl || "/assets/old-site/hero-bright-wellbeing.png"}')`}>
-                <span class="program-index" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-              </div>
+              <div class="program-image" style={`--program-image: url('${program?.imageUrl || "/assets/old-site/hero-bright-wellbeing.png"}')`}></div>
               <div class="program-copy">
-                <p class="eyebrow">{program.category || "Percorso"}</p>
-                <h3>{program.title}</h3>
-                <p>{program.excerpt}</p>
-                <a class="text-link" href={`/programmi/${program.slug}`}>Scopri il percorso <span aria-hidden="true">-&gt;</span></a>
+                <h3>{content.title}</h3>
+                <p class="card-highlight">{content.highlight}</p>
+                <p>{content.text}</p>
+                <a class="text-link" href={`/programmi/${content.slug}`}>Scopri il percorso</a>
               </div>
             </article>
           ))
         }
-          <aside class="program-end">
-            <p class="eyebrow">Il tuo percorso inizia da qui</p>
-            <h3>Ascolteremo la tua storia e valuteremo le tue esigenze.</h3>
-            <div class="button-row">
-              <a class="button button-primary" href="/contatti">Richiedi una consulenza</a>
-              <a class="button button-secondary" href="/programmi">Tutti i programmi</a>
-            </div>
-          </aside>
         </div>
       </div>
     </div>
@@ -165,51 +159,49 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     <div class="container">
       <section class="method-chapter" aria-labelledby="satellite-services-title">
         <div class="method-chapter-head">
-          <span>03</span>
           <div>
-            <p class="eyebrow">{homepage.methodPhytoLabel}</p>
-            <h3 id="satellite-services-title">{homepage.methodPhytoTitle}</h3>
+            <h2 id="satellite-services-title">Consulenze autonome</h2>
+            <p class="chapter-subtitle">{homepage.methodPhytoTitle}</p>
           </div>
         </div>
-        <p>{homepage.methodPhytoText}</p>
+        <div class="section-body">{homepage.methodPhytoText.split(/\n+/).filter(Boolean).map((paragraph) => <p>{paragraph}</p>)}</div>
         <div class="satellite-grid">
-          <article>
-            <h4>Il Consiglio Fitoterapico</h4>
-            <p><strong>Con la Farmacista specializzata in Fitoterapia.</strong> Una consulenza professionale per individuare, quando necessario, piante officinali e nutraceutici realmente adatti alle tue esigenze.</p>
-            <a class="text-link" href="/fitoterapia">Scopri il Consiglio Fitoterapico <span aria-hidden="true">-&gt;</span></a>
+          <article class="satellite-card">
+            <img
+              class="satellite-image"
+              src={homepage.methodPhytoImageUrl || "/assets/old-site/fitoterapia-consulenza-2026.jpg"}
+              alt="Piante officinali e preparazioni per il Consiglio Fitoterapico"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="satellite-copy">
+              <h3>Il Consiglio Fitoterapico</h3>
+              <p class="role">Con la Farmacista specializzata in Fitoterapia</p>
+              <p>Una consulenza professionale per individuare, quando necessario, piante officinali e nutraceutici realmente adatti alle tue esigenze.</p>
+              <a class="text-link" href="/fitoterapia">Scopri il Consiglio Fitoterapico</a>
+            </div>
           </article>
-          <article>
-            <h4>La Consulenza di Consapevolezza</h4>
-            <p><strong>Con il Tutor del Benessere.</strong> Una consulenza dedicata a comprendere il linguaggio del proprio corpo, riconoscere i cambiamenti e affrontare ogni fase della vita con maggiore consapevolezza.</p>
-            <a class="text-link" href="/consapevolezza">Scopri la Consulenza di Consapevolezza <span aria-hidden="true">-&gt;</span></a>
+          <article class="satellite-card">
+            <img
+              class="satellite-image"
+              src={homepage.methodCoachingImageUrl || "/assets/old-site/consapevolezza-2026.jpg"}
+              alt="Percorso verso una maggiore consapevolezza"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="satellite-copy">
+              <h3>La Consulenza di Consapevolezza</h3>
+              <p class="role">Con il Tutor del Benessere</p>
+              <p>Una consulenza dedicata a comprendere i cambiamenti del proprio corpo, sviluppare nuove abitudini e affrontare ogni fase con maggiore consapevolezza.</p>
+              <a class="text-link" href="/consapevolezza">Scopri la Consulenza di Consapevolezza</a>
+            </div>
           </article>
         </div>
       </section>
     </div>
   </section>
 
-  <section class="voices-section">
-    <div class="container voices-layout">
-      <header class="voices-heading reveal">
-        <p class="eyebrow">Dicono di noi</p>
-        <h2>Il cambiamento si misura anche nel modo in cui ci si sente.</h2>
-        <a class="text-link" href="/dicono-di-noi">Leggi tutte le esperienze <span aria-hidden="true">→</span></a>
-      </header>
-      <div class="voices-list">
-        {testimonials.slice(0, 3).map((item, index) => (
-          <figure class="voice reveal" style={`--delay: ${index * 100}ms`}>
-            <blockquote>“{item.text}”</blockquote>
-            <figcaption>
-              <strong>{item.name}</strong>
-              {item.role && <span>{item.role}</span>}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <CTASection {...homepage.finalCta} immersive />
+  <CTASection {...homepage.finalCta} secondaryLabel="" titleAsHeading={false} immersive />
 </MainLayout>
 
 <script>
@@ -286,89 +278,128 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    padding: clamp(88px, 11vw, 156px) 0 88px;
+    padding: clamp(64px, 7vw, 88px) 0 64px;
     background:
       radial-gradient(circle at 8% 10%, rgba(197, 155, 39, 0.12), transparent 28%),
       linear-gradient(145deg, rgba(120, 151, 124, 0.16), transparent 42%),
       var(--color-white);
   }
 
-  .studio-wordmark {
-    position: absolute;
-    top: 20px;
-    right: -0.04em;
-    z-index: -1;
-    color: rgba(93, 120, 95, 0.055);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(4.5rem, 13vw, 11rem);
-    line-height: 0.8;
-    white-space: nowrap;
-  }
-
   .intro-layout {
     display: grid;
-    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
-    gap: clamp(48px, 8vw, 112px);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: clamp(48px, 6vw, 88px);
     align-items: center;
   }
 
   .intro-visual {
     position: relative;
-    padding: 0 0 46px 36px;
-  }
-
-  .intro-visual::before {
-    position: absolute;
-    inset: 36px 36px 0 0;
-    z-index: -1;
+    padding: 28px;
     background: #dbe3d8;
-    content: "";
   }
 
   .intro-photo {
-    min-height: 580px;
-    background:
-      linear-gradient(rgba(16, 24, 20, 0.03), rgba(16, 24, 20, 0.08)),
-      var(--approach-image, linear-gradient(135deg, #e8eadf 0%, #fff7df 42%, #78977c 100%));
-    background-position: center;
-    background-size: cover;
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
     box-shadow: 0 28px 70px rgba(38, 51, 44, 0.16);
   }
 
-  .intro-caption {
-    position: absolute;
-    right: -28px;
-    bottom: 0;
-    width: min(280px, 76%);
-    margin: 0;
-    padding: 20px 24px;
-    background: var(--color-ink);
-    color: white;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.05rem;
-    line-height: 1.45;
-  }
-
-  .intro-copy h2 {
+  .intro-copy h2,
+  .method-heading h2,
+  .method-chapter h2,
+  .program-heading h2 {
     max-width: 740px;
-    margin-bottom: 28px;
-    font-size: clamp(2.05rem, 4.1vw, 3.75rem);
+    margin-bottom: 18px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(2.05rem, 4vw, 3.6rem);
+    font-weight: 500;
+    line-height: 1.08;
   }
 
-  .intro-lead {
+  .section-subtitle {
     max-width: 660px;
-    margin-bottom: 22px;
+    margin: 0 0 22px;
     color: var(--color-ink);
     font-family: Georgia, "Times New Roman", serif;
     font-size: clamp(1.25rem, 2.2vw, 1.65rem);
     line-height: 1.5;
   }
 
-  .intro-body {
+  .section-body {
     max-width: 680px;
-    margin-bottom: 30px;
+  }
+
+  .section-body p {
+    margin: 0 0 20px;
     font-size: 1.03rem;
     line-height: 1.85;
+  }
+
+  .section-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .studio-space {
+    border-top: 1px solid rgba(19, 56, 43, 0.08);
+    border-bottom: 1px solid rgba(19, 56, 43, 0.08);
+    background: #e8eadf;
+    color: var(--color-primary);
+    padding: clamp(30px, 4vw, 42px) 0;
+  }
+
+  .studio-space-inner {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+
+  .studio-space-heading {
+    border-right: 1px solid rgba(19, 56, 43, 0.16);
+    padding-right: clamp(26px, 4vw, 46px);
+  }
+
+  .studio-space h2 {
+    max-width: 470px;
+    margin-bottom: 10px;
+    color: var(--color-primary);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.85rem, 3vw, 2.55rem);
+    font-weight: 500;
+    line-height: 1.08;
+  }
+
+  .studio-space-heading p {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 1.02rem;
+    font-weight: 800;
+    line-height: 1.5;
+  }
+
+  .studio-space-text {
+    max-width: 780px;
+    margin: 0;
+    color: var(--color-ink);
+    font-size: 1rem;
+    line-height: 1.78;
+  }
+
+  .method-body {
+    max-width: 720px;
+    margin: 0;
+  }
+
+  .method-body p {
+    margin: 0 0 20px;
+    font-size: 1.03rem;
+    line-height: 1.8;
+  }
+
+  .method-body p:last-child {
+    margin-bottom: 0;
   }
 
   .text-link {
@@ -437,25 +468,28 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
 
   .program-heading {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.6fr);
-    gap: 36px;
-    align-items: end;
-    margin-bottom: 20px;
-  }
-
-  .program-heading .eyebrow {
-    grid-column: 1 / -1;
-    margin-bottom: -18px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    max-width: 900px;
+    margin-bottom: 32px;
   }
 
   .program-heading h2 {
     margin: 0;
-    font-size: clamp(2.05rem, 3.8vw, 3.45rem);
   }
 
-  .program-heading > p:last-child {
-    margin: 0 0 8px;
+  .program-heading > div > p:last-child {
+    max-width: 720px;
+    margin: 0;
     font-size: 1.05rem;
+    line-height: 1.7;
+  }
+
+  .program-heading .section-subtitle {
+    max-width: 720px;
+    margin-bottom: 10px;
+    font-size: clamp(1.18rem, 1.8vw, 1.45rem);
   }
 
   .program-viewport {
@@ -477,6 +511,7 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     width: min(84vw, 1040px);
     min-height: 360px;
     grid-template-columns: minmax(360px, 1.05fr) minmax(360px, 0.95fr);
+    align-items: center;
     overflow: hidden;
     background: var(--color-white);
     box-shadow: 0 24px 70px rgba(38, 51, 44, 0.12);
@@ -484,20 +519,15 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
 
   .program-image {
     position: relative;
-    min-height: 360px;
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    align-self: center;
+    min-height: 0;
     background-image: linear-gradient(rgba(16, 24, 20, 0.03), rgba(16, 24, 20, 0.12)), var(--program-image);
     background-position: center;
-    background-size: cover;
-  }
-
-  .program-index {
-    position: absolute;
-    top: 24px;
-    left: 24px;
-    color: white;
-    font-size: 0.8rem;
-    font-weight: 800;
-    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.3);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, contain;
+    background-color: #eef2ec;
   }
 
   .program-copy {
@@ -507,63 +537,52 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     padding: clamp(32px, 4vw, 58px);
   }
 
-  .program-copy h3 {
+  .program-copy h3,
+  .pillar-grid h3,
+  .satellite-grid h3 {
+    margin: 0 0 16px;
     overflow-wrap: anywhere;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.75rem, 2.55vw, 2.65rem);
+    font-size: clamp(1.45rem, 2.1vw, 2rem);
     font-weight: 500;
     hyphens: auto;
-    line-height: 1.08;
+    line-height: 1.18;
   }
 
-  .program-end h3 {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(2rem, 3.5vw, 3.2rem);
-    font-weight: 500;
-    line-height: 1.08;
-  }
-
-  .program-copy > p:not(.eyebrow) {
-    margin-bottom: 28px;
+  .program-copy > p {
+    margin: 0 0 20px;
     font-size: 1.02rem;
     line-height: 1.75;
+  }
+
+  .program-copy .card-highlight {
+    color: var(--color-ink);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(1.08rem, 1.6vw, 1.3rem);
+    font-weight: 700;
+    line-height: 1.4;
   }
 
   .program-copy .text-link {
     align-self: flex-start;
   }
 
-  .program-end {
-    display: flex;
-    width: min(60vw, 650px);
-    min-height: 360px;
-    flex-direction: column;
-    justify-content: center;
-    background: var(--color-ink);
-    color: white;
-    padding: clamp(40px, 6vw, 74px);
+  .autonomous-services {
+    background: #e8eadf;
+    padding: clamp(48px, 5vw, 64px) 0;
   }
 
-  .program-end .eyebrow,
-  .program-end h3 {
-    color: white;
-  }
-
-  .program-end .button-primary {
-    background: white;
-    color: var(--color-ink);
-  }
-
-  .program-end .button-secondary {
-    border-color: rgba(255, 255, 255, 0.48);
+  .autonomous-services .method-chapter {
+    border: 0;
     background: transparent;
-    color: white;
+    box-shadow: none;
+    padding: 0;
   }
 
   .method-paths {
     position: relative;
     overflow: hidden;
-    padding: clamp(86px, 11vw, 156px) 0;
+    padding: clamp(48px, 5vw, 64px) 0;
     background:
       radial-gradient(circle at 12% 16%, rgba(197, 155, 39, 0.12), transparent 30%),
       radial-gradient(circle at 88% 76%, rgba(120, 151, 124, 0.18), transparent 28%),
@@ -588,20 +607,12 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
 
   .method-heading {
     max-width: 820px;
-    margin: 0 auto clamp(42px, 7vw, 76px);
-    text-align: center;
+    margin: 0 0 clamp(42px, 7vw, 76px);
+    text-align: left;
   }
 
-  .method-heading h2 {
-    margin-bottom: 22px;
-    font-size: clamp(2.05rem, 4.2vw, 3.85rem);
-  }
-
-  .method-heading p:last-child {
+  .method-heading .section-subtitle {
     max-width: 720px;
-    margin: 0 auto;
-    font-size: clamp(1rem, 1.6vw, 1.15rem);
-    line-height: 1.8;
   }
 
   .method-board {
@@ -623,38 +634,22 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
   }
 
   .method-chapter-head {
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    gap: 18px;
-    align-items: start;
     margin-bottom: 28px;
   }
 
-  .method-chapter-head > span {
-    display: grid;
-    width: 46px;
-    aspect-ratio: 1;
-    place-items: center;
-    border: 1px solid rgba(93, 120, 95, 0.24);
-    background: rgba(143, 165, 143, 0.14);
-    color: var(--color-sage-dark);
-    font-weight: 850;
-  }
-
-  .method-chapter h3 {
+  .chapter-subtitle {
     max-width: 760px;
-    margin: 0;
+    margin: 12px 0 0;
+    color: #244D3D;
     font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.75rem, 3.2vw, 2.85rem);
-    font-weight: 500;
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    line-height: 1.45;
   }
 
   .method-chapter > p,
-  .method-note {
+  .method-chapter > .section-body {
     max-width: 760px;
     margin: 0 0 24px;
-    font-size: 1.03rem;
-    line-height: 1.78;
   }
 
   .pillar-grid,
@@ -676,53 +671,17 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     min-height: 210px;
   }
 
-  .pillar-grid span {
-    display: block;
-    margin-bottom: 18px;
-    color: var(--color-gold);
-    font-weight: 850;
-  }
-
-  .pillar-grid h4,
-  .satellite-grid h4 {
-    margin: 0 0 12px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.25rem, 2vw, 1.7rem);
-    font-weight: 500;
-  }
-
   .pillar-grid p,
   .satellite-grid p {
     margin: 0;
     line-height: 1.68;
   }
 
-  .method-area-list {
-    display: grid;
-    gap: 14px;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .method-area-list li {
-    display: grid;
-    grid-template-columns: minmax(180px, 0.42fr) minmax(0, 0.58fr);
-    gap: 18px;
-    align-items: baseline;
-    border-top: 1px solid rgba(38, 51, 44, 0.1);
-    padding-top: 14px;
-  }
-
-  .method-area-list strong {
+  .pillar-grid .role,
+  .satellite-grid .role {
+    margin: 0 0 12px;
     color: var(--color-ink);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.18rem;
-    font-weight: 500;
-  }
-
-  .method-area-list span {
-    line-height: 1.68;
+    font-weight: 800;
   }
 
   .satellite-grid {
@@ -737,101 +696,39 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     align-items: flex-start;
   }
 
-  .satellite-grid .text-link {
+  .satellite-grid .satellite-card {
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .satellite-image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #eef2ec;
+    object-fit: contain;
+  }
+
+  .satellite-copy {
+    display: flex;
+    width: 100%;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+  }
+
+  .satellite-copy .text-link {
     margin-top: auto;
   }
 
-  .voices-section {
-    position: relative;
-    overflow: hidden;
-    padding: clamp(96px, 12vw, 170px) 0;
-    background: var(--color-white);
-  }
-
-  .autonomous-services {
-    padding: clamp(82px, 10vw, 138px) 0;
-    background: var(--color-white);
-  }
-
-  .autonomous-services .method-chapter {
-    max-width: 1120px;
-    margin: 0 auto;
-  }
-
-  .voices-section::before {
-    position: absolute;
-    top: -0.25em;
-    left: -0.03em;
-    color: rgba(93, 120, 95, 0.07);
-    content: "“";
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: min(45vw, 620px);
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  .voices-layout {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(430px, 0.95fr) minmax(0, 1.05fr);
-    gap: clamp(52px, 7vw, 100px);
-    align-items: start;
-  }
-
-  .voices-heading {
-    position: sticky;
-    top: 130px;
-    min-width: 0;
-    container-type: inline-size;
-  }
-
-  .voices-heading h2 {
-    width: 100%;
-    max-width: 11ch;
-    margin-bottom: 34px;
-    font-size: clamp(2.05rem, 9cqi, 3.2rem);
-    line-height: 1.04;
-    overflow-wrap: normal;
-    word-break: normal;
-  }
-
-  .voices-list {
-    display: grid;
-    gap: 0;
-  }
-
-  .voice {
-    margin: 0;
-    border-top: 1px solid rgba(38, 51, 44, 0.16);
-    padding: 42px 0 50px;
-  }
-
-  .voice blockquote {
-    margin: 0 0 28px;
-    color: var(--color-ink);
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(1.55rem, 3vw, 2.45rem);
-    line-height: 1.35;
-  }
-
-  .voice figcaption {
-    display: flex;
-    gap: 10px 18px;
-    align-items: baseline;
-    color: var(--color-muted);
-  }
-
-  .voice figcaption strong {
-    color: var(--color-ink);
-  }
-
-  .voice figcaption span {
-    font-size: 0.88rem;
-  }
-
   @media (max-width: 900px) {
+    .autonomous-services {
+      padding: 48px 0;
+    }
+
     .studio-intro {
-      padding: 76px 0 64px;
+      padding: 56px 0 48px;
     }
 
     .intro-layout {
@@ -842,29 +739,19 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     .intro-visual {
       width: min(100%, 560px);
       margin: 0 auto;
-      padding: 0;
+      padding: 16px;
     }
 
-    .intro-visual::before {
-      inset: 18px 0 -14px 18px;
+    .studio-space-inner {
+      grid-template-columns: 1fr;
+      gap: 22px;
     }
 
-    .intro-photo {
-      min-height: clamp(300px, 78vw, 430px);
-    }
-
-    .intro-caption {
-      position: relative;
-      right: auto;
-      bottom: auto;
-      width: calc(100% - 28px);
-      margin: -34px 0 0 auto;
-      padding: 16px 18px;
-      font-size: 0.98rem;
-    }
-
-    .intro-copy h2 {
-      font-size: clamp(2rem, 9vw, 3rem);
+    .studio-space-heading {
+      border-right: 0;
+      border-bottom: 1px solid rgba(19, 56, 43, 0.16);
+      padding-right: 0;
+      padding-bottom: 22px;
     }
 
     .program-experience {
@@ -874,16 +761,12 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     .program-sticky {
       position: relative;
       min-height: 0;
-      padding: 78px 0 72px;
+      padding: 56px 0;
     }
 
     .program-heading {
       grid-template-columns: 1fr;
       margin-bottom: 36px;
-    }
-
-    .program-heading .eyebrow {
-      margin-bottom: 0;
     }
 
     .program-viewport {
@@ -908,11 +791,12 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
       width: min(86vw, 520px);
       min-height: 0;
       grid-template-columns: 1fr;
+      align-items: stretch;
       scroll-snap-align: center;
     }
 
     .program-image {
-      min-height: 310px;
+      min-height: 0;
     }
 
     .program-copy {
@@ -920,31 +804,13 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
       padding: 30px 26px 34px;
     }
 
-    .program-copy h3 {
-      font-size: clamp(1.7rem, 8vw, 2.35rem);
-    }
-
-    .program-end {
-      width: min(86vw, 520px);
-      min-height: 640px;
-      scroll-snap-align: center;
-    }
-
     .method-paths {
-      padding: 74px 0;
+      padding: 48px 0;
     }
 
     .method-heading {
       margin-bottom: 34px;
       text-align: left;
-    }
-
-    .method-heading h2 {
-      font-size: clamp(2.25rem, 10vw, 3.7rem);
-    }
-
-    .method-heading p:last-child {
-      margin: 0;
     }
 
     .method-board {
@@ -954,15 +820,8 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
     .method-chapter {
       padding: 24px 20px;
     }
-
     .method-chapter-head {
-      grid-template-columns: 1fr;
-      gap: 14px;
       margin-bottom: 22px;
-    }
-
-    .method-chapter-head > span {
-      width: 40px;
     }
 
     .pillar-grid,
@@ -974,42 +833,6 @@ const visibleHelpPrograms = helpPrograms.length ? helpPrograms : visibleFeatured
       min-height: auto;
     }
 
-    .method-area-list li {
-      grid-template-columns: 1fr;
-      gap: 6px;
-    }
-
-    .voices-layout {
-      grid-template-columns: 1fr;
-      gap: 46px;
-    }
-
-    .voices-heading {
-      position: relative;
-      top: auto;
-      min-width: 0;
-    }
-
-    .voices-heading h2 {
-      width: 100%;
-      max-width: 12ch;
-      margin-bottom: 28px;
-      font-size: clamp(2.05rem, 9vw, 2.85rem);
-      line-height: 1.04;
-      overflow-wrap: normal;
-      word-break: normal;
-    }
-
-    .voice figcaption {
-      align-items: flex-start;
-      flex-direction: column;
-    }
-  }
-
-  @media (max-width: 380px) {
-    .voices-heading h2 {
-      font-size: 2.35rem;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

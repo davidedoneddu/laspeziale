@@ -5,24 +5,24 @@ const [settings, programs] = await Promise.all([getSiteSettings(), getPrograms()
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
 const findProgram = (slug: string) => programs.find((program) => program.slug === slug);
 const clinicalItems = [
-  { label: "Gestione del peso, cellulite e ricomposizione corporea", slug: "gestione-peso-ricomposizione-corporea" },
+  { label: "Gestione del peso", slug: "gestione-peso-ricomposizione-corporea" },
   { label: "Gonfiore e disturbi intestinali", slug: "gonfiore-disturbi-intestinali" },
-  { label: "Salute femminile e cambiamenti ormonali", slug: "menopausa-premenopausa" },
-  { label: "Longevita e Anti-Age", slug: "programma-anti-age" },
-  { label: "Nutrizione Sportiva", slug: "nutrizione-sportiva" },
+  { label: "Le Fasi della donna", slug: "menopausa-premenopausa" },
+  { label: "Longevità e Vitalità", slug: "programma-anti-age" },
+  { label: "Nutrizione sportiva", slug: "nutrizione-sportiva" },
 ].map((item) => ({ ...item, href: `/programmi/${findProgram(item.slug)?.slug || item.slug}` }));
 const consultationItems = [
-  { label: "Farmacista Fitoterapeuta", href: "/fitoterapia" },
-  { label: "Tutor del Benessere", href: "/consapevolezza" },
+  { label: "Consiglio Fitoterapico", href: "/fitoterapia" },
+  { label: "Consulenza di Consapevolezza", href: "/consapevolezza" },
 ];
-const headerCtaLabel = "Richiedi una consulenza";
+const headerCtaLabel = settings.globalCtaLabel || "Prenota una consulenza";
 const headerCtaLink = settings.globalCtaLink || "/contatti";
 ---
 
 <header class="site-header">
   <div class="container header-inner">
     <a class="brand" href="/" aria-label="La Speziale home">
-      <img class="brand-logo" src={settings.logoUrl || "/assets/old-site/logo.png"} alt="Studio nutrizionista La Speziale Milano" />
+      <img class="brand-logo" src="/assets/old-site/logo-la-speziale-pellini.png" alt="Studio nutrizionista La Speziale Milano" />
     </a>
 
     <nav class="desktop-nav" aria-label="Navigazione principale">
@@ -30,14 +30,14 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
         Il Metodo
       </a>
       <div class:list={["nav-item", "programs-item", { active: pathname.startsWith("/programmi") }]}>
-        <a href="/programmi" aria-haspopup="true">Aree di intervento</a>
-        <div class="programs-menu" aria-label="Aree di intervento">
+        <a href="/programmi" aria-haspopup="true">Cosa trattiamo</a>
+        <div class="programs-menu" aria-label="Cosa trattiamo">
           {clinicalItems.map((item) => <a href={item.href}>{item.label}</a>)}
         </div>
       </div>
       <div class:list={["nav-item", "programs-item", { active: pathname.startsWith("/altre-consulenze") || pathname.startsWith("/fitoterapia") || pathname.startsWith("/consapevolezza") }]}>
-        <a href="/altre-consulenze" aria-haspopup="true">Consulenze</a>
-        <div class="programs-menu" aria-label="Consulenze">
+        <a href="/altre-consulenze" aria-haspopup="true">Consulenze autonome</a>
+        <div class="programs-menu" aria-label="Consulenze autonome">
           {consultationItems.map((item) => <a href={item.href}>{item.label}</a>)}
         </div>
       </div>
@@ -64,7 +64,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
               <span>Il Metodo</span>
             </a>
             <a href="/altre-consulenze">
-              <span>Consulenze</span>
+              <span>Consulenze autonome</span>
             </a>
             <a href="/dicono-di-noi">
               <span>Dicono di noi</span>
@@ -79,7 +79,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
               <div class="mobile-section-head">
                 <div>
                   <p>{clinicalItems.length} bisogni principali</p>
-                  <h2 id="mobile-programs-title">Aree di intervento</h2>
+                  <h2 id="mobile-programs-title">Cosa trattiamo</h2>
                 </div>
                 <a href="/programmi">Vedi tutti</a>
               </div>
@@ -92,7 +92,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
               <div class="mobile-section-head">
                 <div>
                   <p>{consultationItems.length} competenze dedicate</p>
-                  <h2 id="mobile-consultations-title">Consulenze</h2>
+                  <h2 id="mobile-consultations-title">Consulenze autonome</h2>
                 </div>
                 <a href="/altre-consulenze">Vedi tutte</a>
               </div>
@@ -197,10 +197,10 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
     gap: 12px;
   }
 
-  .brand-logo {
+  :global(.brand-logo) {
     display: block;
-    width: 180px;
-    max-height: 52px;
+    width: 220px;
+    max-height: 64px;
     object-fit: contain;
   }
 
@@ -292,7 +292,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
     align-items: center;
     justify-content: center;
     border-radius: 999px;
-    background: var(--color-primary);
+    background: var(--color-cta);
     color: white;
     font-weight: 850;
     line-height: 1.15;
@@ -303,7 +303,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
 
   .header-cta:hover,
   .header-cta:focus {
-    background: var(--color-primary-hover);
+    background: var(--color-cta-hover);
     color: white;
     transform: translateY(-1px);
   }
@@ -541,7 +541,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
 
     .mobile-section-head p {
       margin: 0 0 6px;
-      color: var(--color-gold-dark);
+      color: var(--color-primary);
       font-size: 0.74rem;
       font-weight: 900;
       letter-spacing: 0.06em;
@@ -560,7 +560,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
     .mobile-section-head a {
       border-radius: 999px;
       background: var(--color-white);
-      color: var(--color-gold-dark);
+      color: var(--color-primary);
       font-size: 0.8rem;
       font-weight: 850;
       padding: 8px 12px;
@@ -581,7 +581,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
       gap: 12px;
       min-height: 42px;
       border-bottom: 1px solid rgba(38, 51, 44, 0.08);
-      color: #4e5d53;
+      color: var(--color-muted);
       font-size: clamp(0.82rem, 1.55vw, 0.94rem);
       font-weight: 820;
       line-height: 1.25;
@@ -593,7 +593,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
     }
 
     .mobile-link-list a::after {
-      color: var(--color-gold-dark);
+      color: var(--color-primary);
       content: "->";
       flex: 0 0 auto;
       font-size: 0.94rem;
@@ -605,7 +605,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
       align-items: center;
       justify-content: center;
       border-radius: 999px;
-      background: var(--color-primary);
+      background: var(--color-cta);
       color: white;
       font-weight: 900;
       padding: 12px 18px;
@@ -614,7 +614,7 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
 
     .mobile-panel .mobile-consultation:hover,
     .mobile-panel .mobile-consultation:focus {
-      background: var(--color-primary-hover);
+      background: var(--color-cta-hover);
       color: white;
       transform: translateY(-1px);
     }
@@ -640,9 +640,9 @@ const headerCtaLink = settings.globalCtaLink || "/contatti";
       min-width: 0;
     }
 
-    .brand-logo {
-      width: 138px;
-      max-height: 40px;
+    :global(.brand-logo) {
+      width: 165px;
+      max-height: 48px;
     }
 
     .header-cta {

@@ -1,15 +1,13 @@
 ---
 interface Props {
-  eyebrow?: string;
   title: string;
   text?: string;
 }
 
-const { eyebrow, title, text } = Astro.props;
+const { title, text } = Astro.props;
 ---
 
 <div class="section-title">
-  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
   <h2>{title}</h2>
   {text && <p>{text}</p>}
 </div>
@@ -20,7 +18,7 @@ const { eyebrow, title, text } = Astro.props;
     margin-bottom: 34px;
   }
 
-  .section-title p:not(.eyebrow) {
+  .section-title p {
     max-width: 680px;
     font-size: 1.05rem;
   }
