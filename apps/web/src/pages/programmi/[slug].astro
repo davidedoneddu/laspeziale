@@ -12,6 +12,7 @@ import {
 } from "@lucide/astro";
 import MainLayout from "../../layouts/MainLayout.astro";
 import { blocksToText, getProgram, getPrograms, getSiteSettings } from "../../lib/sanity";
+import { breadcrumbJsonLd, compactJsonLd, faqPageJsonLd } from "../../lib/structuredData";
 
 const retiredProgramSlugs = new Set(["nutrizione-integrata", "fitoterapia-erbe-officinali-nutraceutici"]);
 const isRetiredProgramSlug = (slug: string) => retiredProgramSlugs.has(slug) || slug.includes("fitoterapia") || slug === "consapevolezza-motivazione";
@@ -85,6 +86,15 @@ const richTextBlocks = (program.blocks || []).filter((block) => {
 
 const faqs = program.faqs || [];
 const heroImage = program.heroImageUrl || program.imageUrl || "/assets/old-site/hero-header.jpg";
+const siteUrl = Astro.site?.href || Astro.url.origin;
+const programStructuredData = compactJsonLd([
+  breadcrumbJsonLd([
+    { name: "Home", url: new URL("/", siteUrl).href },
+    { name: "Cosa trattiamo", url: new URL("/programmi/", siteUrl).href },
+    { name: program.title, url: new URL(`/programmi/${program.slug}/`, siteUrl).href },
+  ]),
+  showFaqs && faqs.length > 0 && faqPageJsonLd(faqs),
+]);
 
 const overviewItems = [
   {
@@ -120,6 +130,7 @@ const compactFacts = [
   title={program.seo?.title || `${program.title} | Studio nutrizionista La Speziale Milano`}
   description={program.seo?.description || program.excerpt}
   image={program.seo?.imageUrl || heroImage}
+  structuredData={programStructuredData}
 >
   <article class="program-page">
     <header class="program-hero" style={`--program-hero: url('${heroImage}')`}>

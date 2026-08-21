@@ -957,7 +957,7 @@ await upsertSingleton('siteSettings', 'siteSettings', {
   cookiePolicyLink: '/cookie-policy',
   legalName: 'La Speziale',
   privacyEmail: 'laspeziale@laspeziale.it',
-  privacyUpdatedAt: '2026-06-22',
+  privacyUpdatedAt: '2026-08-21',
   seo: {
     _type: 'seo',
     title: 'Studio nutrizionista La Speziale Milano',

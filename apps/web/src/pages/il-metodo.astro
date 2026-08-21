@@ -1,6 +1,7 @@
 ---
 import CTASection from "../components/CTASection.astro";
 import MainLayout from "../layouts/MainLayout.astro";
+import { imageSrcSet, optimizedImageUrl } from "../lib/images";
 import { getMethodPage } from "../lib/sanity";
 
 const page = await getMethodPage();
@@ -23,7 +24,14 @@ const visitBoxes = page.visitBoxes || [];
       </div>
       {page.introImageUrl && (
         <figure class="method-hero-figure">
-          <img src={page.introImageUrl} alt="Il Metodo La Speziale" />
+          <img
+            src={optimizedImageUrl(page.introImageUrl, 1200)}
+            srcset={imageSrcSet(page.introImageUrl, [640, 960, 1200, 1440])}
+            sizes="(max-width: 960px) calc(100vw - 40px), 52vw"
+            alt="Il Metodo La Speziale"
+            decoding="async"
+            fetchpriority="high"
+          />
         </figure>
       )}
     </div>

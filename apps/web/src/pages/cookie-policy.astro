@@ -6,14 +6,14 @@ import { getSiteSettings } from "../lib/sanity";
 const settings = await getSiteSettings();
 const updatedAt = settings.privacyUpdatedAt
   ? new Intl.DateTimeFormat("it-IT", { dateStyle: "long" }).format(new Date(`${settings.privacyUpdatedAt}T12:00:00`))
-  : "22 giugno 2026";
+  : "21 agosto 2026";
 ---
 
 <MainLayout title="Cookie policy" description="Informazioni su cookie, preferenze locali e contenuti esterni utilizzati dal sito La Speziale.">
   <LegalPage title="Cookie policy" intro="Quali strumenti usa il sito e come puoi modificare le tue scelte in ogni momento." updatedAt={updatedAt}>
     <section>
       <h2>Cosa usa questo sito</h2>
-      <p>Il sito non utilizza cookie pubblicitari o di profilazione propri. Memorizza nel browser una preferenza tecnica necessaria a ricordare la scelta sui contenuti esterni. Google Maps viene caricato soltanto dopo il consenso.</p>
+      <p>Il sito non utilizza cookie pubblicitari o di profilazione propri. Memorizza nel browser una preferenza tecnica necessaria a ricordare le scelte espresse nel banner. Google Analytics e Google Maps vengono caricati soltanto dopo il consenso.</p>
     </section>
 
     <section>
@@ -22,11 +22,18 @@ const updatedAt = settings.privacyUpdatedAt
         <table>
           <thead><tr><th>Strumento</th><th>Finalità</th><th>Durata</th><th>Categoria</th></tr></thead>
           <tbody>
-            <tr><td><code>laspeziale-consent-v1</code></td><td>Ricorda la scelta espressa nel banner.</td><td>Fino a 180 giorni</td><td>Necessario</td></tr>
+            <tr><td><code>laspeziale-consent-v2</code></td><td>Ricorda le scelte espresse nel banner.</td><td>Fino a 180 giorni</td><td>Necessario</td></tr>
+            <tr><td>Google Analytics</td><td>Raccoglie statistiche aggregate sull'utilizzo del sito per migliorarne contenuti e navigazione.</td><td>Secondo le impostazioni e le condizioni di Google Analytics</td><td>Statistiche facoltative</td></tr>
             <tr><td>Google Maps</td><td>Mostra la posizione dello studio con una mappa interattiva.</td><td>Secondo le condizioni di Google</td><td>Contenuto esterno facoltativo</td></tr>
           </tbody>
         </table>
       </div>
+    </section>
+
+    <section>
+      <h2>Google Analytics</h2>
+      <p>Google Analytics viene caricato solo dopo il consenso alle statistiche. Prima del consenso il sito non collega il browser ai server di Google Analytics. Se il consenso viene revocato, il sito disattiva la raccolta statistica e tenta di rimuovere i cookie Analytics già presenti nel browser.</p>
+      <p>Google può trattare informazioni tecniche come indirizzo IP, dispositivo, browser e pagine visitate secondo la propria <a href="https://policies.google.com/privacy?hl=it" target="_blank" rel="noopener noreferrer">informativa privacy</a>.</p>
     </section>
 
     <section>
@@ -36,7 +43,7 @@ const updatedAt = settings.privacyUpdatedAt
 
     <section>
       <h2>Come modificare o revocare la scelta</h2>
-      <p>Puoi rifiutare i contenuti esterni senza perdere le funzioni principali del sito. Usa il pulsante seguente oppure il collegamento “Preferenze cookie” nel footer.</p>
+      <p>Puoi rifiutare le statistiche e i contenuti esterni senza perdere le funzioni principali del sito. Usa il pulsante seguente oppure il collegamento “Preferenze cookie” nel footer.</p>
       <button class="button button-secondary" type="button" data-open-cookie-settings>Gestisci le preferenze</button>
     </section>
 

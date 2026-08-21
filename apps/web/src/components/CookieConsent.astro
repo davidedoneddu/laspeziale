@@ -7,7 +7,7 @@ import { Settings2, ShieldCheck, X } from "@lucide/astro";
     <span class="consent-icon"><ShieldCheck size={24} stroke-width={1.8} aria-hidden="true" /></span>
     <div>
       <h2 id="consent-title" tabindex="-1">La tua privacy, con scelte chiare</h2>
-      <p>Usiamo solo strumenti tecnici necessari. Google Maps viene caricato esclusivamente con il tuo consenso.</p>
+      <p>Usiamo strumenti tecnici necessari. Google Analytics e Google Maps vengono attivati solo se dai il consenso.</p>
     </div>
     <button class="consent-close" type="button" data-consent-close aria-label="Chiudi il banner">
       <X size={20} stroke-width={2} aria-hidden="true" />
@@ -28,6 +28,13 @@ import { Settings2, ShieldCheck, X } from "@lucide/astro";
         <span>Consente di visualizzare la mappa interattiva fornita da Google Maps.</span>
       </div>
       <input type="checkbox" data-external-media-toggle />
+    </label>
+    <label class="consent-option">
+      <div>
+        <strong>Statistiche</strong>
+        <span>Consente di usare Google Analytics per capire come viene consultato il sito e migliorarlo.</span>
+      </div>
+      <input type="checkbox" data-analytics-toggle />
     </label>
   </div>
 
@@ -75,28 +82,32 @@ import { Settings2, ShieldCheck, X } from "@lucide/astro";
 
 <script>
   type ConsentState = {
-    version: 1;
+    version: 2;
     necessary: true;
     externalMedia: boolean;
+    analytics: boolean;
     updatedAt: string;
   };
 
-  const STORAGE_KEY = "laspeziale-consent-v1";
+  const STORAGE_KEY = "laspeziale-consent-v2";
   const MAX_AGE = 180 * 24 * 60 * 60 * 1000;
+  const GA_ID = "G-3L0Y5G26N2";
   const banner = document.querySelector<HTMLElement>("[data-consent-banner]");
   const preferences = banner?.querySelector<HTMLElement>("[data-consent-preferences]");
   const title = banner?.querySelector<HTMLElement>("#consent-title");
-  const toggle = banner?.querySelector<HTMLInputElement>("[data-external-media-toggle]");
+  const externalMediaToggle = banner?.querySelector<HTMLInputElement>("[data-external-media-toggle]");
+  const analyticsToggle = banner?.querySelector<HTMLInputElement>("[data-analytics-toggle]");
   const manageButton = banner?.querySelector<HTMLButtonElement>("[data-consent-manage]");
   const saveButton = banner?.querySelector<HTMLButtonElement>("[data-consent-save]");
   let current: ConsentState | null = null;
+  let analyticsLoaded = false;
 
   const readConsent = (): ConsentState | null => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) return null;
       const value = JSON.parse(stored) as ConsentState;
-      if (value.version !== 1 || Date.now() - new Date(value.updatedAt).getTime() > MAX_AGE) {
+      if (value.version !== 2 || Date.now() - new Date(value.updatedAt).getTime() > MAX_AGE) {
         localStorage.removeItem(STORAGE_KEY);
         return null;
       }
@@ -110,12 +121,89 @@ import { Settings2, ShieldCheck, X } from "@lucide/astro";
     document.dispatchEvent(new CustomEvent("laspeziale:consent", { detail: consent }));
   };
 
-  const persist = (externalMedia: boolean) => {
-    current = { version: 1, necessary: true, externalMedia, updatedAt: new Date().toISOString() };
+  const setGoogleConsent = (analytics: boolean) => {
+    window.dataLayer = window.dataLayer || [];
+    window.gtag =
+      window.gtag ||
+      function gtag() {
+        window.dataLayer.push(arguments);
+      };
+
+    window.gtag("consent", "default", {
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+      analytics_storage: "denied",
+      functionality_storage: "granted",
+      security_storage: "granted",
+    });
+
+    window.gtag("consent", "update", {
+      analytics_storage: analytics ? "granted" : "denied",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+    });
+  };
+
+  const removeAnalyticsCookies = () => {
+    const host = window.location.hostname;
+    const domains = [host, `.${host}`];
+    document.cookie
+      .split(";")
+      .map((cookie) => cookie.split("=")[0]?.trim())
+      .filter((name) => name === "_ga" || name?.startsWith("_ga_"))
+      .forEach((name) => {
+        document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
+        domains.forEach((domain) => {
+          document.cookie = `${name}=; Max-Age=0; path=/; domain=${domain}; SameSite=Lax`;
+        });
+      });
+  };
+
+  const loadAnalytics = () => {
+    setGoogleConsent(true);
+    if (analyticsLoaded || document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_ID}"]`)) {
+      analyticsLoaded = true;
+      return;
+    }
+
+    analyticsLoaded = true;
+    const script = document.createElement("script");
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
+
+    window.gtag("js", new Date());
+    window.gtag("config", GA_ID, {
+      anonymize_ip: true,
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
+  };
+
+  const applyConsent = (consent: ConsentState) => {
+    if (consent.analytics) loadAnalytics();
+    else {
+      setGoogleConsent(false);
+      removeAnalyticsCookies();
+    }
+    notify(consent);
+  };
+
+  const persist = (externalMedia: boolean, analytics: boolean) => {
+    current = {
+      version: 2,
+      necessary: true,
+      externalMedia,
+      analytics,
+      updatedAt: new Date().toISOString(),
+    };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
-    if (toggle) toggle.checked = externalMedia;
+    if (externalMediaToggle) externalMediaToggle.checked = externalMedia;
+    if (analyticsToggle) analyticsToggle.checked = analytics;
     if (banner) banner.hidden = true;
-    notify(current);
+    applyConsent(current);
   };
 
   const openBanner = (showPreferences = false) => {
@@ -124,21 +212,26 @@ import { Settings2, ShieldCheck, X } from "@lucide/astro";
     preferences.hidden = !showPreferences;
     manageButton.hidden = showPreferences;
     saveButton.hidden = !showPreferences;
-    if (toggle) toggle.checked = current?.externalMedia === true;
+    if (externalMediaToggle) externalMediaToggle.checked = current?.externalMedia === true;
+    if (analyticsToggle) analyticsToggle.checked = current?.analytics === true;
     requestAnimationFrame(() => title?.focus());
   };
 
   current = readConsent();
-  if (current) notify(current);
+  if (current) applyConsent(current);
   else openBanner(false);
 
-  banner?.querySelector("[data-consent-accept]")?.addEventListener("click", () => persist(true));
-  banner?.querySelector("[data-consent-reject]")?.addEventListener("click", () => persist(false));
-  banner?.querySelector("[data-consent-save]")?.addEventListener("click", () => persist(toggle?.checked === true));
+  banner?.querySelector("[data-consent-accept]")?.addEventListener("click", () => persist(true, true));
+  banner?.querySelector("[data-consent-reject]")?.addEventListener("click", () => persist(false, false));
+  banner
+    ?.querySelector("[data-consent-save]")
+    ?.addEventListener("click", () =>
+      persist(externalMediaToggle?.checked === true, analyticsToggle?.checked === true),
+    );
   banner?.querySelector("[data-consent-manage]")?.addEventListener("click", () => openBanner(true));
   banner?.querySelector("[data-consent-close]")?.addEventListener("click", () => {
     if (current) banner.hidden = true;
-    else persist(false);
+    else persist(false, false);
   });
   document.querySelectorAll<HTMLElement>("[data-open-cookie-settings]").forEach((button) => {
     button.addEventListener("click", () => openBanner(true));
@@ -148,11 +241,13 @@ import { Settings2, ShieldCheck, X } from "@lucide/astro";
     LaSpezialeConsent?: {
       get: () => ConsentState | null;
       setExternalMedia: (allowed: boolean) => void;
+      setAnalytics: (allowed: boolean) => void;
       open: () => void;
     };
   }).LaSpezialeConsent = {
     get: () => current,
-    setExternalMedia: (allowed) => persist(allowed),
+    setExternalMedia: (allowed) => persist(allowed, current?.analytics === true),
+    setAnalytics: (allowed) => persist(current?.externalMedia === true, allowed),
     open: () => openBanner(true),
   };
 </script>

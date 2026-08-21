@@ -3,6 +3,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CookieConsent from "../components/CookieConsent.astro";
 import { getSiteSettings } from "../lib/sanity";
+import { compactJsonLd, localBusinessJsonLd } from "../lib/structuredData";
 import "../styles/global.css";
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
   description?: string;
   image?: string;
   noindex?: boolean;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const settings = await getSiteSettings();
@@ -18,10 +20,14 @@ const {
   description = settings.seo?.description || "Nutrizione integrata, alimentazione personalizzata, fitoterapia e programmi benessere a Milano.",
   image = settings.seo?.imageUrl || settings.logoUrl || "/assets/old-site/logo.png",
   noindex = false,
+  structuredData,
 } = Astro.props;
 const pageTitle = title.includes("La Speziale") ? title : `${title} | La Speziale`;
 const canonical = Astro.url.href;
 const favicon = settings.faviconUrl || settings.logoUrl || "/assets/old-site/logo.png";
+const siteUrl = Astro.site?.href || Astro.url.origin;
+const pageStructuredData = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
+const jsonLdItems = compactJsonLd([localBusinessJsonLd(settings, siteUrl), ...pageStructuredData]);
 ---
 
 <!doctype html>
@@ -38,6 +44,7 @@ const favicon = settings.faviconUrl || settings.logoUrl || "/assets/old-site/log
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.url).href} />
     <meta property="og:type" content="website" />
+    {jsonLdItems.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
     <title>{pageTitle}</title>
   </head>
   <body>

@@ -2,6 +2,8 @@
 import { BadgeCheck, Leaf, Mail, MessageCircle, ShoppingBag } from "@lucide/astro";
 import MainLayout from "../../layouts/MainLayout.astro";
 import { blocksToText, getSiteSettings, getTherapies, getTherapy } from "../../lib/sanity";
+import { imageSrcSet, optimizedImageUrl } from "../../lib/images";
+import { breadcrumbJsonLd, compactJsonLd, faqPageJsonLd } from "../../lib/structuredData";
 
 export async function getStaticPaths() {
   const therapies = await getTherapies();
@@ -27,6 +29,15 @@ const showBenefits = isVisible(therapy.showBenefits) && benefits.length > 0;
 const showProducts = isVisible(therapy.showRecommendedProducts) && products.length > 0;
 const showFaqs = isVisible(therapy.showFaqs) && faqs.length > 0;
 const showFinalCta = isVisible(therapy.showFinalCta);
+const siteUrl = Astro.site?.href || Astro.url.origin;
+const structuredData = compactJsonLd([
+  breadcrumbJsonLd([
+    { name: "Home", url: new URL("/", siteUrl).href },
+    { name: "Fitoterapia", url: new URL("/fitoterapia/", siteUrl).href },
+    { name: therapy.title, url: new URL(`/fitoterapia/${therapy.slug}/`, siteUrl).href },
+  ]),
+  showFaqs && faqPageJsonLd(faqs),
+]);
 const anchors = [
   showOverview && { href: "#panoramica", label: "Panoramica" },
   showBenefits && { href: "#benefici", label: "Benefici" },
@@ -36,7 +47,7 @@ const anchors = [
 ].filter(Boolean) as { href: string; label: string }[];
 ---
 
-<MainLayout title={therapy.seo?.title || `${therapy.title} | Fitoterapia La Speziale Milano`} description={therapy.seo?.description || therapy.excerpt} image={therapy.seo?.imageUrl || heroImage}>
+<MainLayout title={therapy.seo?.title || `${therapy.title} | Fitoterapia La Speziale Milano`} description={therapy.seo?.description || therapy.excerpt} image={therapy.seo?.imageUrl || heroImage} structuredData={structuredData}>
   <article class="therapy-page">
     <header class="therapy-detail-hero" style={`--therapy-detail-hero: url('${heroImage}')`}>
       <div class="container therapy-copy">
@@ -101,7 +112,16 @@ const anchors = [
             {products.map((product) => (
               <article class="related-card">
                 <a href={`/prodotti/${product.slug}/`} class="related-image" aria-label={`Apri ${product.title}`}>
-                  {product.imageUrl ? <img src={product.imageUrl} alt={product.imageAlt || product.title} loading="lazy" /> : <span></span>}
+                  {product.imageUrl ? (
+                    <img
+                      src={optimizedImageUrl(product.imageUrl, 720)}
+                      srcset={imageSrcSet(product.imageUrl, [360, 540, 720, 960])}
+                      sizes="(max-width: 880px) calc(100vw - 40px), 31vw"
+                      alt={product.imageAlt || product.title}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : <span></span>}
                 </a>
                 <div>
                   <h3><a href={`/prodotti/${product.slug}/`}>{product.title}</a></h3>

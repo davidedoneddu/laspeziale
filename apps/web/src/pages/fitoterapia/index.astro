@@ -2,6 +2,7 @@
 import { ArrowRight, CircleCheck } from "@lucide/astro";
 import MainLayout from "../../layouts/MainLayout.astro";
 import { getTherapiesPage } from "../../lib/sanity";
+import { compactJsonLd, faqPageJsonLd } from "../../lib/structuredData";
 
 const page = await getTherapiesPage();
 
@@ -12,9 +13,10 @@ const expertiseParagraphs = (page.expertiseText || "")
   .split(/\n+/)
   .map((paragraph) => paragraph.trim())
   .filter(Boolean);
+const structuredData = compactJsonLd([faqPageJsonLd(faqs)]);
 ---
 
-<MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
+<MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl} structuredData={structuredData}>
   <section class="phyto-hero" style={`--phyto-image: url('${page.heroImageUrl || "/assets/old-site/fitoterapia-consulenza-2026.jpg"}')`}>
     <div class="container phyto-hero-inner">
       <div class="phyto-hero-copy">

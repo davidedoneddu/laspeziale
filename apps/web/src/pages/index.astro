@@ -3,6 +3,7 @@ import MainLayout from "../layouts/MainLayout.astro";
 import Hero from "../components/Hero.astro";
 import CTASection from "../components/CTASection.astro";
 import { getHomepage, getPrograms } from "../lib/sanity";
+import { imageSrcSet, optimizedImageUrl } from "../lib/images";
 
 const [homepage, programs] = await Promise.all([
   getHomepage(),
@@ -44,6 +45,9 @@ const visibleHelpPrograms = homeProgramContent.map((content) => ({
   ...content,
   program: programs.find((program) => program.slug === content.slug),
 }));
+const approachImage = homepage.approachImageUrl || "/assets/old-site/home-metodo-competenze.png";
+const phytoImage = homepage.methodPhytoImageUrl || "/assets/old-site/fitoterapia-consulenza-2026.jpg";
+const coachingImage = homepage.methodCoachingImageUrl || "/assets/old-site/consapevolezza-2026.jpg";
 ---
 
 <MainLayout title={homepage.seo?.title} description={homepage.seo?.description}>
@@ -62,7 +66,15 @@ const visibleHelpPrograms = homeProgramContent.map((content) => ({
   <section class="studio-intro">
     <div class="container intro-layout">
       <div class="intro-visual reveal reveal-image">
-        <img class="intro-photo" src={homepage.approachImageUrl || "/assets/old-site/home-metodo-competenze.png"} alt="Tre professionisti collaborano alla costruzione del Metodo La Speziale" />
+        <img
+          class="intro-photo"
+          src={optimizedImageUrl(approachImage, 1200)}
+          srcset={imageSrcSet(approachImage, [640, 960, 1200, 1440])}
+          sizes="(max-width: 900px) 560px, 52vw"
+          alt="Tre professionisti collaborano alla costruzione del Metodo La Speziale"
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div class="intro-copy reveal">
         <h2>{homepage.introEyebrow || "Perché un approccio diverso"}</h2>
@@ -169,7 +181,9 @@ const visibleHelpPrograms = homeProgramContent.map((content) => ({
           <article class="satellite-card">
             <img
               class="satellite-image"
-              src={homepage.methodPhytoImageUrl || "/assets/old-site/fitoterapia-consulenza-2026.jpg"}
+              src={optimizedImageUrl(phytoImage, 900)}
+              srcset={imageSrcSet(phytoImage, [480, 720, 900, 1200])}
+              sizes="(max-width: 900px) calc(100vw - 40px), 50vw"
               alt="Piante officinali e preparazioni per il Consiglio Fitoterapico"
               loading="lazy"
               decoding="async"
@@ -184,7 +198,9 @@ const visibleHelpPrograms = homeProgramContent.map((content) => ({
           <article class="satellite-card">
             <img
               class="satellite-image"
-              src={homepage.methodCoachingImageUrl || "/assets/old-site/consapevolezza-2026.jpg"}
+              src={optimizedImageUrl(coachingImage, 900)}
+              srcset={imageSrcSet(coachingImage, [480, 720, 900, 1200])}
+              sizes="(max-width: 900px) calc(100vw - 40px), 50vw"
               alt="Percorso verso una maggiore consapevolezza"
               loading="lazy"
               decoding="async"

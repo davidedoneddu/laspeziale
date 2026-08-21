@@ -420,7 +420,7 @@ export const fallbackSettings: SiteSettings = {
   privacyPolicyLink: "/privacy-policy",
   cookiePolicyLink: "/cookie-policy",
   legalName: "La Speziale",
-  privacyUpdatedAt: "2026-06-22",
+  privacyUpdatedAt: "2026-08-21",
   seo: {
     title: "Studio nutrizionista La Speziale Milano",
     description:
