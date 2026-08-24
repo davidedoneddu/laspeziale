@@ -8,19 +8,21 @@ const page = await getTestimonialsPage();
 const googleReviews = page.googleReviews || [];
 const googleRating = Math.min(5, Math.max(0, page.googleRating || 0));
 const googleReviewsUrl = page.googleReviewsUrl || "https://www.google.com/maps/search/?api=1&query=La+Speziale+Milano";
+const heroTitle = "Le esperienze di chi ha scelto il Metodo La Speziale";
+const heroText = "Ogni persona arriva con una storia, esigenze e obiettivi diversi. Le testimonianze che trovi in questa pagina raccontano il percorso vissuto insieme a noi e il cambiamento che ciascuno ha costruito nel tempo.";
 const formatReviewDate = (value?: string) => {
   if (!value) return undefined;
   return new Intl.DateTimeFormat("it-IT", { month: "long", year: "numeric" }).format(new Date(`${value}T12:00:00`));
 };
 ---
 
-<MainLayout title={page.seo?.title} description={page.seo?.description || page.heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
+<MainLayout title={page.seo?.title} description={page.seo?.description || heroText} image={page.seo?.imageUrl || page.heroImageUrl}>
   <section class:list={["page-hero", "testimonials-page-hero", { "testimonials-hero": page.heroImageUrl }]} style={page.heroImageUrl ? `--testimonials-hero: url('${page.heroImageUrl}')` : undefined}>
     <span class="hero-quote hero-quote-open" aria-hidden="true">“</span>
     <span class="hero-quote hero-quote-close" aria-hidden="true">”</span>
     <div class="container">
-      <h1>{page.heroTitle}</h1>
-      {page.heroText && <p class="lead">{page.heroText}</p>}
+      <h1>{heroTitle}</h1>
+      <p class="lead">{heroText}</p>
     </div>
   </section>
 
@@ -28,9 +30,8 @@ const formatReviewDate = (value?: string) => {
     <section class="google-reviews-section" aria-labelledby="google-reviews-title">
       <div class="container google-reviews-panel">
         <div class="google-summary">
-          <h2 id="google-reviews-title">{page.googleEyebrow || "Recensioni Google"}</h2>
-          <p class="google-subtitle">{page.googleTitle || "Le recensioni pubblicate su Google"}</p>
-          {page.googleText && <p class="google-intro">{page.googleText}</p>}
+          <h2 id="google-reviews-title">Recensioni Google</h2>
+          <p class="google-intro">Le recensioni raccontano l'esperienza diretta di chi ha intrapreso un percorso con il Metodo La Speziale e sono state pubblicate su Google.</p>
           {(googleRating > 0 || page.googleReviewCount) && (
             <div class="rating-summary">
               {googleRating > 0 && <strong>{googleRating.toLocaleString("it-IT", { maximumFractionDigits: 1 })}</strong>}
