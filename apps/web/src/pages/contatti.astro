@@ -57,6 +57,7 @@ const socialLinks = [
           </p>
           <label>{page.nameLabel || "Nome e cognome"}<input type="text" name="name" placeholder={page.namePlaceholder} autocomplete="name" required /></label>
           <label>{page.emailLabel || "Email"}<input type="email" name="email" placeholder={page.emailPlaceholder} autocomplete="email" required /></label>
+          <label>Telefono<input type="tel" name="phone" placeholder="Il tuo numero di telefono" autocomplete="tel" required /></label>
           <label>{page.messageLabel || "Messaggio"}<textarea name="message" placeholder={page.messagePlaceholder} required></textarea></label>
           <button class="button button-primary" type="submit" data-submit-label={page.submitLabel || "Invia richiesta"}>{page.submitLabel || "Invia richiesta"}</button>
         </form>
